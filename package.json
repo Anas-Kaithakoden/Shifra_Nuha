@@ -1,0 +1,31 @@
+{
+  "name": "shifra-nuha-technologies",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Marketing website for Shifra Nuha Technologies — Start. Build. Grow. Automate.",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run typecheck && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test:smoke": "vite build --ssr scripts/smoke.tsx --outDir node_modules/.tmp/ssr --logLevel error && node node_modules/.tmp/ssr/smoke.js",
+    "test:a11y": "vite build --ssr scripts/a11y-check.tsx --outDir node_modules/.tmp/ssr --logLevel error && node node_modules/.tmp/ssr/a11y-check.js",
+    "test": "npm run typecheck && npm run test:smoke && npm run test:a11y"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/node": "^26.6.3",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.5"
+  }
+}

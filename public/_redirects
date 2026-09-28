@@ -1,0 +1,3 @@
+# Single-page app: serve index.html for all client-side routes.
+# /index.html  /services  /about  /contact  /privacy
+/*  /index.html  200
