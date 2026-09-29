@@ -63,7 +63,7 @@ export default function Contact() {
 
           <Reveal delay={80}>
             <div className="space-y-5">
-              <div className="rounded-xl border border-ink-200 bg-white p-6">
+              <div className="rounded-xl border border-ink-200 bg-white p-6 text-center sm:text-left">
                 <h2 className="text-xs font-semibold tracking-[0.18em] text-ink-500 uppercase">
                   {pick(contactPage.directTitle.en, contactPage.directTitle.ml)}
                 </h2>
@@ -72,7 +72,7 @@ export default function Contact() {
                   <dl className="mt-5 space-y-4 text-sm">
                     {phone.ready ? (
                       <div>
-                        <dt className="flex items-center gap-2 text-ink-500">
+                        <dt className="flex items-center justify-center gap-2 text-ink-500 sm:justify-start">
                           <IconPhone width={16} height={16} /> {t('section.phone')}
                         </dt>
                         <dd className="mt-1">
@@ -87,7 +87,7 @@ export default function Contact() {
                     ) : null}
                     {whatsapp.ready ? (
                       <div>
-                        <dt className="flex items-center gap-2 text-ink-500">
+                        <dt className="flex items-center justify-center gap-2 text-ink-500 sm:justify-start">
                           <IconPhone width={16} height={16} /> {t('section.whatsapp')}
                         </dt>
                         <dd className="mt-1">
@@ -104,7 +104,7 @@ export default function Contact() {
                     ) : null}
                     {email.ready ? (
                       <div>
-                        <dt className="flex items-center gap-2 text-ink-500">
+                        <dt className="flex items-center justify-center gap-2 text-ink-500 sm:justify-start">
                           <IconMail width={16} height={16} /> {t('section.email')}
                         </dt>
                         <dd className="mt-1">
@@ -119,7 +119,7 @@ export default function Contact() {
                     ) : null}
                     {contact.hours ? (
                       <div>
-                        <dt className="flex items-center gap-2 text-ink-500">
+                        <dt className="flex items-center justify-center gap-2 text-ink-500 sm:justify-start">
                           <IconClock width={16} height={16} /> {t('section.hours')}
                         </dt>
                         <dd className="mt-1 text-base font-medium text-ink-950">{contact.hours}</dd>
@@ -127,7 +127,7 @@ export default function Contact() {
                     ) : null}
                     {contact.address ? (
                       <div>
-                        <dt className="flex items-center gap-2 text-ink-500">
+                        <dt className="flex items-center justify-center gap-2 text-ink-500 sm:justify-start">
                           <IconPin width={16} height={16} /> {t('section.address')}
                         </dt>
                         <dd className="mt-1 text-base font-medium text-ink-950">{contact.address}</dd>
@@ -142,12 +142,12 @@ export default function Contact() {
                 )}
               </div>
 
-              <div className="rounded-xl border border-ink-200 bg-white p-6">
+              <div className="rounded-xl border border-ink-200 bg-white p-6 text-center sm:text-left">
                 <h2 className="text-xs font-semibold tracking-[0.18em] text-ink-500 uppercase">
                   {contact.serviceAreaTitle}
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-ink-600">{contact.serviceAreaBody}</p>
-                <ul className="mt-4 flex flex-wrap gap-2">
+                <ul className="mt-4 flex flex-wrap justify-center gap-2 sm:justify-start">
                   {contact.serviceAreas.map((area) => (
                     <li
                       key={area}

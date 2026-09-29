@@ -106,7 +106,7 @@ export function ServicePage({ service }: { service: CoreService }) {
           ---------------------------------------------------------------- */}
           <div>
             <nav aria-label="Breadcrumb" className="mb-8 text-sm text-ink-500">
-              <ol className="flex flex-wrap items-center gap-2">
+              <ol className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
                 <li>
                   <Link to="/" className="inline-flex min-h-10 items-center hover:text-brand-700">
                     Home
@@ -146,7 +146,10 @@ export function ServicePage({ service }: { service: CoreService }) {
               </h2>
               <ul className="mt-5 space-y-2.5">
                 {service.whoNeeds.map((item) => (
-                  <li key={item} className="flex gap-3 text-base leading-relaxed text-ink-600">
+                  <li
+                    key={item}
+                    className="flex justify-center gap-3 text-base leading-relaxed text-ink-600 sm:justify-start"
+                  >
                     <IconCheck className="mt-1 size-4 shrink-0 text-brand-600" width={16} height={16} />
                     <span className="text-pretty">{item}</span>
                   </li>
@@ -163,7 +166,7 @@ export function ServicePage({ service }: { service: CoreService }) {
                 {service.includes.map((item) => (
                   <li
                     key={item}
-                    className="flex gap-3 rounded-lg border border-ink-200 bg-white p-4 text-sm leading-relaxed text-ink-700"
+                    className="flex justify-center gap-3 rounded-lg border border-ink-200 bg-white p-4 text-sm leading-relaxed text-ink-700 sm:justify-start"
                   >
                     <span className="mt-2 size-1.5 shrink-0 rounded-full bg-brand-500" aria-hidden="true" />
                     <span className="text-pretty">{item}</span>
@@ -179,7 +182,11 @@ export function ServicePage({ service }: { service: CoreService }) {
               </h2>
               <ol className="mt-6 space-y-px overflow-hidden rounded-xl bg-ink-200">
                 {service.process.map((step, index) => (
-                  <Reveal key={step.title} as="li" className="flex gap-4 bg-white p-5">
+                  <Reveal
+                    key={step.title}
+                    as="li"
+                    className="flex justify-center gap-4 bg-white p-5 sm:justify-start"
+                  >
                     <span className="font-mono text-xs font-semibold text-brand-600">
                       {String(index + 1).padStart(2, '0')}
                     </span>
@@ -209,7 +216,7 @@ export function ServicePage({ service }: { service: CoreService }) {
                 {service.documents.map((item) => (
                   <li
                     key={item}
-                    className="flex gap-3 rounded-lg border border-ink-200 bg-white p-4 text-sm leading-relaxed text-ink-700"
+                    className="flex justify-center gap-3 rounded-lg border border-ink-200 bg-white p-4 text-sm leading-relaxed text-ink-700 sm:justify-start"
                   >
                     <span className="mt-2 size-1.5 shrink-0 rounded-full bg-ink-400" aria-hidden="true" />
                     <span className="text-pretty">{item}</span>
@@ -220,7 +227,7 @@ export function ServicePage({ service }: { service: CoreService }) {
 
             {/* Caveats — stated up front, on purpose */}
             <section className="mt-12 border-t border-ink-200 pt-10">
-              <h2 className="flex items-center gap-2.5 text-xl font-semibold tracking-tight text-ink-950">
+              <h2 className="flex items-center justify-center gap-2.5 text-xl font-semibold tracking-tight text-ink-950 sm:justify-start">
                 <IconWarning width={20} height={20} className="shrink-0 text-amber-600" />
                 {t('section.caveats')}
               </h2>
@@ -250,7 +257,7 @@ export function ServicePage({ service }: { service: CoreService }) {
                     <li key={item.slug}>
                       <Link
                         to={item.path}
-                        className="group flex h-full items-center justify-between gap-2 rounded-lg border border-ink-200 bg-white p-4 text-sm font-semibold text-ink-900 transition-colors hover:border-brand-300 hover:text-brand-700"
+                        className="group flex h-full items-center justify-center gap-2 rounded-lg border border-ink-200 bg-white p-4 text-sm font-semibold text-ink-900 transition-colors hover:border-brand-300 hover:text-brand-700 sm:justify-between"
                       >
                         {item.name}
                         <IconArrowRight

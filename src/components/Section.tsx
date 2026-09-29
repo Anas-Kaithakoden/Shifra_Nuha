@@ -8,7 +8,6 @@ type Props = {
   eyebrow?: string
   title: ReactNode
   intro?: ReactNode
-  align?: 'left' | 'center'
   /** Background + text colour scheme. */
   surface?: Surface
   /** Adds a hairline divider above the section. */
@@ -28,13 +27,11 @@ export function Section({
   eyebrow,
   title,
   intro,
-  align = 'left',
   surface = 'white',
   divided = false,
   className = '',
   children,
 }: Props) {
-  const centered = align === 'center'
   const tone = surfaces[surface]
 
   return (
@@ -46,9 +43,13 @@ export function Section({
     >
       <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
         <Reveal>
-          <div className={centered ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl'}>
+          {/* Headings and lead text centre themselves on mobile via the rules in
+              `index.css`; the column itself stays a readable measure either way. */}
+          <div className="max-w-2xl">
             {eyebrow ? (
-              <p className={`mb-4 text-xs font-semibold tracking-[0.18em] uppercase ${tone.eyebrow}`}>{eyebrow}</p>
+              <p className={`mb-4 text-xs font-semibold tracking-[0.18em] uppercase ${tone.eyebrow}`}>
+                {eyebrow}
+              </p>
             ) : null}
             <h2
               className={`text-3xl leading-[1.15] font-semibold tracking-tight text-balance sm:text-4xl ${tone.heading}`}
@@ -56,7 +57,9 @@ export function Section({
               {title}
             </h2>
             {intro ? (
-              <p className={`mt-5 text-base leading-relaxed text-pretty sm:text-lg ${tone.body}`}>{intro}</p>
+              <p className={`mt-5 text-base leading-relaxed text-pretty sm:text-lg ${tone.body}`}>
+                {intro}
+              </p>
             ) : null}
           </div>
         </Reveal>

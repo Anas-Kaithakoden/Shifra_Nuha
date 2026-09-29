@@ -29,7 +29,7 @@ export function WhyUs() {
           return (
             <Reveal key={point.title.en} delay={index * 60} className="h-full">
               <div className="flex h-full flex-col rounded-xl border border-ink-200 bg-white p-6 sm:p-7">
-                <span className="inline-flex size-10 items-center justify-center rounded-lg bg-brand-50 text-brand-700 ring-1 ring-brand-200 ring-inset">
+                <span className="inline-flex size-10 self-center items-center justify-center rounded-lg bg-brand-50 text-brand-700 ring-1 ring-brand-200 ring-inset sm:self-start">
                   <Icon width={20} height={20} />
                 </span>
                 <h3 className="mt-5 text-base font-semibold tracking-tight text-ink-950">
@@ -54,7 +54,7 @@ export function WhyUs() {
               variant="whatsapp"
               size="md"
               label={pick(whyUs.closing.button.en, whyUs.closing.button.ml)}
-              className="mt-6 self-start"
+              className="mt-6 self-center sm:self-start"
             />
           </div>
         </Reveal>

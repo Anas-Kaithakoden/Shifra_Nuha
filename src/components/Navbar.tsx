@@ -232,7 +232,7 @@ export function Navbar() {
       {/* Mobile navigation. The services are listed inline rather than hidden
           behind a submenu, because on a phone this is the only nav most
           visitors will ever use. */}
-      <div id="mobile-nav" hidden={!open} className="border-t border-ink-200/80 bg-white md:hidden">
+      <div id="mobile-nav" hidden={!open} className="border-t border-ink-200/80 bg-white text-left md:hidden">
         <nav aria-label="Mobile" className="mx-auto w-full max-w-6xl px-5 py-4 sm:px-8">
           <ul className="flex flex-col gap-1">
             {nav.map((item) => (

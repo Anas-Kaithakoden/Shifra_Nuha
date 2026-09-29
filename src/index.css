@@ -42,11 +42,46 @@
   }
 
   body {
-    @apply bg-white font-sans text-ink-800 antialiased;
+    @apply bg-white font-sans text-ink-800 antialiased text-center sm:text-left;
   }
 
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-brand-600;
+  }
+
+  /**
+   * MOBILE ALIGNMENT
+   * ----------------
+   * On a phone the content column is roughly 350px wide, and a screenful of
+   * left-aligned text in a single narrow column reads as though something failed
+   * to load rather than as a design. So from phone width the whole page is
+   * centred — `body` above turns it on, and `sm` switches it back off, leaving
+   * tablet and desktop exactly as they were.
+   *
+   * One rule rather than a class per element, so a page added later inherits the
+   * behaviour instead of quietly opting out of it.
+   *
+   * `text-align` only reaches inline content, so anything laid out with flex or
+   * grid is positioned by `justify-content` instead and needs its own
+   * `justify-center sm:justify-start`. That is why some components carry the
+   * pair even though their text is centred by `body` — an icon in a flex row
+   * stays pinned to the left edge otherwise, stranded from the text it labels.
+   *
+   * To opt a block out, set `text-left` on it. Three do, each for a reason
+   * rather than by accident:
+   *
+   *  - The contact form. Browsers align text inside inputs themselves and do
+   *    not inherit `text-align` from the document, so a centred label over a
+   *    left-aligned field would look broken rather than deliberate.
+   *  - The mobile navigation. Menu items are scanned by their left edge.
+   *  - The footer's legal disclaimer. Centred grey fine print at `text-xs` is
+   *    markedly harder to read than a ragged right edge.
+   */
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply text-center sm:text-left;
   }
 
   ::selection {

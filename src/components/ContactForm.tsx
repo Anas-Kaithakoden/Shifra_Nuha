@@ -134,8 +134,12 @@ export function ContactForm({ defaultService = '' }: { defaultService?: string }
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="rounded-xl border border-ink-200 bg-white p-6 sm:p-8"
+      className="rounded-xl border border-ink-200 bg-white p-6 text-left sm:p-8"
     >
+      {/* The one block that opts out of the mobile centring set in `index.css`.
+          Browsers align text inside inputs themselves and do not inherit
+          `text-align` from the document, so a centred label sitting over a
+          left-aligned field would read as a mistake rather than a choice. */}
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor={field('name')} className={labelClass}>

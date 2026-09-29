@@ -29,7 +29,7 @@ export function Faq({ items, className = '' }: { items: FaqItem[]; className?: s
         const id = `${base}-${index}`
         return (
           <details key={item.question} className="group">
-            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-base font-semibold tracking-tight text-ink-950 transition-colors hover:bg-ink-50 sm:px-6 [&::-webkit-details-marker]:hidden">
+            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-center gap-3 px-5 py-4 text-base font-semibold tracking-tight text-ink-950 transition-colors hover:bg-ink-50 sm:justify-between sm:gap-4 sm:px-6 [&::-webkit-details-marker]:hidden">
               <span className="text-pretty">{item.question}</span>
               <IconChevron
                 width={18}

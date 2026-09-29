@@ -28,7 +28,7 @@ export function DigitalServices() {
           const Icon = digitalIcons[group.icon] ?? digitalIcons.automation
           return (
             <Reveal key={group.title.en} delay={index * 60} className="h-full">
-              <div className="flex h-full gap-4 rounded-xl border border-dashed border-ink-300 bg-ink-50/60 p-6">
+              <div className="flex h-full justify-center gap-4 rounded-xl border border-dashed border-ink-300 bg-ink-50/60 p-6 sm:justify-start">
                 <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-white text-ink-600 ring-1 ring-ink-200 ring-inset">
                   <Icon width={20} height={20} />
                 </span>

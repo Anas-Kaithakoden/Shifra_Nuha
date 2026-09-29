@@ -49,7 +49,7 @@ export function CtaBand() {
             to="/contact#enquiry"
             size="md"
             variant="ghost"
-            className="self-start text-brand-200 hover:bg-white/10 hover:text-white"
+            className="self-center text-brand-200 hover:bg-white/10 hover:text-white sm:self-start"
           >
             {t('cta.enquiry')}
             <IconArrowRight width={16} height={16} />

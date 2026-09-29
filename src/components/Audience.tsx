@@ -40,7 +40,7 @@ export function Audience() {
       </div>
 
       <Reveal>
-        <ul className="mt-10 flex flex-wrap gap-2.5">
+        <ul className="mt-10 flex flex-wrap justify-center gap-2.5 sm:justify-start">
           {audience.types.map((type) => (
             <li
               key={type}

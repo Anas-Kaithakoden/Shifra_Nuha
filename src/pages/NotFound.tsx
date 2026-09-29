@@ -47,7 +47,7 @@ export default function NotFound() {
               <li key={service.slug}>
                 <Link
                   to={service.path}
-                  className="inline-flex min-h-11 items-center gap-1.5 text-sm text-ink-700 transition-colors hover:text-brand-700"
+                  className="inline-flex min-h-11 items-center justify-center gap-1.5 text-sm text-ink-700 transition-colors hover:text-brand-700 sm:justify-start"
                 >
                   {service.name}
                   <IconArrowRight width={14} height={14} className="text-ink-400" />
