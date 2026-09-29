@@ -106,7 +106,7 @@ export function Navbar() {
       <div
         id="mobile-nav"
         hidden={!open}
-        className="border-t border-paper-200 bg-white md:hidden"
+        className="border-t border-paper-200 bg-white text-left md:hidden"
       >
         <nav aria-label="Mobile" className="mx-auto w-full max-w-6xl px-4 py-3 sm:px-8">
           <ul className="flex flex-col">

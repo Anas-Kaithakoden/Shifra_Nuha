@@ -133,8 +133,12 @@ export function ContactForm({ defaultService = '' }: { defaultService?: string }
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="rounded-xl border border-paper-200 bg-white p-6 sm:p-8"
+      className="rounded-xl border border-paper-200 bg-white p-6 text-left sm:p-8"
     >
+      {/* Opts out of the justified body copy set in `index.css`. Browsers align
+          text inside inputs themselves and do not inherit `text-align` from the
+          document, so a justified label over a left-aligned field would look
+          broken rather than deliberate. */}
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor={field('name')} className={labelClass}>

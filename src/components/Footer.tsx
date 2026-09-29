@@ -173,7 +173,10 @@ export function Footer() {
             </ul>
           </div>
 
-          <p className="max-w-md text-xs leading-relaxed text-ink-500">
+          {/* Also opts out of the justified body copy. This is the densest text
+              in the footer, and justified grey fine print at this size is much
+              harder to read than a ragged right edge. */}
+          <p className="max-w-md text-left text-xs leading-relaxed text-ink-500">
             Information on this website is general and is not legal, tax or financial advice. Work
             that requires a qualified professional is performed or supervised by the appropriate
             professional. {CONFIG.WEBSITE_DOMAIN ? '' : 'Prices and processing times depend on your circumstances.'}

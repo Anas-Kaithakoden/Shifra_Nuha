@@ -72,17 +72,35 @@
   }
 
   /*
-   * Body copy is left-aligned at every width.
+   * Body copy is justified on phones, left-aligned from `sm` up.
    *
-   * This was justified on phones, with automatic hyphenation, to tidy a narrow
-   * ragged column. On review that trade is a bad one: hyphenation dictionaries
-   * differ between browsers and languages, and where they are missing the
-   * justification stretches the gaps between words instead — the "rivers" that
-   * justified narrow columns are known for. Left-aligned text is the
-   * professional default and it never depends on a dictionary being available.
+   * REVERSAL NOTE: this was left-aligned at every width, on the reasoning that
+   * hyphenation dictionaries are inconsistent between browsers and languages,
+   * and that where one is missing, justification stretches the gaps between words
+   * instead. That reasoning was written while the site still carried Malayalam,
+   * where browsers have no usable hyphenation dictionary at all. The site is
+   * English-only now and `<html lang="en">` is static, so Chrome, Safari and
+   * Firefox all ship a good English dictionary and the objection largely goes.
+   *
+   * `hyphens-auto` is therefore not decoration, it is the thing that makes
+   * justification survive a ~350px column. Without permission to break words
+   * the browser can only break at spaces, so it stretches the gaps instead.
+   * It switches off at `sm` where the measure is wide enough not to need it.
+   *
+   * Last line of a paragraph is unaffected, as is any single line of text, so
+   * short strings still sit flush left.
+   *
+   * To opt a block out, set `text-left` on it. Three do, each deliberately:
+   *
+   *  - The contact form. Browsers align text inside inputs themselves and do
+   *    not inherit `text-align` from the document, so a justified label over a
+   *    left-aligned field would look broken rather than deliberate.
+   *  - The mobile navigation. Menu items are scanned by their left edge.
+   *  - The footer's legal disclaimer. Justified grey fine print at this size is
+   *    markedly harder to read than a ragged right edge.
    */
   body {
-    @apply bg-paper-50 font-sans text-ink-700 antialiased;
+    @apply bg-paper-50 font-sans text-ink-700 antialiased text-justify hyphens-auto sm:text-left sm:hyphens-manual;
   }
 
   h1,
