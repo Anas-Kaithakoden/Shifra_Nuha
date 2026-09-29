@@ -104,7 +104,7 @@ export function organisationSchema() {
     logo: absoluteUrl(brand.logo) || brand.logo,
     image: absoluteUrl(brand.ogImage) || brand.ogImage,
     areaServed: { '@type': 'State', name: site.region, country: 'IN' },
-    knowsLanguage: ['en', 'ml'],
+    knowsLanguage: ['en'],
     ...(siteConfig.EMAIL ? { email: siteConfig.EMAIL } : {}),
     ...(siteConfig.PHONE_NUMBER ? { telephone: siteConfig.PHONE_NUMBER } : {}),
   }

@@ -1,8 +1,8 @@
 import { useId, useState, type FormEvent } from 'react'
 import { businessTypeOptions, serviceOptions } from '../content/services'
+import { ui } from '../content/ui'
 import { onFormSubmit } from '../lib/contactLinks'
 import { submitEnquiry, type Enquiry } from '../lib/enquiry'
-import { useLocale } from '../i18n/LocaleProvider'
 import { Button } from './Button'
 import { IconCheck } from './icons'
 
@@ -35,7 +35,6 @@ const labelClass = 'block text-sm font-medium text-ink-800'
  */
 export function ContactForm({ defaultService = '' }: { defaultService?: string }) {
   const id = useId()
-  const { t } = useLocale()
   const [values, setValues] = useState<Enquiry>({
     name: '',
     phone: '',
@@ -55,16 +54,16 @@ export function ContactForm({ defaultService = '' }: { defaultService?: string }
   const validate = (input: Enquiry): Errors => {
     const found: Errors = {}
 
-    if (!input.name.trim()) found.name = t('form.err.name')
+    if (!input.name.trim()) found.name = ui['form.err.name']
     if (!input.phone.trim()) {
-      found.phone = t('form.err.phone')
+      found.phone = ui['form.err.phone']
     } else if (input.phone.replace(/\D/g, '').length < 10) {
-      found.phone = t('form.err.phoneInvalid')
+      found.phone = ui['form.err.phoneInvalid']
     }
     if (input.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(input.email.trim())) {
-      found.email = t('form.err.email')
+      found.email = ui['form.err.email']
     }
-    if (!input.need) found.need = t('form.err.service')
+    if (!input.need) found.need = ui['form.err.service']
 
     return found
   }
@@ -102,9 +101,9 @@ export function ContactForm({ defaultService = '' }: { defaultService?: string }
         <span className="inline-flex size-10 items-center justify-center rounded-lg bg-brand-50 text-brand-700 ring-1 ring-brand-200 ring-inset">
           <IconCheck />
         </span>
-        <h3 className="mt-5 text-lg font-semibold tracking-tight text-ink-950">{t('form.sent')}</h3>
+        <h3 className="mt-5 text-lg font-semibold tracking-tight text-ink-950">{ui['form.sent']}</h3>
         <p className="mt-3 text-sm leading-relaxed text-ink-600">{resultMessage}</p>
-        <p className="mt-4 text-sm leading-relaxed text-ink-500">{t('form.fasterCta')}</p>
+        <p className="mt-4 text-sm leading-relaxed text-ink-500">{ui['form.fasterCta']}</p>
         <div className="mt-6">
           <Button
             variant="secondary"
@@ -123,7 +122,7 @@ export function ContactForm({ defaultService = '' }: { defaultService?: string }
               setStatus('idle')
             }}
           >
-            {t('form.again')}
+            {ui['form.again']}
           </Button>
         </div>
       </div>
@@ -143,7 +142,7 @@ export function ContactForm({ defaultService = '' }: { defaultService?: string }
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor={field('name')} className={labelClass}>
-            {t('form.name')} <span className="text-ink-400">*</span>
+            {ui['form.name']} <span className="text-ink-400">*</span>
           </label>
           <input
             id={field('name')}
@@ -167,7 +166,7 @@ export function ContactForm({ defaultService = '' }: { defaultService?: string }
 
         <div>
           <label htmlFor={field('phone')} className={labelClass}>
-            {t('form.phone')} <span className="text-ink-400">*</span>
+            {ui['form.phone']} <span className="text-ink-400">*</span>
           </label>
           <input
             id={field('phone')}
@@ -192,7 +191,7 @@ export function ContactForm({ defaultService = '' }: { defaultService?: string }
 
         <div>
           <label htmlFor={field('need')} className={labelClass}>
-            {t('form.service')} <span className="text-ink-400">*</span>
+            {ui['form.service']} <span className="text-ink-400">*</span>
           </label>
           <select
             id={field('need')}
@@ -204,7 +203,7 @@ export function ContactForm({ defaultService = '' }: { defaultService?: string }
             aria-describedby={errorFor('need') ? `${field('need')}-error` : undefined}
             className={`${inputClass} select-field`}
           >
-            <option value="">{t('form.selectService')}</option>
+            <option value="">{ui['form.selectService']}</option>
             {serviceOptions.map((option) => (
               <option key={option} value={option}>
                 {option}
@@ -220,7 +219,7 @@ export function ContactForm({ defaultService = '' }: { defaultService?: string }
 
         <div>
           <label htmlFor={field('email')} className={labelClass}>
-            {t('form.emailOptional')}
+            {ui['form.emailOptional']}
           </label>
           <input
             id={field('email')}
@@ -243,7 +242,7 @@ export function ContactForm({ defaultService = '' }: { defaultService?: string }
 
         <div>
           <label htmlFor={field('businessName')} className={labelClass}>
-            {t('form.businessNameOptional')}
+            {ui['form.businessNameOptional']}
           </label>
           <input
             id={field('businessName')}
@@ -259,7 +258,7 @@ export function ContactForm({ defaultService = '' }: { defaultService?: string }
 
         <div>
           <label htmlFor={field('businessType')} className={labelClass}>
-            {t('form.businessTypeOptional')}
+            {ui['form.businessTypeOptional']}
           </label>
           <select
             id={field('businessType')}
@@ -268,7 +267,7 @@ export function ContactForm({ defaultService = '' }: { defaultService?: string }
             onChange={update('businessType')}
             className={`${inputClass} select-field`}
           >
-            <option value="">{t('form.selectType')}</option>
+            <option value="">{ui['form.selectType']}</option>
             {businessTypeOptions.map((option) => (
               <option key={option} value={option}>
                 {option}
@@ -279,7 +278,7 @@ export function ContactForm({ defaultService = '' }: { defaultService?: string }
 
         <div className="sm:col-span-2">
           <label htmlFor={field('message')} className={labelClass}>
-            {t('form.messageOptional')}
+            {ui['form.messageOptional']}
           </label>
           <textarea
             id={field('message')}
@@ -294,9 +293,9 @@ export function ContactForm({ defaultService = '' }: { defaultService?: string }
       </div>
 
       <div className="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="max-w-sm text-xs leading-relaxed text-ink-500">{t('form.note')}</p>
+        <p className="max-w-sm text-xs leading-relaxed text-ink-500">{ui['form.note']}</p>
         <Button type="submit" size="lg" disabled={status === 'sending'} className="w-full sm:w-auto">
-          {status === 'sending' ? t('form.sending') : t('form.submit')}
+          {status === 'sending' ? ui['form.sending'] : ui['form.submit']}
         </Button>
       </div>
     </form>

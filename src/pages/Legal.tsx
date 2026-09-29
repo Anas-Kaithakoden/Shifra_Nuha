@@ -1,7 +1,7 @@
 import { Reveal } from '../components/Reveal'
 import { legalDocs, type LegalDoc } from '../content/legal'
 import { site } from '../content/site'
-import { useLocale } from '../i18n/LocaleProvider'
+import { ui } from '../content/ui'
 import { useDocumentMeta } from '../lib/seo'
 import { PageIntro, PageShell } from './PageShell'
 
@@ -15,8 +15,6 @@ import { PageIntro, PageShell } from './PageShell'
  * provisional one.
  */
 export function Legal({ doc }: { doc: LegalDoc }) {
-  const { t } = useLocale()
-
   useDocumentMeta({
     title: `${doc.title} — ${site.name}`,
     description: doc.intro,
@@ -33,7 +31,7 @@ export function Legal({ doc }: { doc: LegalDoc }) {
             <div className="space-y-5 lg:sticky lg:top-28">
               {doc.draft ? (
                 <div className="rounded-xl border border-dashed border-amber-300 bg-amber-50 p-5 text-sm leading-relaxed text-amber-900">
-                  <span className="font-semibold">{t('legal.draft')}</span> {t('legal.draftBody')}
+                  <span className="font-semibold">{ui['legal.draft']}</span> {ui['legal.draftBody']}
                 </div>
               ) : null}
 

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
+import { ui } from '../content/ui'
 import { callLink, onPhoneClick, onWhatsappClick, whatsappLink } from '../lib/contactLinks'
-import { useLocale } from '../i18n/LocaleProvider'
 import { ButtonAnchor, type Size, type Variant } from './Button'
 import { IconPhone, IconWhatsApp } from './icons'
 
@@ -8,8 +8,8 @@ import { IconPhone, IconWhatsApp } from './icons'
  * ---------------------------------------------------------------------------
  * CTA BUTTONS
  * ---------------------------------------------------------------------------
- * WhatsApp and Call, in that order, everywhere on the site. The advertising is
- * a Malayalam Meta ad; a visitor on a phone who has decided to act should never
+ * WhatsApp and Call, in that order, everywhere on the site. Most of the traffic
+ * is a mobile ad click; a visitor on a phone who has decided to act should never
  * have to work out how. Both are one tap, both open something the visitor
  * already knows how to use, and neither requires an account or a form.
  *
@@ -54,7 +54,6 @@ export function WhatsAppButton({
   label,
   note,
 }: LinkProps) {
-  const { t } = useLocale()
   const link = whatsappLink(message)
   const target = link.ready
     ? { href: link.href, target: '_blank', rel: 'noreferrer noopener' as const }
@@ -67,10 +66,10 @@ export function WhatsAppButton({
       variant={variant}
       size={size}
       className={className}
-      title={link.ready ? undefined : t('placeholder.ctaFallback')}
+      title={link.ready ? undefined : ui['placeholder.ctaFallback']}
     >
       <IconWhatsApp width={18} height={18} className="shrink-0" />
-      {label ?? t('cta.whatsapp')}
+      {label ?? ui['cta.whatsapp']}
       {note ? <span className="sr-only"> — {note}</span> : null}
     </ButtonAnchor>
   )
@@ -79,11 +78,10 @@ export function WhatsAppButton({
 type CallProps = Common & { variant?: Variant }
 
 export function CallButton({ place, size = 'lg', variant = 'secondary', className, label, note }: CallProps) {
-  const { t } = useLocale()
   const link = callLink()
   const target = link.ready
     ? { href: link.href, title: undefined }
-    : { href: link.href, title: t('placeholder.ctaFallback') }
+    : { href: link.href, title: ui['placeholder.ctaFallback'] }
 
   return (
     <ButtonAnchor
@@ -94,7 +92,7 @@ export function CallButton({ place, size = 'lg', variant = 'secondary', classNam
       className={className}
     >
       <IconPhone width={18} height={18} className="shrink-0" />
-      {label ?? t('cta.call')}
+      {label ?? ui['cta.call']}
       {note ? <span className="sr-only"> — {note}</span> : null}
     </ButtonAnchor>
   )

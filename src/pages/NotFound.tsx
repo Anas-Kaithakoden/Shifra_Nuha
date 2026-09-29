@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { ButtonLink } from '../components/Button'
 import { coreServices } from '../content/services'
 import { notFound, site } from '../content/site'
-import { useLocale } from '../i18n/LocaleProvider'
+import { ui } from '../content/ui'
 import { useDocumentMeta } from '../lib/seo'
 import { IconArrowRight } from '../components/icons'
 
@@ -12,7 +12,6 @@ import { IconArrowRight } from '../components/icons'
  * looking for the thing they came here for.
  */
 export default function NotFound() {
-  const { pick, t } = useLocale()
 
   useDocumentMeta({
     title: `Page not found — ${site.name}`,
@@ -26,21 +25,21 @@ export default function NotFound() {
       <div className="mx-auto min-h-[60vh] w-full max-w-6xl px-5 py-20 sm:px-8 sm:py-24">
         <p className="font-mono text-sm font-semibold text-brand-600">404</p>
         <h1 className="mt-4 text-3xl font-semibold tracking-tight text-balance text-ink-950 sm:text-4xl">
-          {pick(notFound.heading.en, notFound.heading.ml)}
+          {notFound.heading}
         </h1>
         <p className="mt-4 max-w-xl text-base leading-relaxed text-pretty text-ink-600">
-          {pick(notFound.body.en, notFound.body.ml)}
+          {notFound.body}
         </p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <ButtonLink to="/">{pick(notFound.button.en, notFound.button.ml)}</ButtonLink>
+          <ButtonLink to="/">{notFound.button}</ButtonLink>
           <ButtonLink to="/services" variant="secondary">
-            {t('cta.viewServices')}
+            {ui['cta.viewServices']}
           </ButtonLink>
         </div>
 
-        <nav aria-label={t('nav.servicesList')} className="mt-12 border-t border-ink-200 pt-8">
+        <nav aria-label={ui['nav.servicesList']} className="mt-12 border-t border-ink-200 pt-8">
           <h2 className="text-xs font-semibold tracking-[0.18em] text-ink-500 uppercase">
-            {t('nav.servicesList')}
+            {ui['nav.servicesList']}
           </h2>
           <ul className="mt-4 grid gap-0.5 sm:grid-cols-2 lg:grid-cols-3">
             {coreServices.map((service) => (

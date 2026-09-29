@@ -2,9 +2,8 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { coreServices } from '../content/services'
 import { nav } from '../content/site'
-import { useLocale } from '../i18n/LocaleProvider'
+import { ui } from '../content/ui'
 import { ButtonLink } from './Button'
-import { LanguageToggle } from './LanguageToggle'
 import { Logo } from './Logo'
 import { WhatsAppButton } from './CtaButtons'
 import { IconArrowRight, IconClose, IconMenu } from './icons'
@@ -13,20 +12,15 @@ import { IconArrowRight, IconClose, IconMenu } from './icons'
  * ---------------------------------------------------------------------------
  * NAVBAR
  * ---------------------------------------------------------------------------
- * Three jobs, in order of importance:
+ * Two jobs, in order of importance:
  *
- *  1. Get out of the way. The logo and the language toggle are the two things
- *     a visitor needs on every screen size, so they are always visible — the
- *     toggle included, because on a phone it is the difference between reading
- *     the site in Malayalam and not. WhatsApp joins them from `md` up; below
- *     that the header is only wide enough for the logo, the toggle and the
- *     menu button, and the conversion actions live in the menu panel and in
- *     the sticky bar.
+ *  1. Get out of the way. The logo and a conversion action are the two things a
+ *     visitor needs, so both are always visible, on every screen size. Which
+ *     action takes the slot is a question of width: WhatsApp from `md` up, and
+ *     the enquiry form below that, where the sticky bar keeps WhatsApp and Call
+ *     within thumb reach anyway.
  *  2. Make the nine landing pages reachable in one click, including on mobile,
  *     where the traffic actually comes from.
- *  3. Offer the language toggle, so Malayalam content can be switched on when
- *     it is ready. It lives in the header at every width, because the one
- *     thing a visitor from a Malayalam ad cannot do is find the switch.
  */
 export function Navbar() {
   const [open, setOpen] = useState(false)
@@ -37,7 +31,6 @@ export function Navbar() {
   const servicesRef = useRef<HTMLDivElement>(null)
   const servicesButtonRef = useRef<HTMLButtonElement>(null)
   const servicesId = useId()
-  const { pick, t } = useLocale()
 
   // Close both menus whenever the route changes.
   useEffect(() => {
@@ -96,8 +89,6 @@ export function Navbar() {
     }
   }, [servicesOpen])
 
-  const label = (item: (typeof nav)[number]) => pick(item.label, item.labelMl)
-
   return (
     <header
       className={`sticky top-0 z-50 border-b transition-colors duration-200 ${
@@ -107,7 +98,7 @@ export function Navbar() {
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-3 px-5 sm:px-8 lg:h-[72px]">
         <Logo />
 
-        <nav aria-label={t('nav.primary')} className="hidden items-center gap-1 md:flex">
+        <nav aria-label={ui['nav.primary']} className="hidden items-center gap-1 md:flex">
           <NavLink
             to="/"
             end
@@ -117,7 +108,7 @@ export function Navbar() {
               }`
             }
           >
-            {label(nav[0])}
+            {nav[0].label}
           </NavLink>
 
           {/* Services: a link to the hub, plus a dropdown to the nine pages. */}
@@ -131,7 +122,7 @@ export function Navbar() {
                   }`
                 }
               >
-                {label(nav[1])}
+                {nav[1].label}
               </NavLink>
               <button
                 ref={servicesButtonRef}
@@ -139,7 +130,7 @@ export function Navbar() {
                 onClick={() => setServicesOpen((value) => !value)}
                 aria-expanded={servicesOpen}
                 aria-controls={servicesId}
-                aria-label={t('nav.toggleServices')}
+                aria-label={ui['nav.toggleServices']}
                 className="-ml-2 inline-flex size-9 items-center justify-center rounded-md text-ink-500 transition-colors hover:bg-ink-50 hover:text-ink-900"
               >
                 <svg
@@ -179,7 +170,7 @@ export function Navbar() {
                     to="/services"
                     className="flex min-h-11 items-center gap-1.5 rounded-lg px-3 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-50"
                   >
-                    {t('nav.servicesList')}
+                    {ui['nav.servicesList']}
                     <IconArrowRight width={14} height={14} />
                   </Link>
                 </li>
@@ -197,29 +188,23 @@ export function Navbar() {
                 }`
               }
             >
-              {label(item)}
+              {item.label}
             </NavLink>
           ))}
         </nav>
 
         <div className="flex items-center gap-2 md:gap-3">
-          {/*
-           * The language toggle sits in the header at every width. Almost all of
-           * the traffic is a Malayalam ad opened on a phone, so switching
-           * language is a first-class action rather than something to be buried
-           * behind the menu — which is also what made it undiscoverable on
-           * mobile. At 360px the logo, this and the menu button come to about
-           * 265px of the 320px available, so the whole `EN | മലയാളം` pair fits
-           * and no compact variant is needed.
-           */}
-          <LanguageToggle />
-
-          {/* The primary conversion action, visible on every screen size that
-              has room for it. A phone's header is the language toggle and the
-              menu button, so its CTAs live in the panel below instead. */}
+          {/* The primary conversion action, visible on every screen size.
+              WhatsApp leads from `md` up, where there is room for it; below that
+              the header carries the enquiry button instead, and the sticky bar
+              keeps WhatsApp and Call within thumb reach. */}
           <div className="hidden md:block">
             <WhatsAppButton place="navbar" size="md" />
           </div>
+
+          <ButtonLink to="/contact#enquiry" size="md" variant="primary" className="md:hidden">
+            {ui['cta.enquiry']}
+          </ButtonLink>
 
           <button
             ref={toggleRef}
@@ -227,7 +212,7 @@ export function Navbar() {
             onClick={() => setOpen((value) => !value)}
             aria-expanded={open}
             aria-controls="mobile-nav"
-            aria-label={open ? t('nav.closeMenu') : t('nav.openMenu')}
+            aria-label={open ? ui['nav.closeMenu'] : ui['nav.openMenu']}
             className="-mr-2 inline-flex size-11 items-center justify-center rounded-md text-ink-800 transition-colors hover:bg-ink-50 md:hidden"
           >
             {open ? <IconClose /> : <IconMenu />}
@@ -252,7 +237,7 @@ export function Navbar() {
                     }`
                   }
                 >
-                  {label(item)}
+                  {item.label}
                 </NavLink>
               </li>
             ))}
@@ -260,7 +245,7 @@ export function Navbar() {
 
           <div className="sm:hidden">
             <p className="mt-5 mb-2 px-3 text-xs font-semibold tracking-[0.18em] text-ink-400 uppercase">
-              {t('nav.servicesList')}
+              {ui['nav.servicesList']}
             </p>
             <ul className="grid gap-1 sm:grid-cols-2">
               {coreServices.map((service) => (
@@ -276,10 +261,9 @@ export function Navbar() {
             </ul>
           </div>
 
-          <div className="mt-5 flex flex-col gap-2">
-            <ButtonLink to="/contact#enquiry" size="lg" variant="primary" className="w-full">
-              {t('cta.enquiry')}
-            </ButtonLink>
+          {/* WhatsApp, from `sm` up. Below that the header carries the enquiry
+              button instead, so the panel does not repeat it. */}
+          <div className="mt-5 hidden sm:block">
             <WhatsAppButton place="navbar-mobile" size="lg" className="w-full" />
           </div>
         </nav>

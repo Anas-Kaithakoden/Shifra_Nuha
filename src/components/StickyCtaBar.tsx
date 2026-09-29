@@ -6,8 +6,8 @@ import { CtaPair } from './CtaButtons'
  * ---------------------------------------------------------------------------
  * STICKY CTA BAR — small screens only
  * ---------------------------------------------------------------------------
- * The traffic this site exists for is on a phone, mid-scroll, probably from a
- * Malayalam ad. A bar pinned to the bottom means the two things that matter —
+ * The traffic this site exists for is on a phone, mid-scroll, probably from an
+ * ad. A bar pinned to the bottom means the two things that matter —
  * WhatsApp and Call — are always within thumb reach, without the visitor having
  * to find their way back to a button they have already scrolled past.
  *

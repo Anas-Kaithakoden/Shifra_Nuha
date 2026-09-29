@@ -19,11 +19,6 @@
  *    professional.
  *  - No services outside the agreed list. The nine below are the whole
  *    registration and professional-services catalogue.
- *
- * The advertising is in Malayalam, so every service carries a Malayalam
- * prefilled WhatsApp message. The explanatory copy itself is deliberately
- * English-first: each block has an `ml` slot ready for a checked translation,
- * and until one exists the English text is shown.
  */
 
 export type ServiceIconKey =
@@ -61,8 +56,6 @@ type ServiceSource = {
   icon: ServiceIconKey
   /** Prefilled WhatsApp message, English. Used by every button on this page. */
   whatsappMessage: string
-  /** Prefilled WhatsApp message, Malayalam — the language the ads run in. */
-  whatsappMessageMl: string
   /** The "Clear explanation" part of the page. */
   explanation: ExplanationBlock[]
   /** "Who needs this". */
@@ -85,19 +78,14 @@ type ServiceSource = {
   faqs: FaqItem[]
   /** Slugs of related services, for internal linking. */
   related: string[]
-  /** Optional checked Malayalam copy. */
-  ml?: {
-    name: string
-    summary: string
-  }
 }
 
 /** What every component consumes: the authored data plus its derived fields. */
-export type Service = Omit<ServiceSource, 'metaTitle' | 'metaDescription' | 'whatsappMessage' | 'whatsappMessageMl'> & {
+export type Service = Omit<ServiceSource, 'metaTitle' | 'metaDescription' | 'whatsappMessage'> & {
   /** The full route, `/company-registration` and so on. */
   path: string
   seo: { title: string; description: string }
-  whatsapp: { en: string; ml: string }
+  whatsapp: string
 }
 
 const serviceSources: ServiceSource[] = [
@@ -113,7 +101,6 @@ const serviceSources: ServiceSource[] = [
       'Private limited company incorporation support in Kerala. Name approval, MOA and AOA, DIN, PAN and TAN, and Registrar of Companies coordination. Message us for a quotation.',
     icon: 'building',
     whatsappMessage: 'Hi, I am interested in company registration.',
-    whatsappMessageMl: 'ഹായ്, എനിക്ക് കമ്പനി രജിസ്ട്രേഷനിൽ താൽപ്പര്യമുണ്ട്.',
     startingFrom: '',
     explanation: [
       {
@@ -224,10 +211,6 @@ const serviceSources: ServiceSource[] = [
       },
     ],
     related: ['gst-services', 'accounting-bookkeeping', 'trademark'],
-    ml: {
-      name: 'കമ്പനി ഇൻകോർപ്പറേഷൻ',
-      summary: 'ഇന്ത്യയിൽ പ്രൈവറ്റ് ലിമിറ്റഡ് കമ്പനി തുടങ്ങാൻ പ്രൊഫഷണൽ സഹായം — പേര് അപ്രൂവൽ മുതൽ ഇൻകോർപ്പറേഷൻ സർട്ടിഫിക്കറ്റ് വരെ.',
-    },
   },
 
   // ==========================================================================
@@ -242,7 +225,6 @@ const serviceSources: ServiceSource[] = [
       'LLP registration services in Kerala. Name approval, LLP agreement, DPIN, PAN and TAN, and MCA coordination. Talk to us on WhatsApp or call for a quotation.',
     icon: 'scale',
     whatsappMessage: 'Hi, I am interested in LLP registration.',
-    whatsappMessageMl: 'ഹായ്, എനിക്ക് എൽ.എൽ.പി രജിസ്ട്രേഷനിൽ താൽപ്പര്യമുണ്ട്.',
     startingFrom: '',
     explanation: [
       {
@@ -351,10 +333,6 @@ const serviceSources: ServiceSource[] = [
       },
     ],
     related: ['partnership-registration', 'company-registration', 'gst-services'],
-    ml: {
-      name: 'എൽഎൽപി രജിസ്ട്രേഷൻ',
-      summary: 'പങ്കാളികൾക്ക് പരിമിത ഉത്തരവാദിത്വം നൽകുന്ന എൽഎൽപി രജിസ്ടറേഷനിലേക്ക് പ്രൊഫഷണൽ സഹായം.',
-    },
   },
 
   // ==========================================================================
@@ -369,7 +347,6 @@ const serviceSources: ServiceSource[] = [
       'Partnership firm registration in Kerala with the Registrar of Firms. Firm name approval, partnership deed drafting, PAN and TAN, and GST coordination. Get a quotation.',
     icon: 'handshake',
     whatsappMessage: 'Hi, I am interested in partnership registration.',
-    whatsappMessageMl: 'ഹായ്, എനിക്ക് പാർട്ടർഷിപ്പ് രജിസ്ട്രേഷനിൽ താൽപ്പര്യമുണ്ട്.',
     startingFrom: '',
     explanation: [
       {
@@ -477,10 +454,6 @@ const serviceSources: ServiceSource[] = [
       },
     ],
     related: ['llp-registration', 'gst-services', 'income-tax'],
-    ml: {
-      name: 'പാർട്ടർഷിപ്പ് രജിസ്ട്രേഷൻ',
-      summary: 'സ്റ്റേറ്റ് രജിസ്ട്രാർ ഓഫ് ഫേംസിനോട് പാർട്ടർഷിപ്പ് ഫിം രജിസ്ടർ ചെയ്യുന്നതിനും പാർട്ടർഷിപ്പ് ഡീഡ് തയറാക്കുന്നതിനും സഹായം.',
-    },
   },
 
   // ==========================================================================
@@ -495,7 +468,6 @@ const serviceSources: ServiceSource[] = [
       'GST registration, amendment, return filing and notice support for businesses in Kerala. Eligibility check, filing and ongoing compliance. Message us for a quotation.',
     icon: 'receipt',
     whatsappMessage: 'Hi, I need help with GST.',
-    whatsappMessageMl: 'ഹായ്, എനിക്ക് ജിഎസ്ടിയിൽ സഹായം വേണം.',
     startingFrom: '',
     explanation: [
       {
@@ -604,10 +576,6 @@ const serviceSources: ServiceSource[] = [
       },
     ],
     related: ['accounting-bookkeeping', 'income-tax', 'company-registration'],
-    ml: {
-      name: 'ജിഎസ്ടി സേവനങ്ങൾ',
-      summary: 'ജിഎസ്ടി രജിസ്ട്രേഷൻ, റിട്ടേൺ ഫയലിംഗ്, അമൻഡ്മെന്റ്, നോട്ടീസ് ക്യാസ് എന്നിവയിൽ സമർത്തനം.',
-    },
   },
 
   // ==========================================================================
@@ -622,7 +590,6 @@ const serviceSources: ServiceSource[] = [
       'Outsourced bookkeeping and business accounting services in Kerala. Books maintained monthly, reconciliations, financial statements and management reports. Talk to us.',
     icon: 'calculator',
     whatsappMessage: 'Hi, I need help with accounting and bookkeeping.',
-    whatsappMessageMl: 'ഹായ്, എനിക്ക് അക്കൗണ്ടിംഗിനും ബുക്കീപിംഗിനും സഹായം വേണം.',
     startingFrom: '',
     explanation: [
       {
@@ -727,10 +694,6 @@ const serviceSources: ServiceSource[] = [
       },
     ],
     related: ['income-tax', 'auditing', 'gst-services'],
-    ml: {
-      name: 'അക്കൗണ്ടിംഗ് & ബുക്കീപിംഗ്',
-      summary: 'ദൈനംദിന രേഖകൾ, ബാങ്ക് റീകോന്സിലിയേഷൻ, ഫിനാൻഷ്യൽ സ്റ്ററ്റ്മെന്റ് — നിങ്ങളുടെ ബിസിനസിന്റെ യഥാർത്ഥ സ്ഥിതി എപ്പോഴും അറിയാൻ.',
-    },
   },
 
   // ==========================================================================
@@ -745,7 +708,6 @@ const serviceSources: ServiceSource[] = [
       'Income tax return preparation and filing, TDS and advance tax support, and notice replies for businesses and individuals in Kerala. Talk to us on WhatsApp or call.',
     icon: 'percent',
     whatsappMessage: 'Hi, I need help with income tax.',
-    whatsappMessageMl: 'ഹായ്, എനിക്ക് ഇൻകം ടാക്സിനും സഹായം വേണം.',
     startingFrom: '',
     explanation: [
       {
@@ -851,10 +813,6 @@ const serviceSources: ServiceSource[] = [
       },
     ],
     related: ['accounting-bookkeeping', 'auditing', 'gst-services'],
-    ml: {
-      name: 'ഇൻകം ടാക്സ്',
-      summary: 'ഇൻകം ടാക്സ് റിട്ടേൺ തയറാക്കൽ, ഫയലിംഗ്, ടിഡിഎസ്, അഡ്വാൻസ് ടാക്സ്, നോട്ടീസ് റിപ്ലയ്.',
-    },
   },
 
   // ==========================================================================
@@ -869,7 +827,6 @@ const serviceSources: ServiceSource[] = [
       'Business audit coordination in Kerala, including tax audit support, book audit and financial statement preparation, through a practising chartered accountant.',
     icon: 'clipboard',
     whatsappMessage: 'Hi, I need help with auditing.',
-    whatsappMessageMl: 'ഹായ്, എനിക്ക് ഓഡിറ്റിംഗിനും സഹായം വേണം.',
     startingFrom: '',
     explanation: [
       {
@@ -974,10 +931,6 @@ const serviceSources: ServiceSource[] = [
       },
     ],
     related: ['accounting-bookkeeping', 'income-tax', 'project-report'],
-    ml: {
-      name: 'ഓഡിറ്റിംഗ്',
-      summary: 'സ്റ്റാറ്റ്യൂട്ടറി, ടാക്സ് ഓഡിറ്റ് എന്നിവയ്ക്ക് പ്രൊഫഷണൽ ചാർട്ടർഡ് അക്കൗണ്ടന്റിനൊപ്പം ഓഡിറ്റ് ഏകോപനിഷൻ.',
-    },
   },
 
   // ==========================================================================
@@ -992,7 +945,6 @@ const serviceSources: ServiceSource[] = [
       'Business project report and CMA data preparation for banks, DICs and institutions in Kerala. Projections, break-even, means of finance and lender-format submission.',
     icon: 'document',
     whatsappMessage: 'Hi, I need help with a project report.',
-    whatsappMessageMl: 'ഹായ്, എനിക്ക് ഒരു പ്രോജക്റ്റ് റിപ്പോർട്ടിനും സഹായം വേണം.',
     startingFrom: '',
     explanation: [
       {
@@ -1103,10 +1055,6 @@ const serviceSources: ServiceSource[] = [
       },
     ],
     related: ['auditing', 'accounting-bookkeeping', 'company-registration'],
-    ml: {
-      name: 'പ്രോജക്റ്റ് റിപ്പോർട്ടുകൾ',
-      summary: 'ബാങ്കിനും സ്ഥാപകർത്ഥരുടെയും ആവശ്യമുള്ള ഫോർമാറ്റിൽ പ്രൊജക്റ്റ് റിപ്പോർട്ടുകളും ഫിനാൻഷ്യൽ പ്രൊജക്ഷനുകളും.',
-    },
   },
 
   // ==========================================================================
@@ -1121,7 +1069,6 @@ const serviceSources: ServiceSource[] = [
       'Trademark search, class selection and filing support in Kerala. Word mark and logo registration coordination with an IP professional. Message us on WhatsApp.',
     icon: 'tag',
     whatsappMessage: 'Hi, I am interested in trademark registration.',
-    whatsappMessageMl: 'ഹായ്, എനിക്ക് ട്രേഡ്മാർക്ക് രജിസ്ട്രേഷനിൽ താൽപ്പര്യമുണ്ട്.',
     startingFrom: '',
     explanation: [
       {
@@ -1228,10 +1175,6 @@ const serviceSources: ServiceSource[] = [
       },
     ],
     related: ['company-registration', 'llp-registration', 'gst-services'],
-    ml: {
-      name: 'ട്രേഡ്മാർക്ക്',
-      summary: 'ട്രേഡ്മാർക്ക് തിരയൽ, ക്ലാസ് തിരഞ്ഞെടുക്കൽ, ഫയലിംഗ് ഏകോപനിഷൻ — ഐപി പ്രൊഫഷണലിനൊപ്പം.',
-    },
   },
 ]
 
@@ -1244,7 +1187,7 @@ export const services: Service[] = serviceSources.map((source) => ({
   ...source,
   path: `/${source.slug}`,
   seo: { title: source.metaTitle, description: source.metaDescription },
-  whatsapp: { en: source.whatsappMessage, ml: source.whatsappMessageMl },
+  whatsapp: source.whatsappMessage,
 }))
 
 /** Slug → service, for routing and internal linking. */

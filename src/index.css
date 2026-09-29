@@ -1,13 +1,9 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Noto Sans Malayalam sits in the same stack as Inter. Font fallback is
-     resolved per glyph, so Latin text stays in Inter while Malayalam — which
-     Inter does not cover — falls through to a real Malayalam face instead of a
-     device substitute. */
+  /* Inter carries the whole interface; the site is English only. */
   --font-sans:
-    'Inter', 'Noto Sans Malayalam', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, sans-serif;
+    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
   /* Ink — near-black navy neutrals */
   --color-ink-50: #f6f7f9;
@@ -53,10 +49,10 @@
    *
    * `hyphens-auto` is not decoration. Without permission to break words the
    * browser can only break at spaces, so it stretches the gaps between them
-   * instead — the classic "rivers" of unjustified narrow text. The locale
-   * provider keeps `<html lang>` in sync, so the dictionary follows the
-   * selected language. It is switched off from `sm` up because there is no
-   * reason to hyphenate when the column is wide enough not to.
+   * instead — the classic "rivers" of unjustified narrow text. `<html lang>` is
+   * set in `index.html`, so the hyphenation dictionary is the right one. It is
+   * switched off from `sm` up because there is no reason to hyphenate when the
+   * column is wide enough not to.
    *
    * Headings are the one thing `justify` cannot help: they are single-line, so
    * it would do nothing to them. They are centred on mobile instead, which

@@ -1,7 +1,6 @@
 import { CtaPair } from '../components/CtaButtons'
 import { Reveal } from '../components/Reveal'
 import { aboutPage, site } from '../content/site'
-import { useLocale } from '../i18n/LocaleProvider'
 import { useDocumentMeta } from '../lib/seo'
 import { PageIntro, PageShell } from './PageShell'
 
@@ -20,7 +19,6 @@ import { PageIntro, PageShell } from './PageShell'
  * external partner is involved, is a stronger claim than any adjective.
  */
 export default function About() {
-  const { pick } = useLocale()
 
   useDocumentMeta({
     title: `About — Business Registration and Professional Support in Kerala | ${site.name}`,
@@ -32,9 +30,9 @@ export default function About() {
   return (
     <PageShell>
       <PageIntro
-        eyebrow={pick(aboutPage.eyebrow.en, aboutPage.eyebrow.ml)}
-        title={pick(aboutPage.heading.en, aboutPage.heading.ml)}
-        intro={pick(aboutPage.intro.en, aboutPage.intro.ml)}
+        eyebrow={aboutPage.eyebrow}
+        title={aboutPage.heading}
+        intro={aboutPage.intro}
       />
 
       <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
@@ -44,17 +42,17 @@ export default function About() {
             <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:gap-14">
               <div>
                 <h2 className="text-2xl font-semibold tracking-tight text-balance text-ink-950 sm:text-3xl">
-                  {pick(aboutPage.positioning.title.en, aboutPage.positioning.title.ml)}
+                  {aboutPage.positioning.title}
                 </h2>
                 <p className="mt-6 text-lg leading-relaxed font-medium text-pretty text-ink-900">
-                  “{pick(aboutPage.positioning.primary.en, aboutPage.positioning.primary.ml)}”
+                  “{aboutPage.positioning.primary}”
                 </p>
                 <p className="mt-3 text-lg leading-relaxed text-pretty text-ink-500">
-                  “{pick(aboutPage.positioning.secondary.en, aboutPage.positioning.secondary.ml)}”
+                  “{aboutPage.positioning.secondary}”
                 </p>
               </div>
               <p className="text-base leading-relaxed text-pretty text-ink-600 lg:pt-3">
-                {pick(aboutPage.positioning.body.en, aboutPage.positioning.body.ml)}
+                {aboutPage.positioning.body}
               </p>
             </div>
           </Reveal>
@@ -66,10 +64,10 @@ export default function About() {
             <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
               <div>
                 <h2 className="text-2xl font-semibold tracking-tight text-balance text-ink-950 sm:text-3xl">
-                  {pick(aboutPage.boundaries.title.en, aboutPage.boundaries.title.ml)}
+                  {aboutPage.boundaries.title}
                 </h2>
                 <p className="mt-5 text-base leading-relaxed text-pretty text-ink-600">
-                  {pick(aboutPage.boundaries.body.en, aboutPage.boundaries.body.ml)}
+                  {aboutPage.boundaries.body}
                 </p>
               </div>
               <ul className="space-y-3 lg:pt-2">
@@ -90,10 +88,10 @@ export default function About() {
         <section className="border-t border-ink-200 py-14 sm:py-16">
           <Reveal>
             <h2 className="text-2xl font-semibold tracking-tight text-ink-950 sm:text-3xl">
-              {pick(aboutPage.partners.title.en, aboutPage.partners.title.ml)}
+              {aboutPage.partners.title}
             </h2>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-pretty text-ink-600">
-              {pick(aboutPage.partners.intro.en, aboutPage.partners.intro.ml)}
+              {aboutPage.partners.intro}
             </p>
 
             {/* The table scrolls horizontally on narrow screens rather than
@@ -136,10 +134,10 @@ export default function About() {
         <section className="border-t border-ink-200 py-14 sm:py-16">
           <Reveal>
             <h2 className="text-2xl font-semibold tracking-tight text-ink-950 sm:text-3xl">
-              {pick(aboutPage.journey.title.en, aboutPage.journey.title.ml)}
+              {aboutPage.journey.title}
             </h2>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-pretty text-ink-600">
-              {pick(aboutPage.journey.intro.en, aboutPage.journey.intro.ml)}
+              {aboutPage.journey.intro}
             </p>
 
             <ol className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
@@ -163,10 +161,10 @@ export default function About() {
           <Reveal>
             <div className="rounded-2xl bg-ink-950 p-8 text-white sm:p-10">
               <h2 className="text-2xl font-semibold tracking-tight text-balance text-white sm:text-3xl">
-                {pick(aboutPage.closing.title.en, aboutPage.closing.title.ml)}
+                {aboutPage.closing.title}
               </h2>
               <p className="mt-5 max-w-2xl text-base leading-relaxed text-pretty text-ink-300">
-                {pick(aboutPage.closing.body.en, aboutPage.closing.body.ml)}
+                {aboutPage.closing.body}
               </p>
               <div className="mt-8">
                 <CtaPair place="about-closing" whatsappVariant="whatsapp" callVariant="onDark" />

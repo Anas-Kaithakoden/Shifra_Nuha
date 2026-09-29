@@ -1,4 +1,6 @@
-﻿import { renderToString } from 'react-dom/server'
+﻿import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom/server'
 import App from '../src/App'
 import { CONFIG } from '../src/config/site.config'
@@ -36,6 +38,21 @@ const pass = (scope: string, message: string) => console.log(`ok   ${scope} (${m
 
 const pages: { path: string; html: string }[] = []
 
+/**
+ * The document language is declared once, on `<html>` in `index.html` — the site
+ * is single-language, so there is no runtime locale that could disagree with it.
+ * The shell is the real file rather than the rendered fragment, which never
+ * contains the document element at all. It is read from the project root because
+ * this bundle is emitted into `node_modules/.tmp`, not next to the source.
+ */
+const indexHtml = readFileSync(resolve(process.cwd(), 'index.html'), 'utf8')
+const documentLang = /<html[^>]*\slang="([a-z]{2})/i.exec(indexHtml)?.[1]
+if (!documentLang) {
+  fail('index.html', 'the <html> element has no lang attribute')
+} else if (documentLang !== 'en') {
+  fail('index.html', `declared lang is "${documentLang}", expected "en"`)
+}
+
 for (const route of [...ROUTES.map((r) => r.path), '/this-route-does-not-exist']) {
   try {
     const html = renderToString(
@@ -50,7 +67,6 @@ for (const route of [...ROUTES.map((r) => r.path), '/this-route-does-not-exist']
     if (html.includes('NaN')) issues.push('contains "NaN"')
     if (!html.includes('<h1')) issues.push('missing <h1>')
     if (!html.includes('<footer')) issues.push('missing footer')
-    if (!html.includes('lang=')) issues.push('missing lang attribute on <html>')
     // The two primary CTAs. While the numbers are unset these fall back to the
     // enquiry form, but the buttons themselves must always be present.
     if (!html.includes('wa.me') && !html.includes('/contact')) {
@@ -88,8 +104,7 @@ for (const service of coreServices) {
     ['summary', service.summary],
     ['seo.title', service.seo.title],
     ['seo.description', service.seo.description],
-    ['whatsapp.en', service.whatsapp.en],
-    ['whatsapp.ml', service.whatsapp.ml],
+    ['whatsapp', service.whatsapp],
     ['pricingNote', service.pricingNote],
   ]
   for (const [field, value] of required) {
@@ -287,10 +302,11 @@ pass('routes', `${ROUTES.length} routes, ${INDEXABLE_ROUTES.length} indexable`)
 // ===========================================================================
 
 for (const [key, value] of Object.entries(ui)) {
-  if (!value.en?.trim()) fail('ui', `key ${key} has no English string`)
-  if (value.ml !== undefined && !value.ml.trim()) fail('ui', `key ${key} has an empty Malayalam string`)
+  if (!value.trim()) fail('ui', `key ${key} has no string`)
 }
-pass('ui', `${Object.keys(ui).length} interface keys with both locales`)
+pass('ui', `${Object.keys(ui).length} interface keys`)
+
+if (documentLang === 'en') pass('index.html', 'document language declared as English')
 
 // ===========================================================================
 

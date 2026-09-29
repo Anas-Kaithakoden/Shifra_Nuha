@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { CoreService } from '../content/services'
+import { ui } from '../content/ui'
 import { serviceIcons } from './iconRegistry'
-import { useLocale } from '../i18n/LocaleProvider'
 import { IconArrowRight } from './icons'
 
 /**
@@ -10,7 +10,6 @@ import { IconArrowRight } from './icons'
  * never a generic contact form.
  */
 export function ServiceCard({ service }: { service: CoreService }) {
-  const { pick, t } = useLocale()
   const Icon = serviceIcons[service.icon]
 
   return (
@@ -21,11 +20,11 @@ export function ServiceCard({ service }: { service: CoreService }) {
         </span>
 
         <h3 className="mt-5 text-lg leading-snug font-semibold tracking-tight text-balance text-ink-950">
-          {pick(service.name, service.ml?.name)}
+          {service.name}
         </h3>
 
         <p className="mt-3 text-sm leading-relaxed text-ink-600">
-          {pick(service.summary, service.ml?.summary)}
+          {service.summary}
         </p>
 
         <div className="mt-auto pt-6">
@@ -33,7 +32,7 @@ export function ServiceCard({ service }: { service: CoreService }) {
             to={`/${service.slug}`}
             className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-ink-950 transition-colors group-hover:text-brand-700"
           >
-            {t('cta.learnMore')}
+            {ui['cta.learnMore']}
             <IconArrowRight
               width={16}
               height={16}

@@ -1,6 +1,5 @@
 import { coreServices, type FaqItem } from '../content/services'
 import { faqs, faqsSection } from '../content/site'
-import { useLocale } from '../i18n/LocaleProvider'
 import { faqSchema, useJsonLd } from '../lib/seo'
 import { Faq } from './Faq'
 import { Section } from './Section'
@@ -18,7 +17,6 @@ import { Section } from './Section'
  * duplicating a word of it.
  */
 export function FaqSection() {
-  const { pick } = useLocale()
   const items: FaqItem[] = [
     ...faqs,
     ...coreServices.flatMap((service) => service.faqs.slice(0, 1)),
@@ -29,9 +27,9 @@ export function FaqSection() {
   return (
     <Section
       id="faq"
-      eyebrow={pick(faqsSection.eyebrow.en, faqsSection.eyebrow.ml)}
-      title={pick(faqsSection.title.en, faqsSection.title.ml)}
-      intro={pick(faqsSection.intro.en, faqsSection.intro.ml)}
+      eyebrow={faqsSection.eyebrow}
+      title={faqsSection.title}
+      intro={faqsSection.intro}
       surface="subtle"
       divided
     >

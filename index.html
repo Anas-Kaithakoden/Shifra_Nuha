@@ -41,7 +41,6 @@
       content="Company incorporation, LLP and partnership registration, GST, accounting, income tax, auditing, project reports and trademark support for businesses across Kerala."
     />
     <meta property="og:locale" content="en_IN" />
-    <meta property="og:locale:alternate" content="ml_IN" />
     <!-- Relative until VITE_WEBSITE_DOMAIN is set; useDocumentMeta upgrades it. -->
     <meta property="og:image" content="/brand/og-image.png" />
     <meta property="og:image:type" content="image/png" />
@@ -68,15 +67,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!--
-      Inter carries the interface; Noto Sans Malayalam is listed in the same
-      stack (see `--font-sans` in `src/index.css`) so the `EN | മലയാളം` toggle
-      renders Malayalam with a proper face instead of whatever the device
-      happens to substitute. Glyph fallback is per character, so Latin text
-      still uses Inter.
-    -->
+    <!-- Inter carries the whole interface; the site is English only. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>

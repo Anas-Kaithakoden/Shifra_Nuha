@@ -1,5 +1,5 @@
 import { cta, site } from '../content/site'
-import { useLocale } from '../i18n/LocaleProvider'
+import { ui } from '../content/ui'
 import { CtaPair } from './CtaButtons'
 import { ButtonLink } from './Button'
 import { IconArrowRight } from './icons'
@@ -17,8 +17,6 @@ import { IconArrowRight } from './icons'
  * one.
  */
 export function CtaBand() {
-  const { pick, t } = useLocale()
-
   return (
     <section className="relative overflow-hidden bg-ink-950 py-20 text-white sm:py-24 lg:py-28">
       <div className="bg-grid absolute inset-0" aria-hidden="true" />
@@ -30,13 +28,13 @@ export function CtaBand() {
       <div className="relative mx-auto w-full max-w-6xl px-5 sm:px-8">
         <div className="max-w-2xl">
           <h2 className="text-3xl leading-[1.15] font-semibold tracking-tight text-balance sm:text-4xl">
-            {pick(cta.title.en, cta.title.ml)}
+            {cta.title}
           </h2>
           <p className="mt-5 text-base leading-relaxed text-pretty text-ink-300 sm:text-lg">
-            {pick(cta.body.en, cta.body.ml)}
+            {cta.body}
           </p>
           <p className="mt-4 text-sm leading-relaxed text-ink-400">
-            {pick(cta.note.en, cta.note.ml)}
+            {cta.note}
           </p>
         </div>
 
@@ -51,7 +49,7 @@ export function CtaBand() {
             variant="ghost"
             className="self-start text-brand-200 hover:bg-white/10 hover:text-white"
           >
-            {t('cta.enquiry')}
+            {ui['cta.enquiry']}
             <IconArrowRight width={16} height={16} />
           </ButtonLink>
           <p className="text-sm text-ink-400">Serving businesses across {site.market}.</p>

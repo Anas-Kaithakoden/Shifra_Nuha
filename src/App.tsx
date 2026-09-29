@@ -6,7 +6,7 @@ import { Navbar } from './components/Navbar'
 import { StickyCtaBar } from './components/StickyCtaBar'
 import { legalDocs } from './content/legal'
 import { serviceBySlug } from './content/services'
-import { LocaleProvider, useLocale } from './i18n/LocaleProvider'
+import { ui } from './content/ui'
 import { track } from './lib/tracking'
 import About from './pages/About'
 import Contact from './pages/Contact'
@@ -27,7 +27,6 @@ import ServicesPage from './pages/Services'
  */
 function RouteEffects() {
   const { pathname, hash } = useLocation()
-  const { t } = useLocale()
 
   useEffect(() => {
     if (hash) {
@@ -53,45 +52,43 @@ function RouteEffects() {
       href="#main"
       className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:bg-ink-950 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
     >
-      {t('nav.skip')}
+      {ui['nav.skip']}
     </a>
   )
 }
 
 export default function App() {
   return (
-    <LocaleProvider>
-      <div className="flex min-h-dvh flex-col bg-white">
-        <RouteEffects />
+    <div className="flex min-h-dvh flex-col bg-white">
+      <RouteEffects />
 
-        <Navbar />
+      <Navbar />
 
-        <main id="main" className="flex-1">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            {Object.values(serviceBySlug).map((service) => (
-              <Route key={service.slug} path={service.path} element={<ServicePage service={service} />} />
-            ))}
-            {/*
-              Legal routes are generated from `legalDocs`, so adding one is a
-              content change rather than a routing change. `PrivacyPolicy` is
-              the same `Legal` component behind a named export, kept because
-              the route is the one people have linked to for longest.
-            */}
-            <Route path={`/${legalDocs.privacy.slug}`} element={<PrivacyPolicy />} />
-            <Route path={`/${legalDocs.terms.slug}`} element={<Legal doc={legalDocs.terms} />} />
-            <Route path={`/${legalDocs.disclaimer.slug}`} element={<Legal doc={legalDocs.disclaimer} />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
+      <main id="main" className="flex-1">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          {Object.values(serviceBySlug).map((service) => (
+            <Route key={service.slug} path={service.path} element={<ServicePage service={service} />} />
+          ))}
+          {/*
+            Legal routes are generated from `legalDocs`, so adding one is a
+            content change rather than a routing change. `PrivacyPolicy` is the
+            same `Legal` component behind a named export, kept because the route
+            is the one people have linked to for longest.
+          */}
+          <Route path={`/${legalDocs.privacy.slug}`} element={<PrivacyPolicy />} />
+          <Route path={`/${legalDocs.terms.slug}`} element={<Legal doc={legalDocs.terms} />} />
+          <Route path={`/${legalDocs.disclaimer.slug}`} element={<Legal doc={legalDocs.disclaimer} />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
 
-        <Footer />
-        <StickyCtaBar />
-        <Analytics />
-      </div>
-    </LocaleProvider>
+      <Footer />
+      <StickyCtaBar />
+      <Analytics />
+    </div>
   )
 }

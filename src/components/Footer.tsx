@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import { coreServices } from '../content/services'
 import { footer, site, social } from '../content/site'
+import { ui } from '../content/ui'
 import { CONFIG } from '../config/site.config'
 import { callLink, mailtoLink, whatsappLink } from '../lib/contactLinks'
-import { useLocale } from '../i18n/LocaleProvider'
 import { WhatsAppButton } from './CtaButtons'
 import { Logo } from './Logo'
 import { IconArrowRight, IconMail, IconPhone } from './icons'
@@ -27,7 +27,6 @@ const socialEntries = [
  * bar so it never sits on top of the last line.
  */
 export function Footer() {
-  const { pick, t } = useLocale()
   const year = new Date().getFullYear()
   const activeSocials = socialEntries.filter((entry) => entry.href)
   const whatsapp = whatsappLink()
@@ -47,16 +46,13 @@ export function Footer() {
               {site.tagline}
             </p>
             <p className="mt-3 text-sm leading-relaxed text-ink-600">
-              {pick(footer.blurb.en, footer.blurb.ml)}
-            </p>
-            <p className="mt-4 text-sm leading-relaxed text-ink-600">
-              {t('lang.note')}
+              {footer.blurb}
             </p>
           </div>
 
           <div>
             <h2 className="text-xs font-semibold tracking-[0.18em] text-ink-500 uppercase">
-              {pick(footer.servicesTitle.en, footer.servicesTitle.ml)}
+              {footer.servicesTitle}
             </h2>
             <ul className="mt-4 grid gap-0.5 sm:grid-cols-2 lg:grid-cols-1">
               {coreServices.map((service) => (
@@ -74,7 +70,7 @@ export function Footer() {
 
           <div>
             <h2 className="text-xs font-semibold tracking-[0.18em] text-ink-500 uppercase">
-              {t('nav.contact')}
+              {ui['nav.contact']}
             </h2>
 
             {hasContact ? (
@@ -101,7 +97,7 @@ export function Footer() {
               </ul>
             ) : (
               <p className="mt-4 rounded-lg border border-dashed border-ink-300 bg-white px-3 py-3 text-sm leading-relaxed text-ink-500">
-                {t('placeholder.contact')}
+                {ui['placeholder.contact']}
               </p>
             )}
 
@@ -125,7 +121,7 @@ export function Footer() {
                 to="/contact#enquiry"
                 className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-ink-950 transition-colors hover:text-brand-700"
               >
-                {t('cta.enquiry')}
+                {ui['cta.enquiry']}
                 <IconArrowRight width={16} height={16} />
               </Link>
             </div>

@@ -6,7 +6,7 @@ import { Reveal } from '../components/Reveal'
 import { serviceIcons } from '../components/iconRegistry'
 import { IconArrowRight, IconCheck, IconWarning } from '../components/icons'
 import { coreServices, serviceBySlug, type CoreService } from '../content/services'
-import { useLocale } from '../i18n/LocaleProvider'
+import { ui } from '../content/ui'
 import { absoluteUrl, siteConfig, siteOrigin } from '../config/site.config'
 import { faqSchema, useDocumentMeta, useJsonLd } from '../lib/seo'
 import { PageIntro, PageShell } from './PageShell'
@@ -33,9 +33,8 @@ import { PageIntro, PageShell } from './PageShell'
  * so the conversation starts with the visitor's actual interest already stated.
  */
 export function ServicePage({ service }: { service: CoreService }) {
-  const { locale, pick, t } = useLocale()
   const Icon = serviceIcons[service.icon] ?? serviceIcons.document
-  const message = service.whatsapp[locale === 'ml' ? 'ml' : 'en']
+  const message = service.whatsapp
   const related = service.related.map((slug) => serviceBySlug[slug]).filter(Boolean)
   const pricingLine = service.startingFrom
     ? `From ₹${service.startingFrom}. ${service.pricingNote}`
@@ -51,8 +50,8 @@ export function ServicePage({ service }: { service: CoreService }) {
     {
       '@context': 'https://schema.org',
       '@type': 'Service',
-      name: pick(service.name, service.ml?.name),
-      description: pick(service.summary, service.ml?.summary),
+      name: service.name,
+      description: service.summary,
       serviceType: service.name,
       ...(siteOrigin
         ? {
@@ -65,9 +64,9 @@ export function ServicePage({ service }: { service: CoreService }) {
           }
         : {}),
       areaServed: { '@type': 'State', name: 'Kerala', country: 'IN' },
-      availableLanguage: ['en', 'ml'],
+      availableLanguage: ['en'],
     },
-    [service.slug, locale],
+    [service.slug],
   )
 
   useJsonLd(
@@ -89,8 +88,8 @@ export function ServicePage({ service }: { service: CoreService }) {
     <PageShell>
       <PageIntro
         eyebrow="Service"
-        title={pick(service.name, service.ml?.name)}
-        intro={pick(service.summary, service.ml?.summary)}
+        title={service.name}
+        intro={service.summary}
         meta={pricingLine}
       >
         <div className="mt-9 flex flex-col gap-3 sm:max-w-md sm:flex-row">
@@ -142,7 +141,7 @@ export function ServicePage({ service }: { service: CoreService }) {
             {/* Who needs this */}
             <section className="mt-12 border-t border-ink-200 pt-10">
               <h2 className="text-xl font-semibold tracking-tight text-ink-950">
-                {t('section.whoNeeds')}
+                {ui['section.whoNeeds']}
               </h2>
               <ul className="mt-5 space-y-2.5">
                 {service.whoNeeds.map((item) => (
@@ -157,7 +156,7 @@ export function ServicePage({ service }: { service: CoreService }) {
             {/* What is included */}
             <section className="mt-12 border-t border-ink-200 pt-10">
               <h2 className="text-xl font-semibold tracking-tight text-ink-950">
-                {t('section.includes')}
+                {ui['section.includes']}
               </h2>
               <ul className="mt-5 grid gap-2.5 sm:grid-cols-2">
                 {service.includes.map((item) => (
@@ -175,7 +174,7 @@ export function ServicePage({ service }: { service: CoreService }) {
             {/* Process */}
             <section className="mt-12 border-t border-ink-200 pt-10">
               <h2 className="text-xl font-semibold tracking-tight text-ink-950">
-                {t('section.process')}
+                {ui['section.process']}
               </h2>
               <ol className="mt-6 space-y-px overflow-hidden rounded-xl bg-ink-200">
                 {service.process.map((step, index) => (
@@ -199,7 +198,7 @@ export function ServicePage({ service }: { service: CoreService }) {
             {/* Documents */}
             <section className="mt-12 border-t border-ink-200 pt-10">
               <h2 className="text-xl font-semibold tracking-tight text-ink-950">
-                {t('section.documents')}
+                {ui['section.documents']}
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-ink-500">
                 A general list, so you can start gathering what you have. The exact list depends on your
@@ -225,7 +224,7 @@ export function ServicePage({ service }: { service: CoreService }) {
                   icon would sit at the far left, stranded from its label. */}
               <h2 className="flex items-center justify-center gap-2.5 text-xl font-semibold tracking-tight text-ink-950 sm:justify-start">
                 <IconWarning width={20} height={20} className="shrink-0 text-amber-600" />
-                {t('section.caveats')}
+                {ui['section.caveats']}
               </h2>
               <div className="mt-5 space-y-3 rounded-xl border border-amber-200 bg-amber-50/70 p-5">
                 {service.caveats.map((item) => (
@@ -238,7 +237,7 @@ export function ServicePage({ service }: { service: CoreService }) {
 
             {/* FAQ */}
             <section className="mt-12 border-t border-ink-200 pt-10">
-              <h2 className="text-xl font-semibold tracking-tight text-ink-950">{t('section.faq')}</h2>
+              <h2 className="text-xl font-semibold tracking-tight text-ink-950">{ui['section.faq']}</h2>
               <Faq items={service.faqs} className="mt-6" />
             </section>
 
@@ -246,7 +245,7 @@ export function ServicePage({ service }: { service: CoreService }) {
             {related.length > 0 ? (
               <section className="mt-12 border-t border-ink-200 pt-10">
                 <h2 className="text-xl font-semibold tracking-tight text-ink-950">
-                  {t('section.related')}
+                  {ui['section.related']}
                 </h2>
                 <ul className="mt-5 grid gap-3 sm:grid-cols-3">
                   {related.map((item) => (
@@ -271,7 +270,7 @@ export function ServicePage({ service }: { service: CoreService }) {
             {/* Secondary CTA: the form, prefilled with this service */}
             <section className="mt-12 border-t border-ink-200 pt-10">
               <h2 className="text-xl font-semibold tracking-tight text-ink-950">
-                {t('section.form')}
+                {ui['section.form']}
               </h2>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-600">
                 WhatsApp and calling are faster and we read both. Use the form if you would rather not start
@@ -293,7 +292,7 @@ export function ServicePage({ service }: { service: CoreService }) {
                   <Icon width={20} height={20} />
                 </span>
                 <h2 className="mt-5 text-base font-semibold tracking-tight text-balance text-ink-950">
-                  Talk to someone about {pick(service.name, service.ml?.name).toLowerCase()}
+                  Talk to someone about {service.name.toLowerCase()}
                 </h2>
                 <p className="mt-2.5 text-sm leading-relaxed text-ink-600">
                   Tell us your situation and we will say what applies, what it involves, and what it costs.
@@ -315,7 +314,7 @@ export function ServicePage({ service }: { service: CoreService }) {
 
               <nav aria-label="All services" className="mt-5 rounded-xl border border-ink-200 bg-white p-6">
                 <h2 className="text-xs font-semibold tracking-[0.18em] text-ink-500 uppercase">
-                  {t('nav.servicesList')}
+                  {ui['nav.servicesList']}
                 </h2>
                 <ul className="mt-3 space-y-0.5">
                   {coreServices.map((item) => (

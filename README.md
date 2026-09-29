@@ -114,7 +114,7 @@ for a wording change.**
 | `src/content/services.ts` | The nine core services - the single most important file |
 | `src/content/site.ts` | Everything else: hero, sections, page copy, footer, contact |
 | `src/content/legal.ts` | Privacy Policy, Terms & Conditions, Disclaimer |
-| `src/content/ui.ts` | Short interface strings, in English and Malayalam |
+| `src/content/ui.ts` | Short interface strings, in English |
 
 `src/content/services.ts` is the file to edit when adding or changing a
 service. The homepage cards, the navbar dropdown, the `/services` hub, the route
@@ -125,25 +125,21 @@ generated from it, so a service cannot exist without existing everywhere else.
 
 Two kinds of text, handled two different ways on purpose:
 
-- **Long-form copy** - the explanation of a statutory or tax process - is a
-  `{ en, ml }` object read through `pick()`. A mistranslated explanation of the
-  Companies Act is worse than an English one, so `ml` is only filled in once
-  somebody has checked it, and until then the English is shown.
+- **Long-form copy** - the explanation of a statutory or tax process - lives in
+  `content/site.ts` and `content/services.ts`, as plain strings beside the
+  component that renders them. Changing a wording is a one-line edit.
 - **Interface strings** - button labels, nav, form labels, error messages - live
-  in `src/content/ui.ts` and are read through `t()`. Both locales are always
-  filled in, because a half-translated button is worse than either.
+  in `src/content/ui.ts` and are read by key as `ui['cta.enquiry']`. They are on
+  every page, so keeping them in one table means a wording change is a single
+  edit rather than a sweep through the components.
 
-The site is **English-first with a visible `EN | മലയാളം` toggle**. Most people
-starting a business in Kerala can read English, and the pages that carry real
-explanatory depth are in English. Malayalam is present for the advertising
-audience, and every interface string switches with it. Where a long block has no
-checked Malayalam, the English is shown rather than machine-guessed - the footer
-says so on every page.
+The site is **English only**. There is no language toggle and no translation
+layer: `ui.ts` is a flat string map, and the long-form copy is plain strings.
+Note that the original brief called for the advertising to run in Malayalam with
+an `EN | മലയാളം` toggle, so if that is revived it is a new piece of work rather
+than something still half-built here.
 
-Latin text uses Inter and Malayalam script uses `Noto Sans Malayalam`, both
-loaded from Google Fonts in `index.html`. Malayalam is second in the
-`--font-sans` stack, so the browser only fetches a glyph from it when Inter has
-none to give - an English page never pays for the Malayalam download.
+Latin text uses Inter, loaded from Google Fonts in `index.html`.
 
 ### What must never be invented
 
@@ -188,7 +184,6 @@ src/
     FaqSection.tsx        Homepage FAQ + FAQPage structured data
     Footer.tsx
     Hero.tsx
-    LanguageToggle.tsx    EN / Malayalam
     Logo.tsx              Brand lockup + dark variant
     Navbar.tsx            Sticky nav with the services dropdown
     Process.tsx           How it works
@@ -206,10 +201,7 @@ src/
     legal.ts              Privacy, Terms, Disclaimer
     services.ts           The nine services
     site.ts               Site copy
-    ui.ts                 Interface strings, EN + ML
-  i18n/
-    LocaleProvider.tsx    useLocale() -> { locale, setLocale, t, pick }
-    locales.ts            Locale constants
+    ui.ts                 Interface strings
   lib/
     contactLinks.ts       wa.me / tel: / mailto: builders + click tracking
     enquiry.ts            Form submission (see below)
@@ -329,12 +321,9 @@ to a subdirectory, set `base` in `vite.config.ts`.
       WhatsApp is the intended behaviour.
 - [ ] Add the Meta Pixel and Google Analytics IDs.
 - [ ] Replace the three legal documents with text reviewed for this company.
-- [ ] **Have a native Malayalam speaker review or delete the long-form `ml`
-      copy in `site.ts` and `services.ts`.** It was machine-drafted as a
-      placeholder, and the brief rules out machine-translating complex legal and
-      accounting text. A wrong explanation of a statutory process is worse than
-      the English original, so the safe move for any string that has not been
-      checked is to drop the `ml` key — the English is then shown instead.
-- [ ] Confirm the interface strings in `ui.ts` with the same reviewer; those
-      are short and both locales are always filled in.
+- [ ] **Have a native English speaker review the long-form copy in
+      `site.ts` and `services.ts`.** It was machine-drafted as a placeholder, and
+      the brief rules out unverified text for complex legal and accounting
+      explanations. A wrong explanation of a statutory process is worse than a
+      plainer correct one.
 - [ ] Replace `public/brand/og-image.png` if the tagline on it has changed.
