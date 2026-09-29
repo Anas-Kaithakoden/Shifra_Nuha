@@ -1,75 +1,60 @@
-import { contact, cta } from '../content/site'
+import { cta, site } from '../content/site'
+import { useLocale } from '../i18n/LocaleProvider'
+import { CtaPair } from './CtaButtons'
 import { ButtonLink } from './Button'
-import { IconArrowRight, IconMail, IconPhone } from './icons'
+import { IconArrowRight } from './icons'
 
+/**
+ * ---------------------------------------------------------------------------
+ * CLOSING CTA BAND
+ * ---------------------------------------------------------------------------
+ * The last thing on the homepage. Dark, full width, and the same two buttons in
+ * the same order as the hero — a visitor who scrolled the whole page and is
+ * now ready should not have to scroll back up to find out how.
+ *
+ * The enquiry form link sits underneath as the quieter third option, so the
+ * page is not pushing three equally-weighted actions at someone who only needs
+ * one.
+ */
 export function CtaBand() {
+  const { pick, t } = useLocale()
+
   return (
-    <section className="border-t border-ink-200 bg-white py-20 sm:py-24">
-      <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
-        <div className="relative overflow-hidden rounded-2xl bg-ink-950 px-6 py-14 sm:px-12 sm:py-16">
-          <div className="bg-grid absolute inset-0" aria-hidden="true" />
-          <div
-            className="absolute -right-24 -bottom-24 size-80 rounded-full bg-brand-600/20 blur-[100px]"
-            aria-hidden="true"
-          />
+    <section className="relative overflow-hidden bg-ink-950 py-20 text-white sm:py-24 lg:py-28">
+      <div className="bg-grid absolute inset-0" aria-hidden="true" />
+      <div
+        className="absolute -bottom-40 left-1/2 h-[420px] w-[760px] -translate-x-1/2 rounded-full bg-brand-600/12 blur-[120px]"
+        aria-hidden="true"
+      />
 
-          <div className="relative grid gap-10 lg:grid-cols-[1.5fr_1fr] lg:items-center">
-            <div>
-              <h2 className="max-w-xl text-3xl leading-[1.15] font-semibold tracking-tight text-balance text-white sm:text-4xl">
-                {cta.heading}
-              </h2>
-              <p className="mt-5 max-w-lg text-base leading-relaxed text-ink-300 sm:text-lg">{cta.body}</p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <ButtonLink to="/contact#enquiry" size="lg" variant="onDark">
-                  {cta.button}
-                  <IconArrowRight width={18} height={18} />
-                </ButtonLink>
-                <ButtonLink to="/services" size="lg" variant="onDarkGhost">
-                  See services
-                </ButtonLink>
-              </div>
-            </div>
+      <div className="relative mx-auto w-full max-w-6xl px-5 sm:px-8">
+        <div className="max-w-2xl">
+          <h2 className="text-3xl leading-[1.15] font-semibold tracking-tight text-balance sm:text-4xl">
+            {pick(cta.title.en, cta.title.ml)}
+          </h2>
+          <p className="mt-5 text-base leading-relaxed text-pretty text-ink-300 sm:text-lg">
+            {pick(cta.body.en, cta.body.ml)}
+          </p>
+          <p className="mt-4 text-sm leading-relaxed text-ink-400">
+            {pick(cta.note.en, cta.note.ml)}
+          </p>
+        </div>
 
-            {/* Direct contact details, shown only once real values exist. */}
-            {contact.email || contact.phone ? (
-              <dl className="space-y-4 border-t border-white/10 pt-8 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-10">
-                {contact.phone ? (
-                  <div>
-                    <dt className="flex items-center gap-2 text-xs font-semibold tracking-[0.18em] text-ink-400 uppercase">
-                      <IconPhone width={14} height={14} /> Phone
-                    </dt>
-                    <dd className="mt-2">
-                      <a href={`tel:${contact.phone.replace(/\s+/g, '')}`} className="text-lg text-white hover:text-brand-300">
-                        {contact.phone}
-                      </a>
-                    </dd>
-                  </div>
-                ) : null}
-                {contact.email ? (
-                  <div>
-                    <dt className="flex items-center gap-2 text-xs font-semibold tracking-[0.18em] text-ink-400 uppercase">
-                      <IconMail width={14} height={14} /> Email
-                    </dt>
-                    <dd className="mt-2">
-                      <a href={`mailto:${contact.email}`} className="text-lg break-all text-white hover:text-brand-300">
-                        {contact.email}
-                      </a>
-                    </dd>
-                  </div>
-                ) : null}
-              </dl>
-            ) : (
-              <div className="border-t border-white/10 pt-8 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-10">
-                <p className="text-sm leading-relaxed text-ink-400">
-                  We usually respond to enquiries within one working day.
-                </p>
-                <p className="mt-4 rounded-lg border border-dashed border-white/20 bg-white/5 px-4 py-3 text-sm leading-relaxed text-ink-300">
-                  <span className="font-semibold text-white">Placeholder:</span> phone, WhatsApp and email are being
-                  confirmed and will be published here.
-                </p>
-              </div>
-            )}
-          </div>
+        <div className="mt-9">
+          <CtaPair place="cta-band" whatsappVariant="whatsapp" callVariant="onDark" />
+        </div>
+
+        <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+          <ButtonLink
+            to="/contact#enquiry"
+            size="md"
+            variant="ghost"
+            className="self-start text-brand-200 hover:bg-white/10 hover:text-white"
+          >
+            {t('cta.enquiry')}
+            <IconArrowRight width={16} height={16} />
+          </ButtonLink>
+          <p className="text-sm text-ink-400">Serving businesses across {site.market}.</p>
         </div>
       </div>
     </section>

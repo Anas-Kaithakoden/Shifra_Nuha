@@ -13,42 +13,70 @@
     <!-- The header logo is the largest content element on first paint. -->
     <link rel="preload" as="image" type="image/png" href="/brand/logo.png" />
 
-    <title>Shifra Nuha Technologies — Start. Build. Grow. Automate.</title>
+    <!--
+      The title, description and social tags here are the values a crawler sees
+      before JavaScript runs, and the ones a link is unfurled with. They match
+      `site.tagline` / `site.description` in `src/content/site.ts`, which
+      `useDocumentMeta` then sets per route. Change both together.
+    -->
+    <title>Shifra Nuha Technologies | Business Registration &amp; Professional Services in Kerala</title>
     <meta
       name="description"
-      content="Shifra Nuha Technologies helps businesses with business setup, branding, websites, marketing, automation and technology — through one coordinated team."
+      content="Company incorporation, LLP and partnership registration, GST, accounting, income tax, auditing, project reports and trademark support for new and existing businesses across Kerala. Message on WhatsApp or call."
     />
+    <!-- Rewritten at build time by the plugin in vite.config.ts: with no
+         VITE_WEBSITE_DOMAIN this becomes "noindex, follow". It is declared
+         statically so a crawler that does not run JavaScript still finds it. -->
+    <meta name="robots" content="index, follow, max-image-preview:large" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Shifra Nuha Technologies" />
-    <meta property="og:title" content="Shifra Nuha Technologies — Start. Build. Grow. Automate." />
+    <meta
+      property="og:title"
+      content="Shifra Nuha Technologies | Business Registration &amp; Professional Services in Kerala"
+    />
     <meta
       property="og:description"
-      content="Business setup, branding and digital presence, marketing and lead generation, and AI &amp; business automation — through one coordinated team."
+      content="Company incorporation, LLP and partnership registration, GST, accounting, income tax, auditing, project reports and trademark support for businesses across Kerala."
     />
-    <!-- Relative until site.url is set; useDocumentMeta upgrades it to absolute. -->
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:locale:alternate" content="ml_IN" />
+    <!-- Relative until VITE_WEBSITE_DOMAIN is set; useDocumentMeta upgrades it. -->
     <meta property="og:image" content="/brand/og-image.png" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="Shifra Nuha Technologies — Start. Build. Grow. Automate."
+      content="Shifra Nuha Technologies - business registration and professional business support in Kerala."
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Shifra Nuha Technologies — Start. Build. Grow. Automate." />
+    <meta
+      name="twitter:title"
+      content="Shifra Nuha Technologies | Business Registration &amp; Professional Services in Kerala"
+    />
     <meta
       name="twitter:description"
-      content="Business setup, branding and digital presence, marketing and lead generation, and AI &amp; business automation — through one coordinated team."
+      content="Company incorporation, LLP and partnership registration, GST, accounting, income tax, auditing, project reports and trademark support for businesses across Kerala."
     />
     <meta name="twitter:image" content="/brand/og-image.png" />
-    <meta name="twitter:image:alt" content="Shifra Nuha Technologies — Start. Build. Grow. Automate." />
+    <meta
+      name="twitter:image:alt"
+      content="Shifra Nuha Technologies - business registration and professional business support in Kerala."
+    />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      Inter carries the interface; Noto Sans Malayalam is listed in the same
+      stack (see `--font-sans` in `src/index.css`) so the `EN | മലയാളം` toggle
+      renders Malayalam with a proper face instead of whatever the device
+      happens to substitute. Glyph fallback is per character, so Latin text
+      still uses Inter.
+    -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>

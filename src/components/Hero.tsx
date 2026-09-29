@@ -1,64 +1,95 @@
-import { services, site } from '../content/site'
+import { Link } from 'react-router-dom'
+import { CtaPair } from './CtaButtons'
+import { coreServices } from '../content/services'
+import { hero, site } from '../content/site'
+import { useLocale } from '../i18n/LocaleProvider'
 import { ButtonLink } from './Button'
 import { IconArrowRight } from './icons'
 
-const pills = services.map((service) => service.title)
-
+/**
+ * ---------------------------------------------------------------------------
+ * HERO
+ * ---------------------------------------------------------------------------
+ * The page has one job: make a Malayalam-speaking visitor who arrived from a
+ * Facebook ad understand within a second that this is a business registration
+ * company that serves Kerala, and hand them WhatsApp and a phone number.
+ *
+ * Everything here earns its place by doing one of those things. There is no
+ * illustration, no animation and no claim we cannot back up — a visitor with a
+ * question should see the answer and the two buttons before they scroll.
+ */
 export function Hero() {
+  const { pick, t } = useLocale()
+
   return (
     <section className="relative overflow-hidden bg-ink-950 text-white">
-      {/* Subtle technical grid + soft brand wash, kept very low contrast */}
       <div className="bg-grid absolute inset-0" aria-hidden="true" />
       <div
         className="absolute -top-40 left-1/2 h-[520px] w-[820px] -translate-x-1/2 rounded-full bg-brand-600/12 blur-[120px]"
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto w-full max-w-6xl px-5 pt-16 pb-20 sm:px-8 sm:pt-24 sm:pb-28 lg:pt-28">
+      <div className="relative mx-auto w-full max-w-6xl px-5 pt-12 pb-16 sm:px-8 sm:pt-20 sm:pb-24 lg:pt-24">
         <div className="max-w-3xl">
-          <p className="text-xs font-semibold tracking-[0.2em] text-brand-300 uppercase">
-            Business setup · Digital presence · Growth · Automation
+          <p className="text-xs font-semibold tracking-[0.18em] text-brand-300 uppercase">
+            {pick(hero.eyebrow.en, hero.eyebrow.ml)}
           </p>
 
-          <h1 className="mt-6 text-4xl leading-[1.08] font-semibold tracking-tight text-balance sm:text-6xl">
-            {site.tagline}
+          <h1 className="mt-5 text-4xl leading-[1.08] font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
+            {pick(hero.heading.en, hero.heading.ml)}
           </h1>
 
-          <p className="mt-6 text-lg leading-relaxed font-medium text-pretty text-ink-200 sm:text-xl">
-            {site.supportingLine}
+          <p className="mt-6 text-xl leading-snug font-medium text-pretty text-white sm:text-2xl">
+            {pick(hero.subheading.en, hero.subheading.ml)}
           </p>
 
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-pretty text-ink-400 sm:text-lg">
-            From business setup and branding to websites, marketing and AI automation, Shifra Nuha Technologies helps
-            businesses build and improve their digital operations.
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-pretty text-ink-300 sm:text-lg">
+            {pick(hero.supporting.en, hero.supporting.ml)}
           </p>
 
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <ButtonLink to="/contact#enquiry" size="lg" variant="onDark" className="w-full sm:w-auto">
-              Get Started
-              <IconArrowRight width={18} height={18} />
-            </ButtonLink>
-            <ButtonLink
-              to="/services"
-              size="lg"
-              variant="onDarkGhost"
-              className="w-full sm:w-auto"
-            >
-              Explore Services
-            </ButtonLink>
+          {/* The two actions that matter, in that order, full width on mobile. */}
+          <div className="mt-9">
+            <CtaPair place="hero" whatsappVariant="whatsapp" callVariant="onDark" />
           </div>
 
-          <ul className="mt-12 flex flex-wrap items-center gap-x-2 gap-y-3 text-sm">
-            {pills.map((pill, index) => (
-              <li key={pill} className="flex items-center gap-2">
-                <span className="font-mono text-xs text-brand-400">0{index + 1}</span>
-                <span className="font-semibold tracking-wide text-ink-200">{pill}</span>
-                {index < pills.length - 1 ? (
-                  <span className="ml-2 hidden h-px w-6 bg-white/15 sm:block" aria-hidden="true" />
-                ) : null}
-              </li>
-            ))}
-          </ul>
+          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+            <ButtonLink
+              to="/services"
+              size="md"
+              variant="ghost"
+              className="self-start text-brand-200 hover:bg-white/10 hover:text-white"
+            >
+              {t('cta.viewServices')}
+              <IconArrowRight width={16} height={16} />
+            </ButtonLink>
+            <p className="flex items-center gap-2 text-sm text-ink-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-400" aria-hidden="true" />
+              {pick(hero.note.en, hero.note.ml)}
+            </p>
+          </div>
+
+          {/* The services, named plainly. This is also the natural, non-stuffed
+              place for the search terms the page actually covers. */}
+          <div className="mt-12 border-t border-white/10 pt-8">
+            <h2 className="text-xs font-semibold tracking-[0.18em] text-ink-400 uppercase">
+              What we do across {site.market}
+            </h2>
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {coreServices.map((service) => (
+                <li key={service.slug}>
+                  <Link
+                    to={`/${service.slug}`}
+                    className="inline-flex min-h-10 items-center rounded-lg bg-white/5 px-3 py-1.5 text-sm font-medium text-ink-200 ring-1 ring-white/10 ring-inset transition-colors hover:bg-white/10 hover:text-white"
+                  >
+                    {service.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-6 text-sm leading-relaxed text-ink-400">
+              {t('cta.notSure')}
+            </p>
+          </div>
         </div>
       </div>
     </section>

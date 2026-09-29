@@ -1,3 +1,4 @@
 # Single-page app: serve index.html for all client-side routes.
-# /index.html  /services  /about  /contact  /privacy
+# Static pages (/services, /company-registration, /privacy, ...) are real URLs
+# and must resolve on a hard refresh, not 404.
 /*  /index.html  200

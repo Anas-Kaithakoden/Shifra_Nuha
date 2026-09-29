@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import type { ComponentProps, ReactNode } from 'react'
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'onDark' | 'onDarkGhost'
-type Size = 'md' | 'lg'
+export type Variant = 'primary' | 'secondary' | 'ghost' | 'onDark' | 'onDarkGhost' | 'whatsapp'
+export type Size = 'md' | 'lg'
 
 const variants: Record<Variant, string> = {
   primary:
@@ -12,6 +12,12 @@ const variants: Record<Variant, string> = {
   ghost: 'text-ink-700 hover:text-ink-950 hover:bg-ink-50',
   onDark: 'bg-white text-ink-950 hover:bg-brand-50 active:bg-brand-100',
   onDarkGhost: 'text-white ring-1 ring-white/25 hover:bg-white/10 hover:ring-white/45',
+  /**
+   * WhatsApp's own green, slightly darkened so a full-width button does not
+   * shout. Used only for the WhatsApp CTA, where the colour is a recognisable
+   * signal rather than decoration.
+   */
+  whatsapp: 'bg-[#128c7e] text-white hover:bg-[#0f7065] active:bg-[#0b5a51] shadow-sm shadow-[#0b5a51]/20',
 }
 
 const sizes: Record<Size, string> = {

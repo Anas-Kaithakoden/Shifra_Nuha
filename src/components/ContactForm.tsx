@@ -1,6 +1,8 @@
 import { useId, useState, type FormEvent } from 'react'
-import { businessTypes, contactPage, enquiryNeeds } from '../content/site'
+import { businessTypeOptions, serviceOptions } from '../content/services'
+import { onFormSubmit } from '../lib/contactLinks'
 import { submitEnquiry, type Enquiry } from '../lib/enquiry'
+import { useLocale } from '../i18n/LocaleProvider'
 import { Button } from './Button'
 import { IconCheck } from './icons'
 
@@ -11,47 +13,66 @@ const inputClass =
 
 const labelClass = 'block text-sm font-medium text-ink-800'
 
-function validate(values: Enquiry): Errors {
-  const errors: Errors = {}
-
-  if (!values.name.trim()) errors.name = 'Please enter your name.'
-  if (!values.phone.trim()) {
-    errors.phone = 'Please enter a phone or WhatsApp number.'
-  } else if (values.phone.replace(/\D/g, '').length < 10) {
-    errors.phone = 'Please enter a valid phone number.'
-  }
-  if (values.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(values.email.trim())) {
-    errors.email = 'Please enter a valid email address, or leave it blank.'
-  }
-  if (!values.need) errors.need = 'Please choose what you need.'
-
-  return errors
-}
-
-const empty: Enquiry = {
-  name: '',
-  phone: '',
-  email: '',
-  businessName: '',
-  businessType: '',
-  need: '',
-  message: '',
-}
-
-export function ContactForm() {
+/**
+ * ---------------------------------------------------------------------------
+ * CONTACT FORM — the secondary CTA
+ * ---------------------------------------------------------------------------
+ * Deliberately short, and deliberately second. Most people who are ready will
+ * message on WhatsApp or call, which is faster for them and cheaper for us. This
+ * exists for the people who would rather not start a conversation yet, and it
+ * captures enough to route the enquiry without asking for anything they do not
+ * need to give.
+ *
+ * Three fields are required — name, phone and service. Everything else is
+ * optional, and the optional ones say so.
+ *
+ * The service dropdown is generated from the services themselves, so a new
+ * service cannot be added to the site without appearing here.
+ */
+/**
+ * `defaultService` is passed by the service landing pages, so a visitor who has
+ * already chosen GST and only then filled in the form does not choose it twice.
+ */
+export function ContactForm({ defaultService = '' }: { defaultService?: string }) {
   const id = useId()
-  const [values, setValues] = useState<Enquiry>(empty)
+  const { t } = useLocale()
+  const [values, setValues] = useState<Enquiry>({
+    name: '',
+    phone: '',
+    email: '',
+    businessName: '',
+    businessType: '',
+    need: defaultService,
+    message: '',
+  })
   const [errors, setErrors] = useState<Errors>({})
   const [status, setStatus] = useState<'idle' | 'sending' | 'done'>('idle')
   const [resultMessage, setResultMessage] = useState('')
 
-  const update = (field: keyof Enquiry) => (event: { target: { value: string } }) => {
-    setValues((previous) => ({ ...previous, [field]: event.target.value }))
-    setErrors((previous) => ({ ...previous, [field]: undefined }))
+  const field = (key: keyof Enquiry) => `${id}-${String(key)}`
+  const errorFor = (key: keyof Enquiry) => errors[key]
+
+  const validate = (input: Enquiry): Errors => {
+    const found: Errors = {}
+
+    if (!input.name.trim()) found.name = t('form.err.name')
+    if (!input.phone.trim()) {
+      found.phone = t('form.err.phone')
+    } else if (input.phone.replace(/\D/g, '').length < 10) {
+      found.phone = t('form.err.phoneInvalid')
+    }
+    if (input.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(input.email.trim())) {
+      found.email = t('form.err.email')
+    }
+    if (!input.need) found.need = t('form.err.service')
+
+    return found
   }
 
-  const field = (key: keyof Enquiry) => `${id}-${key}`
-  const errorFor = (key: keyof Enquiry) => errors[key]
+  const update = (key: keyof Enquiry) => (event: { target: { value: string } }) => {
+    setValues((previous: Enquiry) => ({ ...previous, [key]: event.target.value }))
+    setErrors((previous: Errors) => ({ ...previous, [key]: undefined }))
+  }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -68,6 +89,7 @@ export function ContactForm() {
     const result = await submitEnquiry(values)
     setResultMessage(result.message)
     setStatus('done')
+    onFormSubmit(values.need)()
   }
 
   if (status === 'done') {
@@ -80,19 +102,28 @@ export function ContactForm() {
         <span className="inline-flex size-10 items-center justify-center rounded-lg bg-brand-50 text-brand-700 ring-1 ring-brand-200 ring-inset">
           <IconCheck />
         </span>
-        <h3 className="mt-5 text-lg font-semibold tracking-tight text-ink-950">Thank you — we have your details.</h3>
+        <h3 className="mt-5 text-lg font-semibold tracking-tight text-ink-950">{t('form.sent')}</h3>
         <p className="mt-3 text-sm leading-relaxed text-ink-600">{resultMessage}</p>
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+        <p className="mt-4 text-sm leading-relaxed text-ink-500">{t('form.fasterCta')}</p>
+        <div className="mt-6">
           <Button
             variant="secondary"
             onClick={() => {
-              setValues(empty)
+              setValues({
+                name: '',
+                phone: '',
+                email: '',
+                businessName: '',
+                businessType: '',
+                need: defaultService,
+                message: '',
+              })
               setErrors({})
               setResultMessage('')
               setStatus('idle')
             }}
           >
-            Send another enquiry
+            {t('form.again')}
           </Button>
         </div>
       </div>
@@ -106,9 +137,9 @@ export function ContactForm() {
       className="rounded-xl border border-ink-200 bg-white p-6 sm:p-8"
     >
       <div className="grid gap-5 sm:grid-cols-2">
-        <div className="sm:col-span-1">
+        <div>
           <label htmlFor={field('name')} className={labelClass}>
-            Name <span className="text-ink-400">*</span>
+            {t('form.name')} <span className="text-ink-400">*</span>
           </label>
           <input
             id={field('name')}
@@ -130,9 +161,9 @@ export function ContactForm() {
           ) : null}
         </div>
 
-        <div className="sm:col-span-1">
+        <div>
           <label htmlFor={field('phone')} className={labelClass}>
-            Phone / WhatsApp <span className="text-ink-400">*</span>
+            {t('form.phone')} <span className="text-ink-400">*</span>
           </label>
           <input
             id={field('phone')}
@@ -155,9 +186,37 @@ export function ContactForm() {
           ) : null}
         </div>
 
-        <div className="sm:col-span-1">
+        <div>
+          <label htmlFor={field('need')} className={labelClass}>
+            {t('form.service')} <span className="text-ink-400">*</span>
+          </label>
+          <select
+            id={field('need')}
+            name="need"
+            required
+            value={values.need}
+            onChange={update('need')}
+            aria-invalid={Boolean(errorFor('need'))}
+            aria-describedby={errorFor('need') ? `${field('need')}-error` : undefined}
+            className={`${inputClass} select-field`}
+          >
+            <option value="">{t('form.selectService')}</option>
+            {serviceOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          {errorFor('need') ? (
+            <p id={`${field('need')}-error`} className="mt-1.5 text-xs text-red-600">
+              {errorFor('need')}
+            </p>
+          ) : null}
+        </div>
+
+        <div>
           <label htmlFor={field('email')} className={labelClass}>
-            Email <span className="font-normal text-ink-400">(optional)</span>
+            {t('form.emailOptional')}
           </label>
           <input
             id={field('email')}
@@ -178,9 +237,9 @@ export function ContactForm() {
           ) : null}
         </div>
 
-        <div className="sm:col-span-1">
+        <div>
           <label htmlFor={field('businessName')} className={labelClass}>
-            Business name <span className="font-normal text-ink-400">(optional)</span>
+            {t('form.businessNameOptional')}
           </label>
           <input
             id={field('businessName')}
@@ -194,9 +253,9 @@ export function ContactForm() {
           />
         </div>
 
-        <div className="sm:col-span-1">
+        <div>
           <label htmlFor={field('businessType')} className={labelClass}>
-            Business type <span className="font-normal text-ink-400">(optional)</span>
+            {t('form.businessTypeOptional')}
           </label>
           <select
             id={field('businessType')}
@@ -205,63 +264,35 @@ export function ContactForm() {
             onChange={update('businessType')}
             className={`${inputClass} select-field`}
           >
-            <option value="">Select a type</option>
-            {businessTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
+            <option value="">{t('form.selectType')}</option>
+            {businessTypeOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
               </option>
             ))}
           </select>
-        </div>
-
-        <div className="sm:col-span-1">
-          <label htmlFor={field('need')} className={labelClass}>
-            What do you need? <span className="text-ink-400">*</span>
-          </label>
-          <select
-            id={field('need')}
-            name="need"
-            required
-            value={values.need}
-            onChange={update('need')}
-            aria-invalid={Boolean(errorFor('need'))}
-            aria-describedby={errorFor('need') ? `${field('need')}-error` : undefined}
-            className={`${inputClass} select-field`}
-          >
-            <option value="">Select an option</option>
-            {enquiryNeeds.map((need) => (
-              <option key={need} value={need}>
-                {need}
-              </option>
-            ))}
-          </select>
-          {errorFor('need') ? (
-            <p id={`${field('need')}-error`} className="mt-1.5 text-xs text-red-600">
-              {errorFor('need')}
-            </p>
-          ) : null}
         </div>
 
         <div className="sm:col-span-2">
           <label htmlFor={field('message')} className={labelClass}>
-            Message <span className="font-normal text-ink-400">(optional)</span>
+            {t('form.messageOptional')}
           </label>
           <textarea
             id={field('message')}
             name="message"
-            rows={5}
+            rows={4}
             value={values.message}
             onChange={update('message')}
-            placeholder="A few lines about your business and what you are trying to solve."
-            className={`${inputClass} min-h-32 resize-y`}
+            placeholder="A few lines about your business and what you are trying to do."
+            className={`${inputClass} min-h-28 resize-y`}
           />
         </div>
       </div>
 
       <div className="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="max-w-sm text-xs leading-relaxed text-ink-500">{contactPage.formNote}</p>
+        <p className="max-w-sm text-xs leading-relaxed text-ink-500">{t('form.note')}</p>
         <Button type="submit" size="lg" disabled={status === 'sending'} className="w-full sm:w-auto">
-          {status === 'sending' ? 'Sending…' : 'Send Enquiry'}
+          {status === 'sending' ? t('form.sending') : t('form.submit')}
         </Button>
       </div>
     </form>
