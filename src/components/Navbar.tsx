@@ -80,13 +80,28 @@ export function Navbar() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-1 sm:gap-2">
-          <WhatsAppButton
-            place="navbar"
-            size="md"
-            label={ui['cta.whatsappShort']}
-            className="hidden sm:inline-flex"
-          />
-          <WhatsAppButton place="navbar" size="md" iconOnly className="sm:hidden" />
+          {/*
+            ONE WhatsApp button, two forms, swapped at `sm` — the labelled
+            button from `sm` up, the mark alone below it, per THE 320px PROBLEM
+            above.
+
+            The visibility lives on a wrapper rather than on the button's own
+            `className`, and that is load-bearing rather than stylistic.
+            `Button` hard-codes `display: inline-flex` in its base classes, so
+            passing `hidden` to it is a silent no-op: `.inline-flex` is emitted
+            after `.hidden` in the stylesheet and wins on source order, not on
+            class order. That left both buttons rendering on a phone. A plain
+            wrapper carries no competing display class, so the toggle cannot
+            break this way again — and because a `display: none` wrapper is
+            dropped from the accessibility tree too, exactly one WhatsApp
+            button is exposed at any width, as before.
+          */}
+          <span className="hidden sm:block">
+            <WhatsAppButton place="navbar" size="md" label={ui['cta.whatsappShort']} />
+          </span>
+          <span className="sm:hidden">
+            <WhatsAppButton place="navbar" size="md" iconOnly />
+          </span>
 
           <button
             ref={toggleRef}
