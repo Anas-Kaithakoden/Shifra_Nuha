@@ -78,9 +78,9 @@ define the palette.
 
 ## Brand assets
 
-The master artwork is [`brand/logo-source.png`](./brand/logo-source.png). It is
-not shipped: the build only copies `public/`, so the 2000 × 2000 source stays out
-of `dist/` while the web-ready derivatives are generated into `public/brand/`.
+The web-ready derivatives below are checked in and are the only logo files the
+site references. The master artwork they were generated from is **not** stored in
+this repository, so a brand change means starting again from a new source file.
 
 | File | Size | Used for |
 |---|---|---|
@@ -92,17 +92,15 @@ of `dist/` while the web-ready derivatives are generated into `public/brand/`.
 | `public/brand/og-image.png` | 1200 × 630 | Social share card |
 | `public/favicon.svg` | 4.9 KB | Vector favicon, traced from the mark |
 
-[`brand/README.md`](./brand/README.md) documents the pipeline and how to
-regenerate all of them when new artwork arrives.
+Regenerating these needs a **vector** source (for `favicon.svg`) and a **white
+knockout** of the lockup (for `logo-white.png`, used by `tone="dark"` on dark
+backgrounds) — neither can be derived reliably from a flattened raster.
 
 ---
 
 ## Project structure
 
 ```text
-brand/
-├── logo-source.png         Master artwork, as supplied. Not shipped.
-└── README.md               Asset pipeline and how to regenerate
 public/
 ├── brand/                  Generated web-ready derivatives
 ├── favicon.svg             Vector favicon, traced from the mark
