@@ -41,47 +41,53 @@
     -webkit-text-size-adjust: 100%;
   }
 
-  body {
-    @apply bg-white font-sans text-ink-800 antialiased text-center sm:text-left;
-  }
-
-  :focus-visible {
-    @apply outline-2 outline-offset-2 outline-brand-600;
-  }
-
   /**
-   * MOBILE ALIGNMENT
-   * ----------------
-   * On a phone the content column is roughly 350px wide, and a screenful of
-   * left-aligned text in a single narrow column reads as though something failed
-   * to load rather than as a design. So from phone width the whole page is
-   * centred — `body` above turns it on, and `sm` switches it back off, leaving
-   * tablet and desktop exactly as they were.
+   * ---------------------------------------------------------------------------
+   * MOBILE TYPOGRAPHY
+   * ---------------------------------------------------------------------------
+   * On a phone the content column is roughly 350px wide. A single narrow column
+   * of ragged-right text looks untidy rather than designed, so from phone width
+   * body copy is justified — both edges flush, last line left as normal. `sm`
+   * (640px) switches it back to left, which is the better look at a wider
+   * measure and is what tablet and desktop have always had.
    *
-   * One rule rather than a class per element, so a page added later inherits the
-   * behaviour instead of quietly opting out of it.
+   * `hyphens-auto` is not decoration. Without permission to break words the
+   * browser can only break at spaces, so it stretches the gaps between them
+   * instead — the classic "rivers" of unjustified narrow text. The locale
+   * provider keeps `<html lang>` in sync, so the dictionary follows the
+   * selected language. It is switched off from `sm` up because there is no
+   * reason to hyphenate when the column is wide enough not to.
    *
-   * `text-align` only reaches inline content, so anything laid out with flex or
-   * grid is positioned by `justify-content` instead and needs its own
-   * `justify-center sm:justify-start`. That is why some components carry the
-   * pair even though their text is centred by `body` — an icon in a flex row
-   * stays pinned to the left edge otherwise, stranded from the text it labels.
+   * Headings are the one thing `justify` cannot help: they are single-line, so
+   * it would do nothing to them. They are centred on mobile instead, which
+   * balances against the justified column beneath, and are never hyphenated —
+   * a heading broken across lines by a hyphen reads as a typo.
    *
-   * To opt a block out, set `text-left` on it. Three do, each for a reason
-   * rather than by accident:
+   * To opt a block out, set `text-left` on it. Three do, each deliberately:
    *
    *  - The contact form. Browsers align text inside inputs themselves and do
-   *    not inherit `text-align` from the document, so a centred label over a
+   *    not inherit `text-align` from the document, so a justified label over a
    *    left-aligned field would look broken rather than deliberate.
    *  - The mobile navigation. Menu items are scanned by their left edge.
-   *  - The footer's legal disclaimer. Centred grey fine print at `text-xs` is
+   *  - The footer's legal disclaimer. Justified grey fine print at `text-xs` is
    *    markedly harder to read than a ragged right edge.
+   *
+   * (The partners table on the About page is left-aligned for the same class of
+   * reason, and predates this rule.)
    */
+  body {
+    @apply bg-white font-sans text-ink-800 antialiased text-justify hyphens-auto sm:text-left sm:hyphens-manual;
+  }
+
   h1,
   h2,
   h3,
   h4 {
-    @apply text-center sm:text-left;
+    @apply text-center hyphens-manual sm:text-left;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-600;
   }
 
   ::selection {

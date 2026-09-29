@@ -41,7 +41,7 @@ export function Footer() {
           never covers the last line of the page. */}
       <div className="mx-auto w-full max-w-6xl px-5 pt-14 pb-28 sm:px-8 sm:pt-16 sm:pb-16">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr]">
-          <div className="max-w-sm text-center sm:text-left">
+          <div className="max-w-sm">
             <Logo />
             <p className="mt-5 text-sm font-semibold tracking-tight text-ink-950">
               {site.tagline}
@@ -54,11 +54,11 @@ export function Footer() {
             </p>
           </div>
 
-          <div className="text-center sm:text-left">
+          <div>
             <h2 className="text-xs font-semibold tracking-[0.18em] text-ink-500 uppercase">
               {pick(footer.servicesTitle.en, footer.servicesTitle.ml)}
             </h2>
-            <ul className="mt-4 grid justify-items-center gap-0.5 sm:justify-items-start sm:grid-cols-2 lg:grid-cols-1">
+            <ul className="mt-4 grid gap-0.5 sm:grid-cols-2 lg:grid-cols-1">
               {coreServices.map((service) => (
                 <li key={service.slug}>
                   <Link
@@ -72,7 +72,7 @@ export function Footer() {
             </ul>
           </div>
 
-          <div className="text-center sm:text-left">
+          <div>
             <h2 className="text-xs font-semibold tracking-[0.18em] text-ink-500 uppercase">
               {t('nav.contact')}
             </h2>
@@ -131,7 +131,7 @@ export function Footer() {
             </div>
 
             {activeSocials.length > 0 ? (
-              <ul className="mt-5 flex flex-wrap justify-center gap-x-5 gap-y-2 sm:justify-start">
+              <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
                 {activeSocials.map((entry) => (
                   <li key={entry.key}>
                     <a
@@ -151,14 +151,14 @@ export function Footer() {
 
         {/* Legal + company facts, linked for trust and for search. */}
         <div className="mt-12 flex flex-col gap-5 border-t border-ink-200 pt-6 sm:flex-row sm:items-start sm:justify-between">
-          <div className="text-center sm:text-left">
+          <div>
             <p className="text-xs text-ink-500">
               © {year} {site.name}. All rights reserved.
             </p>
             <p className="mt-1 text-xs text-ink-500">
               Serving businesses across {site.market}.
             </p>
-            <ul className="mt-3 flex flex-wrap justify-center gap-x-5 gap-y-1 sm:justify-start">
+            <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1">
               {footer.legal.map((item) => (
                 <li key={item.to}>
                   <Link
@@ -172,9 +172,9 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Left-aligned on mobile, like the contact form. This is the densest
-              text in the footer, and centred grey fine print at this size is
-              markedly harder to read than a ragged right edge. */}
+          {/* Also opts out of the justified body copy. This is the densest text
+              in the footer, and justified grey fine print at `text-xs` is much
+              harder to read than a ragged right edge. */}
           <p className="max-w-md text-left text-xs leading-relaxed text-ink-500 sm:text-right">
             Information on this website is general and is not legal, tax or financial advice. Work that
             requires a qualified professional is performed or supervised by the appropriate professional.

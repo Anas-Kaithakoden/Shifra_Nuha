@@ -57,12 +57,12 @@ export function Hero() {
               to="/services"
               size="md"
               variant="ghost"
-              className="self-center text-brand-200 hover:bg-white/10 hover:text-white sm:self-start"
+              className="self-start text-brand-200 hover:bg-white/10 hover:text-white"
             >
               {t('cta.viewServices')}
               <IconArrowRight width={16} height={16} />
             </ButtonLink>
-            <p className="flex items-center justify-center gap-2 text-sm text-ink-400 sm:justify-start">
+            <p className="flex items-center gap-2 text-sm text-ink-400">
               <span className="h-1.5 w-1.5 rounded-full bg-brand-400" aria-hidden="true" />
               {pick(hero.note.en, hero.note.ml)}
             </p>
@@ -74,7 +74,7 @@ export function Hero() {
             <h2 className="text-xs font-semibold tracking-[0.18em] text-ink-400 uppercase">
               What we do across {site.market}
             </h2>
-            <ul className="mt-5 flex flex-wrap justify-center gap-2 sm:justify-start">
+            <ul className="mt-5 flex flex-wrap gap-2">
               {coreServices.map((service) => (
                 <li key={service.slug}>
                   <Link
