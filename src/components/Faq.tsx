@@ -30,7 +30,11 @@ export function Faq({ items, className = '' }: { items: FaqItem[]; className?: s
         return (
           <details key={item.question} className="group">
             <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-base font-semibold tracking-tight text-ink-950 transition-colors hover:bg-paper-100 sm:px-6 [&::-webkit-details-marker]:hidden">
-              <span className="text-pretty">{item.question}</span>
+              {/* `text-left` opts the question out of the justified body copy:
+                  it is a label, not prose, and a two-line question would
+                  otherwise stretch its inter-word gap. The answer below stays
+                  justified. */}
+              <span className="text-left text-pretty">{item.question}</span>
               <IconChevron
                 width={18}
                 height={18}

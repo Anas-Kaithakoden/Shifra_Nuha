@@ -103,13 +103,26 @@
     @apply bg-paper-50 font-sans text-ink-700 antialiased text-justify hyphens-auto sm:text-left sm:hyphens-manual;
   }
 
+  /*
+   * Headings opt out of the justification above.
+   *
+   * `body` is justified, and a heading sets no alignment of its own, so it
+   * inherits `justify` and a two-line heading stretches the gap between its
+   * words to fill the measure — "Business" / a wide gap / "Registration". That
+   * reads as a layout bug rather than a choice, so headings are pinned left
+   * here. `sm:text-left` is not needed: the left setting is the default at
+   * every width, which is what the rest of the design assumes.
+   *
+   * Same reasoning applies to the FAQ questions, which are labels rather than
+   * prose; that one is opted out in `Faq.tsx` because it is a single span.
+   */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    @apply text-ink-950;
+    @apply text-left text-ink-950;
   }
 
   :focus-visible {
