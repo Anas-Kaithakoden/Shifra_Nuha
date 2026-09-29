@@ -15,12 +15,18 @@ import { IconArrowRight, IconClose, IconMenu } from './icons'
  * ---------------------------------------------------------------------------
  * Three jobs, in order of importance:
  *
- *  1. Get out of the way. The logo and the WhatsApp button are the two things a
- *     visitor needs, so they are always visible, on every screen size.
+ *  1. Get out of the way. The logo and the language toggle are the two things
+ *     a visitor needs on every screen size, so they are always visible — the
+ *     toggle included, because on a phone it is the difference between reading
+ *     the site in Malayalam and not. WhatsApp joins them from `md` up; below
+ *     that the header is only wide enough for the logo, the toggle and the
+ *     menu button, and the conversion actions live in the menu panel and in
+ *     the sticky bar.
  *  2. Make the nine landing pages reachable in one click, including on mobile,
  *     where the traffic actually comes from.
  *  3. Offer the language toggle, so Malayalam content can be switched on when
- *     it is ready.
+ *     it is ready. It lives in the header at every width, because the one
+ *     thing a visitor from a Malayalam ad cannot do is find the switch.
  */
 export function Navbar() {
   const [open, setOpen] = useState(false)
@@ -197,23 +203,23 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2 md:gap-3">
-          <div className="hidden sm:block">
-            <LanguageToggle />
-          </div>
+          {/*
+           * The language toggle sits in the header at every width. Almost all of
+           * the traffic is a Malayalam ad opened on a phone, so switching
+           * language is a first-class action rather than something to be buried
+           * behind the menu — which is also what made it undiscoverable on
+           * mobile. At 360px the logo, this and the menu button come to about
+           * 265px of the 320px available, so the whole `EN | മലയാളം` pair fits
+           * and no compact variant is needed.
+           */}
+          <LanguageToggle />
 
-          {/* The primary conversion action, visible on every screen size. */}
+          {/* The primary conversion action, visible on every screen size that
+              has room for it. A phone's header is the language toggle and the
+              menu button, so its CTAs live in the panel below instead. */}
           <div className="hidden md:block">
             <WhatsAppButton place="navbar" size="md" />
           </div>
-
-          <ButtonLink
-            to="/contact#enquiry"
-            size="md"
-            variant="primary"
-            className="md:hidden"
-          >
-            {t('cta.enquiry')}
-          </ButtonLink>
 
           <button
             ref={toggleRef}
@@ -270,11 +276,10 @@ export function Navbar() {
             </ul>
           </div>
 
-          <div className="mt-5 sm:hidden">
-            <LanguageToggle />
-          </div>
-
-          <div className="mt-5 hidden sm:block">
+          <div className="mt-5 flex flex-col gap-2">
+            <ButtonLink to="/contact#enquiry" size="lg" variant="primary" className="w-full">
+              {t('cta.enquiry')}
+            </ButtonLink>
             <WhatsAppButton place="navbar-mobile" size="lg" className="w-full" />
           </div>
         </nav>
