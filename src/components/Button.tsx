@@ -36,8 +36,16 @@ const sizes: Record<Size, string> = {
   lg: 'min-h-12 px-6 text-base',
 }
 
+/**
+ * `text-left` is load-bearing, not cosmetic. `body` sets `text-align: justify`
+ * for prose, `text-align` is inherited, and a label is not prose. On a narrow
+ * phone a long label such as "Get Started on WhatsApp" wraps to a second line
+ * inside the button, and the justified first line stretched the gap between its
+ * words. `justify-center` above already centres the icon-and-label group
+ * horizontally, so this only governs lines *within* the label once it wraps.
+ */
 const base =
-  'inline-flex items-center justify-center gap-2 rounded-[10px] font-semibold tracking-tight transition-colors duration-150 select-none'
+  'inline-flex items-center justify-center gap-2 rounded-[10px] text-left font-semibold tracking-tight transition-colors duration-150 select-none'
 
 type CommonProps = {
   variant?: Variant

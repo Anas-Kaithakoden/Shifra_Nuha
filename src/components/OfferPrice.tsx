@@ -37,8 +37,13 @@ export function OfferPrice({
         {registrationOffer.label}
       </p>
 
+      {/*
+        `text-left` for the same reason the buttons carry it: a price is a
+        label, not prose, and at `text-[2.75rem]` this line wraps on a phone.
+        Inheriting the justified body alignment stretched the first line.
+      */}
       <p
-        className={`mt-2 font-semibold tracking-tight text-ink-950 text-balance ${
+        className={`mt-2 text-left font-semibold tracking-tight text-ink-950 text-balance ${
           hero ? 'text-[2.75rem] leading-[1.05] sm:text-5xl' : 'text-3xl leading-tight sm:text-4xl'
         }`}
       >
