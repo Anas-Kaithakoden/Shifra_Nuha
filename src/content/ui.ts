@@ -15,12 +15,19 @@
 
 export const ui = {
   // --- Calls to action ------------------------------------------------------
-  'cta.primary': 'Message us on WhatsApp',
-  'cta.whatsapp': 'Chat on WhatsApp',
-  'cta.call': 'Call now',
+  // "Get Started on WhatsApp" is the primary CTA everywhere. "Learn more" and
+  // "Chat on WhatsApp" are not used as primary actions: a visitor who arrived
+  // from an ad has already decided what they want, so the button has to say what
+  // it does rather than make them find out.
+  'cta.primary': 'Get Started on WhatsApp',
+  'cta.whatsapp': 'Get Started on WhatsApp',
+  'cta.whatsappShort': 'WhatsApp Us',
+  'cta.call': 'Call Us',
   'cta.enquiry': 'Send an enquiry',
   'cta.viewServices': 'See all services',
   'cta.learnMore': 'Learn more',
+  'cta.getStarted': 'Get Started',
+  'cta.readMore': 'Read more',
   'cta.notSure': 'Not sure which of these applies to you? Message us on WhatsApp and describe your business in a few lines. We will tell you what is actually needed, and which parts you can safely leave for later.',
 
   // --- Navigation ----------------------------------------------------------

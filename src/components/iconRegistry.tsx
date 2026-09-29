@@ -89,4 +89,6 @@ export const reasonIcons = {
   book: IconBook,
   calculator: IconCalculator,
   document: IconDocument,
+  /** "Responsive support" — the point is that someone replies, so it gets a bubble. */
+  chat: IconChat,
 } satisfies Record<string, IconComponent>

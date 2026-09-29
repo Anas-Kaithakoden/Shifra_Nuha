@@ -1,93 +1,73 @@
-import { Link } from 'react-router-dom'
 import { CtaPair } from './CtaButtons'
-import { coreServices } from '../content/services'
-import { hero, site } from '../content/site'
-import { ui } from '../content/ui'
-import { ButtonLink } from './Button'
-import { IconArrowRight } from './icons'
+import { OfferCard } from './OfferCard'
+import { IconCheck } from './icons'
+import { hero } from '../content/site'
 
 /**
  * ---------------------------------------------------------------------------
  * HERO
  * ---------------------------------------------------------------------------
- * The page has one job: make a visitor who arrived from a Facebook ad
- * understand within a second that this is a business registration company that
- * serves Kerala, and hand them WhatsApp and a phone number.
+ * The most important section on the site, and the only one with a fixed job
+ * order. A visitor who arrived from a Facebook ad has to be able to answer four
+ * questions in about five seconds: what does this company do, how much does it
+ * start at, can I trust it, and how do I contact them.
  *
- * Everything here earns its place by doing one of those things. There is no
- * illustration, no animation and no claim we cannot back up — a visitor with a
- * question should see the answer and the two buttons before they scroll.
+ * The order below is that sequence, and it is also the order the brief asks
+ * for — eyebrow, headline, price, supporting line, buttons, trust points.
+ *
+ * On a 375px screen the price sits between the headline and the supporting
+ * paragraph, so the figure is on screen before the visitor has scrolled at all.
+ * Everything after the buttons is secondary and is allowed to fall below the
+ * fold.
+ *
+ * There is no illustration, no gradient, no glow and no secondary call to
+ * action. The brief asks for the offer to be understood in three to five
+ * seconds, and every extra element above the fold costs a fraction of one.
  */
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-ink-950 text-white">
-      <div className="bg-grid absolute inset-0" aria-hidden="true" />
-      <div
-        className="absolute -top-40 left-1/2 h-[520px] w-[820px] -translate-x-1/2 rounded-full bg-brand-600/12 blur-[120px]"
-        aria-hidden="true"
-      />
-
-      <div className="relative mx-auto w-full max-w-6xl px-5 pt-12 pb-16 sm:px-8 sm:pt-20 sm:pb-24 lg:pt-24">
+    <section className="border-b border-paper-200 bg-paper-50">
+      <div className="mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 sm:py-14 lg:py-16">
         <div className="max-w-3xl">
-          <p className="text-xs font-semibold tracking-[0.18em] text-brand-300 uppercase">
+          <p className="text-xs font-semibold tracking-[0.16em] text-brand-700 uppercase">
             {hero.eyebrow}
           </p>
 
-          <h1 className="mt-5 text-4xl leading-[1.08] font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
+          <h1 className="mt-4 text-[2rem] leading-[1.12] font-semibold tracking-tight text-balance text-ink-950 sm:text-5xl lg:text-[3.5rem] lg:leading-[1.08]">
             {hero.heading}
           </h1>
 
-          <p className="mt-6 text-xl leading-snug font-medium text-pretty text-white sm:text-2xl">
-            {hero.subheading}
-          </p>
+          {/*
+            The offer goes here, directly under the headline and above the
+            supporting line. It is the reason the ad was clicked, so it is what
+            gets read first, and putting it here rather than below the
+            supporting paragraph is what keeps the figure on screen at 320px
+            without having to shorten the headline to do it.
+          */}
+          <OfferCard className="mt-6 sm:mt-8 sm:max-w-md" />
 
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-pretty text-ink-300 sm:text-lg">
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-pretty text-ink-600 sm:text-lg">
             {hero.supporting}
           </p>
 
-          {/* The two actions that matter, in that order, full width on mobile. */}
-          <div className="mt-9">
-            <CtaPair place="hero" whatsappVariant="whatsapp" callVariant="onDark" />
+          <div className="mt-7 sm:mt-8">
+            <CtaPair
+              place="hero"
+              whatsappVariant="whatsapp"
+              callVariant="secondary"
+              size="lg"
+            />
           </div>
 
-          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
-            <ButtonLink
-              to="/services"
-              size="md"
-              variant="ghost"
-              className="self-start text-brand-200 hover:bg-white/10 hover:text-white"
-            >
-              {ui['cta.viewServices']}
-              <IconArrowRight width={16} height={16} />
-            </ButtonLink>
-            <p className="flex items-center gap-2 text-sm text-ink-400">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand-400" aria-hidden="true" />
-              {hero.note}
-            </p>
-          </div>
-
-          {/* The services, named plainly. This is also the natural, non-stuffed
-              place for the search terms the page actually covers. */}
-          <div className="mt-12 border-t border-white/10 pt-8">
-            <h2 className="text-xs font-semibold tracking-[0.18em] text-ink-400 uppercase">
-              What we do across {site.market}
-            </h2>
-            <ul className="mt-5 flex flex-wrap gap-2">
-              {coreServices.map((service) => (
-                <li key={service.slug}>
-                  <Link
-                    to={`/${service.slug}`}
-                    className="inline-flex min-h-10 items-center rounded-lg bg-white/5 px-3 py-1.5 text-sm font-medium text-ink-200 ring-1 ring-white/10 ring-inset transition-colors hover:bg-white/10 hover:text-white"
-                  >
-                    {service.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-6 text-sm leading-relaxed text-ink-400">
-              {ui['cta.notSure']}
-            </p>
-          </div>
+          {/* Why the price is believable. Checkmarks rather than a rating. */}
+          <ul className="mt-7 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2.5">
+            {hero.trustPoints.map((point) => (
+              <li key={point} className="flex items-center gap-2 text-sm text-ink-600">
+                <IconCheck width={16} height={16} className="shrink-0 text-brand-600" />
+                {point}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

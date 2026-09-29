@@ -3,40 +3,51 @@ import { Reveal } from './Reveal'
 import { Section } from './Section'
 
 /**
- * How it works. Four steps, with the honest caveat about timelines directly
- * underneath — promising a turnaround we do not control is exactly the kind of
- * overpromising the brief rules out.
+ * ---------------------------------------------------------------------------
+ * HOW IT WORKS
+ * ---------------------------------------------------------------------------
+ * Three numbered steps in a single row, on the quiet surface. Not four, not
+ * six: three is what a person can hold in their head, and the brief asks for
+ * exactly these three.
+ *
+ * There is no duration on any step and no fourth "delivered in N days" step.
+ * The note underneath says in one sentence why: processing time belongs to the
+ * authority. Stating that is more credible than omitting the timeline, because
+ * every other registration company the visitor has just seen is promising one.
  */
 export function Process() {
   return (
     <Section
-      id="process"
+      id="how-it-works"
       eyebrow={process.eyebrow}
       title={process.title}
       intro={process.intro}
-      surface="dark"
-      className="relative overflow-hidden"
+      surface="muted"
+      divided
     >
-      <div className="bg-grid absolute inset-0" aria-hidden="true" />
-      <div className="relative">
-        <ol className="grid gap-px overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/10 sm:grid-cols-2 lg:grid-cols-4">
-          {process.steps.map((step, index) => (
-            <Reveal key={step.number} delay={index * 70} as="li" className="h-full bg-ink-950 p-6 sm:p-7">
-              <span className="font-mono text-sm font-semibold text-brand-400">{step.number}</span>
-              <h3 className="mt-4 text-base font-semibold tracking-tight text-white">
+      <ol className="grid gap-6 sm:grid-cols-3 sm:gap-8">
+        {process.steps.map((step, index) => (
+          <Reveal key={step.number} as="li" delay={index * 70}>
+            {/*
+              The rule above each step is a hairline, not a card. It separates
+              the steps without turning three short paragraphs into three boxes.
+            */}
+            <div className="border-t border-paper-300 pt-5">
+              <span className="text-sm font-semibold tracking-[0.1em] text-brand-700 tabular-nums">
+                {step.number}
+              </span>
+              <h3 className="mt-2.5 text-base font-semibold tracking-tight text-ink-950">
                 {step.title}
               </h3>
-              <p className="mt-2.5 text-sm leading-relaxed text-ink-400">
-                {step.body}
-              </p>
-            </Reveal>
-          ))}
-        </ol>
+              <p className="mt-2 text-sm leading-relaxed text-ink-600">{step.body}</p>
+            </div>
+          </Reveal>
+        ))}
+      </ol>
 
-        <p className="mt-8 max-w-3xl text-sm leading-relaxed text-ink-400">
-          {process.note}
-        </p>
-      </div>
+      <p className="mt-10 max-w-3xl border-t border-paper-200 pt-6 text-sm leading-relaxed text-ink-500">
+        {process.note}
+      </p>
     </Section>
   )
 }

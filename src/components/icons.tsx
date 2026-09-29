@@ -254,6 +254,14 @@ export const IconChevron = (props: IconProps) => (
   </svg>
 )
 
+/** Opening quote mark, for the testimonial block. */
+export const IconQuote = (props: IconProps) => (
+  <svg {...base(props)}>
+    <path d="M9.5 6H6a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1.5v1A2.5 2.5 0 0 1 5 16.5" />
+    <path d="M19.5 6H16a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1.5v1a2.5 2.5 0 0 1-2.5 2.5" />
+  </svg>
+)
+
 /** Used for the caveats block, so the warnings are visually distinct. */
 export const IconWarning = (props: IconProps) => (
   <svg {...base(props)}>

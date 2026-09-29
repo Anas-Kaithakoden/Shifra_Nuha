@@ -5,6 +5,7 @@ import { Faq } from '../components/Faq'
 import { Reveal } from '../components/Reveal'
 import { serviceIcons } from '../components/iconRegistry'
 import { IconArrowRight, IconCheck, IconWarning } from '../components/icons'
+import { isOfferedService, offerPriceLine } from '../content/offer'
 import { coreServices, serviceBySlug, type CoreService } from '../content/services'
 import { ui } from '../content/ui'
 import { absoluteUrl, siteConfig, siteOrigin } from '../config/site.config'
@@ -36,9 +37,13 @@ export function ServicePage({ service }: { service: CoreService }) {
   const Icon = serviceIcons[service.icon] ?? serviceIcons.document
   const message = service.whatsapp
   const related = service.related.map((slug) => serviceBySlug[slug]).filter(Boolean)
-  const pricingLine = service.startingFrom
-    ? `From ₹${service.startingFrom}. ${service.pricingNote}`
-    : service.pricingNote
+  /*
+   * LLP and Company are the two registrations the ₹2,999 offer covers, so their
+   * pages lead with it — with the qualifier attached, never as a bare number.
+   * The other seven services quote nothing and explain what drives their cost,
+   * which is the honest answer for work that depends on the client's situation.
+   */
+  const pricingLine = offerPriceLine(isOfferedService(service.slug), service.pricingNote)
 
   useDocumentMeta({
     title: service.seo.title,
@@ -92,9 +97,9 @@ export function ServicePage({ service }: { service: CoreService }) {
         intro={service.summary}
         meta={pricingLine}
       >
-        <div className="mt-9 flex flex-col gap-3 sm:max-w-md sm:flex-row">
+        <div className="mt-8 flex flex-col gap-3 sm:max-w-md sm:flex-row">
           <WhatsAppButton place="service-hero" message={message} size="lg" variant="whatsapp" className="w-full" />
-          <CallButton place="service-hero" size="lg" variant="onDark" className="w-full" />
+          <CallButton place="service-hero" size="lg" variant="secondary" className="w-full" />
         </div>
       </PageIntro>
 
@@ -139,7 +144,7 @@ export function ServicePage({ service }: { service: CoreService }) {
             </div>
 
             {/* Who needs this */}
-            <section className="mt-12 border-t border-ink-200 pt-10">
+            <section className="mt-12 border-t border-paper-200 pt-10">
               <h2 className="text-xl font-semibold tracking-tight text-ink-950">
                 {ui['section.whoNeeds']}
               </h2>
@@ -154,7 +159,7 @@ export function ServicePage({ service }: { service: CoreService }) {
             </section>
 
             {/* What is included */}
-            <section className="mt-12 border-t border-ink-200 pt-10">
+            <section className="mt-12 border-t border-paper-200 pt-10">
               <h2 className="text-xl font-semibold tracking-tight text-ink-950">
                 {ui['section.includes']}
               </h2>
@@ -162,7 +167,7 @@ export function ServicePage({ service }: { service: CoreService }) {
                 {service.includes.map((item) => (
                   <li
                     key={item}
-                    className="flex gap-3 rounded-lg border border-ink-200 bg-white p-4 text-sm leading-relaxed text-ink-700"
+                    className="flex gap-3 rounded-lg border border-paper-200 bg-white p-4 text-sm leading-relaxed text-ink-700"
                   >
                     <span className="mt-2 size-1.5 shrink-0 rounded-full bg-brand-500" aria-hidden="true" />
                     <span className="text-pretty">{item}</span>
@@ -172,11 +177,11 @@ export function ServicePage({ service }: { service: CoreService }) {
             </section>
 
             {/* Process */}
-            <section className="mt-12 border-t border-ink-200 pt-10">
+            <section className="mt-12 border-t border-paper-200 pt-10">
               <h2 className="text-xl font-semibold tracking-tight text-ink-950">
                 {ui['section.process']}
               </h2>
-              <ol className="mt-6 space-y-px overflow-hidden rounded-xl bg-ink-200">
+              <ol className="mt-6 space-y-px overflow-hidden rounded-xl bg-paper-200">
                 {service.process.map((step, index) => (
                   <Reveal key={step.title} as="li" className="flex gap-4 bg-white p-5">
                     <span className="font-mono text-xs font-semibold text-brand-600">
@@ -196,7 +201,7 @@ export function ServicePage({ service }: { service: CoreService }) {
             </section>
 
             {/* Documents */}
-            <section className="mt-12 border-t border-ink-200 pt-10">
+            <section className="mt-12 border-t border-paper-200 pt-10">
               <h2 className="text-xl font-semibold tracking-tight text-ink-950">
                 {ui['section.documents']}
               </h2>
@@ -208,7 +213,7 @@ export function ServicePage({ service }: { service: CoreService }) {
                 {service.documents.map((item) => (
                   <li
                     key={item}
-                    className="flex gap-3 rounded-lg border border-ink-200 bg-white p-4 text-sm leading-relaxed text-ink-700"
+                    className="flex gap-3 rounded-lg border border-paper-200 bg-white p-4 text-sm leading-relaxed text-ink-700"
                   >
                     <span className="mt-2 size-1.5 shrink-0 rounded-full bg-ink-400" aria-hidden="true" />
                     <span className="text-pretty">{item}</span>
@@ -218,11 +223,10 @@ export function ServicePage({ service }: { service: CoreService }) {
             </section>
 
             {/* Caveats — stated up front, on purpose */}
-            <section className="mt-12 border-t border-ink-200 pt-10">
-              {/* `justify-content` because this heading is a flex row: the base
-                  rule centres the text, but without centring the row too the
-                  icon would sit at the far left, stranded from its label. */}
-              <h2 className="flex items-center justify-center gap-2.5 text-xl font-semibold tracking-tight text-ink-950 sm:justify-start">
+            <section className="mt-12 border-t border-paper-200 pt-10">
+              {/* A flex row, so `items-center` is what keeps the warning mark
+                  level with the label rather than stranded above it. */}
+              <h2 className="flex items-center gap-2.5 text-xl font-semibold tracking-tight text-ink-950">
                 <IconWarning width={20} height={20} className="shrink-0 text-amber-600" />
                 {ui['section.caveats']}
               </h2>
@@ -236,14 +240,14 @@ export function ServicePage({ service }: { service: CoreService }) {
             </section>
 
             {/* FAQ */}
-            <section className="mt-12 border-t border-ink-200 pt-10">
+            <section className="mt-12 border-t border-paper-200 pt-10">
               <h2 className="text-xl font-semibold tracking-tight text-ink-950">{ui['section.faq']}</h2>
               <Faq items={service.faqs} className="mt-6" />
             </section>
 
             {/* Related services — internal linking, and genuinely useful */}
             {related.length > 0 ? (
-              <section className="mt-12 border-t border-ink-200 pt-10">
+              <section className="mt-12 border-t border-paper-200 pt-10">
                 <h2 className="text-xl font-semibold tracking-tight text-ink-950">
                   {ui['section.related']}
                 </h2>
@@ -252,7 +256,7 @@ export function ServicePage({ service }: { service: CoreService }) {
                     <li key={item.slug}>
                       <Link
                         to={item.path}
-                        className="group flex h-full items-center justify-between gap-2 rounded-lg border border-ink-200 bg-white p-4 text-sm font-semibold text-ink-900 transition-colors hover:border-brand-300 hover:text-brand-700"
+                        className="group flex h-full items-center justify-between gap-2 rounded-lg border border-paper-200 bg-white p-4 text-sm font-semibold text-ink-900 transition-colors hover:border-brand-300 hover:text-brand-700"
                       >
                         {item.name}
                         <IconArrowRight
@@ -268,7 +272,7 @@ export function ServicePage({ service }: { service: CoreService }) {
             ) : null}
 
             {/* Secondary CTA: the form, prefilled with this service */}
-            <section className="mt-12 border-t border-ink-200 pt-10">
+            <section className="mt-12 border-t border-paper-200 pt-10">
               <h2 className="text-xl font-semibold tracking-tight text-ink-950">
                 {ui['section.form']}
               </h2>
@@ -287,7 +291,7 @@ export function ServicePage({ service }: { service: CoreService }) {
           ---------------------------------------------------------------- */}
           <aside className="lg:pt-0">
             <div className="lg:sticky lg:top-28">
-              <div className="rounded-xl border border-ink-200 bg-white p-6">
+              <div className="rounded-xl border border-paper-200 bg-white p-6">
                 <span className="inline-flex size-11 items-center justify-center rounded-lg bg-brand-50 text-brand-700 ring-1 ring-brand-200 ring-inset">
                   <Icon width={20} height={20} />
                 </span>
@@ -312,7 +316,7 @@ export function ServicePage({ service }: { service: CoreService }) {
                 <p className="mt-4 text-xs leading-relaxed text-ink-500">{service.pricingNote}</p>
               </div>
 
-              <nav aria-label="All services" className="mt-5 rounded-xl border border-ink-200 bg-white p-6">
+              <nav aria-label="All services" className="mt-5 rounded-xl border border-paper-200 bg-white p-6">
                 <h2 className="text-xs font-semibold tracking-[0.18em] text-ink-500 uppercase">
                   {ui['nav.servicesList']}
                 </h2>

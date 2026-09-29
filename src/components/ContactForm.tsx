@@ -9,7 +9,7 @@ import { IconCheck } from './icons'
 type Errors = Partial<Record<keyof Enquiry, string>>
 
 const inputClass =
-  'mt-2 min-h-11 w-full rounded-lg border border-ink-200 bg-white px-3.5 py-2.5 text-base text-ink-900 shadow-xs transition-colors placeholder:text-ink-400 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/25'
+  'mt-2 min-h-11 w-full rounded-lg border border-paper-200 bg-white px-3.5 py-2.5 text-base text-ink-900 shadow-xs transition-colors placeholder:text-ink-400 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/25'
 
 const labelClass = 'block text-sm font-medium text-ink-800'
 
@@ -94,7 +94,7 @@ export function ContactForm({ defaultService = '' }: { defaultService?: string }
   if (status === 'done') {
     return (
       <div
-        className="rounded-xl border border-ink-200 bg-white p-6 sm:p-8"
+        className="rounded-xl border border-paper-200 bg-white p-6 sm:p-8"
         role="status"
         aria-live="polite"
       >
@@ -133,12 +133,8 @@ export function ContactForm({ defaultService = '' }: { defaultService?: string }
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="rounded-xl border border-ink-200 bg-white p-6 text-left sm:p-8"
+      className="rounded-xl border border-paper-200 bg-white p-6 sm:p-8"
     >
-      {/* Opts out of the justified body copy set in `index.css`. Browsers align
-          text inside inputs themselves and do not inherit `text-align` from the
-          document, so a justified label over a left-aligned field would look
-          broken rather than deliberate. */}
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor={field('name')} className={labelClass}>

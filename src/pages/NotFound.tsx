@@ -21,7 +21,7 @@ export default function NotFound() {
   })
 
   return (
-    <section className="bg-ink-50">
+    <section className="bg-paper-100">
       <div className="mx-auto min-h-[60vh] w-full max-w-6xl px-5 py-20 sm:px-8 sm:py-24">
         <p className="font-mono text-sm font-semibold text-brand-600">404</p>
         <h1 className="mt-4 text-3xl font-semibold tracking-tight text-balance text-ink-950 sm:text-4xl">
@@ -37,7 +37,7 @@ export default function NotFound() {
           </ButtonLink>
         </div>
 
-        <nav aria-label={ui['nav.servicesList']} className="mt-12 border-t border-ink-200 pt-8">
+        <nav aria-label={ui['nav.servicesList']} className="mt-12 border-t border-paper-200 pt-8">
           <h2 className="text-xs font-semibold tracking-[0.18em] text-ink-500 uppercase">
             {ui['nav.servicesList']}
           </h2>

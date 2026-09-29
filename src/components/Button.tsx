@@ -1,23 +1,33 @@
 import { Link } from 'react-router-dom'
 import type { ComponentProps, ReactNode } from 'react'
 
-export type Variant = 'primary' | 'secondary' | 'ghost' | 'onDark' | 'onDarkGhost' | 'whatsapp'
+export type Variant = 'primary' | 'secondary' | 'ghost' | 'whatsapp'
 export type Size = 'md' | 'lg'
 
+/**
+ * ---------------------------------------------------------------------------
+ * BUTTONS
+ * ---------------------------------------------------------------------------
+ * Border radius is 10px. The brief asks for 8–12px on buttons and 12–16px on
+ * cards, and for anything pill-shaped to be reserved for small badges. A
+ * 10px radius reads as a considered, professional control rather than either a
+ * sharp-edged utility or a rounded pill.
+ *
+ * Every button is a solid fill with a single flat colour. There are no
+ * gradients, no glass and no glow here, and no shadow deeper than the one line
+ * that lifts a filled button off the page by a pixel or two.
+ */
 const variants: Record<Variant, string> = {
-  primary:
-    'bg-ink-950 text-white hover:bg-brand-700 active:bg-brand-800 shadow-sm shadow-ink-950/10',
-  secondary:
-    'bg-white text-ink-900 ring-1 ring-ink-200 hover:bg-ink-50 hover:ring-ink-300 active:bg-ink-100',
-  ghost: 'text-ink-700 hover:text-ink-950 hover:bg-ink-50',
-  onDark: 'bg-white text-ink-950 hover:bg-brand-50 active:bg-brand-100',
-  onDarkGhost: 'text-white ring-1 ring-white/25 hover:bg-white/10 hover:ring-white/45',
+  primary: 'bg-ink-950 text-white hover:bg-ink-800 active:bg-ink-900 shadow-xs',
+  secondary: 'bg-white text-ink-900 ring-1 ring-ink-300 hover:bg-paper-100 hover:ring-ink-300',
+  ghost: 'text-ink-700 hover:text-ink-950 hover:bg-ink-100',
   /**
-   * WhatsApp's own green, slightly darkened so a full-width button does not
+   * WhatsApp's own green, darkened slightly so a full-width button does not
    * shout. Used only for the WhatsApp CTA, where the colour is a recognisable
-   * signal rather than decoration.
+   * signal a visitor is looking for rather than decoration. The brand accent is
+   * a blue, so this is the only green anywhere on the site.
    */
-  whatsapp: 'bg-[#128c7e] text-white hover:bg-[#0f7065] active:bg-[#0b5a51] shadow-sm shadow-[#0b5a51]/20',
+  whatsapp: 'bg-[#128c7e] text-white hover:bg-[#0f7065] active:bg-[#0b5a51] shadow-xs shadow-[#0b5a51]/15',
 }
 
 const sizes: Record<Size, string> = {
@@ -27,7 +37,7 @@ const sizes: Record<Size, string> = {
 }
 
 const base =
-  'inline-flex items-center justify-center gap-2 rounded-lg font-semibold tracking-tight transition-colors duration-200 select-none'
+  'inline-flex items-center justify-center gap-2 rounded-[10px] font-semibold tracking-tight transition-colors duration-150 select-none'
 
 type CommonProps = {
   variant?: Variant

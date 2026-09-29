@@ -8,7 +8,9 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/brand/apple-touch-icon.png" />
-    <meta name="theme-color" content="#0b1220" />
+    <!-- Warm off-white page background, so the mobile browser chrome matches the
+         page on first paint rather than flashing a dark band. -->
+    <meta name="theme-color" content="#fbfaf7" />
 
     <!-- The header logo is the largest content element on first paint. -->
     <link rel="preload" as="image" type="image/png" href="/brand/logo.png" />
@@ -16,13 +18,13 @@
     <!--
       The title, description and social tags here are the values a crawler sees
       before JavaScript runs, and the ones a link is unfurled with. They match
-      `site.tagline` / `site.description` in `src/content/site.ts`, which
+      `site.seoTitle` / `site.seoDescription` in `src/content/site.ts`, which
       `useDocumentMeta` then sets per route. Change both together.
     -->
-    <title>Shifra Nuha Technologies | Business Registration &amp; Professional Services in Kerala</title>
+    <title>Business Registration in Kerala | Shifra Nuha Technologies</title>
     <meta
       name="description"
-      content="Company incorporation, LLP and partnership registration, GST, accounting, income tax, auditing, project reports and trademark support for new and existing businesses across Kerala. Message on WhatsApp or call."
+      content="Affordable LLP and Company registration assistance in Kerala. Get started from ₹2,999 + applicable charges."
     />
     <!-- Rewritten at build time by the plugin in vite.config.ts: with no
          VITE_WEBSITE_DOMAIN this becomes "noindex, follow". It is declared
@@ -34,11 +36,11 @@
     <meta property="og:site_name" content="Shifra Nuha Technologies" />
     <meta
       property="og:title"
-      content="Shifra Nuha Technologies | Business Registration &amp; Professional Services in Kerala"
+      content="Business Registration in Kerala | Shifra Nuha Technologies"
     />
     <meta
       property="og:description"
-      content="Company incorporation, LLP and partnership registration, GST, accounting, income tax, auditing, project reports and trademark support for businesses across Kerala."
+      content="Affordable LLP and Company registration assistance in Kerala. Get started from ₹2,999 + applicable charges."
     />
     <meta property="og:locale" content="en_IN" />
     <!-- Relative until VITE_WEBSITE_DOMAIN is set; useDocumentMeta upgrades it. -->
@@ -53,11 +55,11 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="Shifra Nuha Technologies | Business Registration &amp; Professional Services in Kerala"
+      content="Business Registration in Kerala | Shifra Nuha Technologies"
     />
     <meta
       name="twitter:description"
-      content="Company incorporation, LLP and partnership registration, GST, accounting, income tax, auditing, project reports and trademark support for businesses across Kerala."
+      content="Affordable LLP and Company registration assistance in Kerala. Get started from ₹2,999 + applicable charges."
     />
     <meta name="twitter:image" content="/brand/og-image.png" />
     <meta

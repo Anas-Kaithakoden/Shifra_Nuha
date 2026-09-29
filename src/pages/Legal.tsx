@@ -35,7 +35,7 @@ export function Legal({ doc }: { doc: LegalDoc }) {
                 </div>
               ) : null}
 
-              <nav aria-label="On this page" className="rounded-xl border border-ink-200 bg-white p-5">
+              <nav aria-label="On this page" className="rounded-xl border border-paper-200 bg-white p-5">
                 <h2 className="text-xs font-semibold tracking-[0.18em] text-ink-500 uppercase">
                   On this page
                 </h2>
@@ -75,7 +75,7 @@ export function Legal({ doc }: { doc: LegalDoc }) {
                 </section>
               ))}
 
-              <section className="rounded-xl border border-ink-200 bg-white p-6">
+              <section className="rounded-xl border border-paper-200 bg-white p-6">
                 <h2 className="text-lg font-semibold tracking-tight text-ink-950">Questions</h2>
                 <p className="mt-3 text-sm leading-relaxed text-ink-600">
                   If anything on this page is unclear, or you think something has gone wrong, tell us and we

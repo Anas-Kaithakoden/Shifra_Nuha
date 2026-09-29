@@ -24,12 +24,12 @@ export function Faq({ items, className = '' }: { items: FaqItem[]; className?: s
   if (items.length === 0) return null
 
   return (
-    <div className={`divide-y divide-ink-200 overflow-hidden rounded-xl border border-ink-200 bg-white ${className}`}>
+    <div className={`divide-y divide-paper-200 overflow-hidden rounded-xl border border-paper-200 bg-white ${className}`}>
       {items.map((item, index) => {
         const id = `${base}-${index}`
         return (
           <details key={item.question} className="group">
-            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-base font-semibold tracking-tight text-ink-950 transition-colors hover:bg-ink-50 sm:px-6 [&::-webkit-details-marker]:hidden">
+            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-base font-semibold tracking-tight text-ink-950 transition-colors hover:bg-paper-100 sm:px-6 [&::-webkit-details-marker]:hidden">
               <span className="text-pretty">{item.question}</span>
               <IconChevron
                 width={18}

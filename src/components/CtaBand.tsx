@@ -1,59 +1,44 @@
-import { cta, site } from '../content/site'
-import { ui } from '../content/ui'
+import { cta } from '../content/site'
 import { CtaPair } from './CtaButtons'
-import { ButtonLink } from './Button'
-import { IconArrowRight } from './icons'
+import { OfferPrice } from './OfferPrice'
+import { Reveal } from './Reveal'
 
 /**
  * ---------------------------------------------------------------------------
- * CLOSING CTA BAND
+ * CLOSING CTA
  * ---------------------------------------------------------------------------
- * The last thing on the homepage. Dark, full width, and the same two buttons in
- * the same order as the hero — a visitor who scrolled the whole page and is
- * now ready should not have to scroll back up to find out how.
+ * The last thing on the homepage: the same offer, the same two buttons, in the
+ * same order as the hero. Someone who scrolled the whole page is at the point
+ * of deciding, and they should not have to scroll back up to find out how to
+ * start.
  *
- * The enquiry form link sits underneath as the quieter third option, so the
- * page is not pushing three equally-weighted actions at someone who only needs
- * one.
+ * The surface is white with a hairline above rather than a dark band. A dark
+ * full-bleed panel with a glow behind it is the look the brief is asking us to
+ * remove, and on a page that is mostly warm off-white it would read as a
+ * different website bolted onto the end.
  */
 export function CtaBand() {
   return (
-    <section className="relative overflow-hidden bg-ink-950 py-20 text-white sm:py-24 lg:py-28">
-      <div className="bg-grid absolute inset-0" aria-hidden="true" />
-      <div
-        className="absolute -bottom-40 left-1/2 h-[420px] w-[760px] -translate-x-1/2 rounded-full bg-brand-600/12 blur-[120px]"
-        aria-hidden="true"
-      />
+    <section className="border-t border-paper-200 bg-white py-16 sm:py-20 lg:py-24">
+      <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
+        <Reveal>
+          <div className="max-w-2xl">
+            <h2 className="text-2xl leading-[1.2] font-semibold tracking-tight text-balance text-ink-950 sm:text-3xl">
+              {cta.title}
+            </h2>
+            <p className="mt-4 text-base leading-relaxed text-pretty text-ink-600 sm:text-lg">
+              {cta.body}
+            </p>
 
-      <div className="relative mx-auto w-full max-w-6xl px-5 sm:px-8">
-        <div className="max-w-2xl">
-          <h2 className="text-3xl leading-[1.15] font-semibold tracking-tight text-balance sm:text-4xl">
-            {cta.title}
-          </h2>
-          <p className="mt-5 text-base leading-relaxed text-pretty text-ink-300 sm:text-lg">
-            {cta.body}
-          </p>
-          <p className="mt-4 text-sm leading-relaxed text-ink-400">
-            {cta.note}
-          </p>
-        </div>
+            <OfferPrice size="inline" className="mt-7" />
 
-        <div className="mt-9">
-          <CtaPair place="cta-band" whatsappVariant="whatsapp" callVariant="onDark" />
-        </div>
+            <div className="mt-7">
+              <CtaPair place="cta-band" whatsappVariant="whatsapp" callVariant="secondary" size="lg" />
+            </div>
 
-        <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
-          <ButtonLink
-            to="/contact#enquiry"
-            size="md"
-            variant="ghost"
-            className="self-start text-brand-200 hover:bg-white/10 hover:text-white"
-          >
-            {ui['cta.enquiry']}
-            <IconArrowRight width={16} height={16} />
-          </ButtonLink>
-          <p className="text-sm text-ink-400">Serving businesses across {site.market}.</p>
-        </div>
+            <p className="mt-5 max-w-xl text-sm leading-relaxed text-ink-500">{cta.note}</p>
+          </div>
+        </Reveal>
       </div>
     </section>
   )

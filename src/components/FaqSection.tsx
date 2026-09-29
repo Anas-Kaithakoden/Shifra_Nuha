@@ -1,28 +1,28 @@
-import { coreServices, type FaqItem } from '../content/services'
 import { faqs, faqsSection } from '../content/site'
 import { faqSchema, useJsonLd } from '../lib/seo'
 import { Faq } from './Faq'
 import { Section } from './Section'
 
 /**
- * The homepage FAQ.
+ * ---------------------------------------------------------------------------
+ * FAQ
+ * ---------------------------------------------------------------------------
+ * Six questions, and the section is deliberately short.
  *
- * Two jobs: answer the questions that stop someone from making contact, and
- * carry the homepage's structured data. Both are served by the same content —
- * questions about cost, documents and timelines, answered with what actually
- * drives each one rather than with a number we would then have to honour.
+ * The first three are the ones the ₹2,999 price raises — what it costs, what is
+ * in it, and what happens next — because those are what a visitor opens this
+ * section to check. If the answer to "what does it cost" is not here, the
+ * visitor leaves to ask somebody else and we never find out why.
  *
- * The first question from each of the nine services is folded in, so the
- * homepage answers the single most common question per service without
- * duplicating a word of it.
+ * It also carries the page's structured data from the same array, so the
+ * FAQPage markup and the visible questions can never disagree.
+ *
+ * The per-service questions live on the service pages, where they are relevant.
+ * Folding nine services' FAQs in here used to produce fifteen questions, which
+ * is a wall, not an FAQ.
  */
 export function FaqSection() {
-  const items: FaqItem[] = [
-    ...faqs,
-    ...coreServices.flatMap((service) => service.faqs.slice(0, 1)),
-  ]
-
-  useJsonLd(faqSchema(items), [items.length])
+  useJsonLd(faqSchema(faqs), [faqs.length])
 
   return (
     <Section
@@ -30,10 +30,8 @@ export function FaqSection() {
       eyebrow={faqsSection.eyebrow}
       title={faqsSection.title}
       intro={faqsSection.intro}
-      surface="subtle"
-      divided
     >
-      <Faq items={items} />
+      <Faq items={faqs} />
     </Section>
   )
 }

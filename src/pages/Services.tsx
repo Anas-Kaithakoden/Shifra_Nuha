@@ -59,14 +59,14 @@ export default function ServicesPage() {
         intro={servicesPage.intro}
       >
         <div className="mt-9">
-          <CtaPair place="services-hub-hero" whatsappVariant="whatsapp" callVariant="onDark" />
+          <CtaPair place="services-hub-hero" whatsappVariant="whatsapp" callVariant="secondary" />
         </div>
       </PageIntro>
 
       <div className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8 sm:py-20">
         {/* The cost policy, stated up front. */}
         <Reveal>
-          <div className="rounded-xl border border-ink-200 bg-white p-6 sm:p-7">
+          <div className="rounded-xl border border-paper-200 bg-white p-6 sm:p-7">
             <h2 className="text-base font-semibold tracking-tight text-ink-950">
               {servicesPage.pricingPolicy.title}
             </h2>
@@ -86,18 +86,18 @@ export default function ServicesPage() {
 
         {/* A second, quieter CTA, for anyone who scrolled the whole list. */}
         <Reveal>
-          <div className="mt-12 rounded-2xl bg-ink-950 p-8 text-white sm:p-10">
-            <h2 className="text-2xl font-semibold tracking-tight text-balance text-white sm:text-3xl">
+          <div className="mt-12 rounded-xl border border-paper-200 bg-white p-7 sm:p-9">
+            <h2 className="text-xl font-semibold tracking-tight text-balance text-ink-950 sm:text-2xl">
               {ui['cta.notSure']}
             </h2>
-            <div className="mt-7">
-              <CtaPair place="services-hub" whatsappVariant="whatsapp" callVariant="onDark" />
+            <div className="mt-6">
+              <CtaPair place="services-hub" whatsappVariant="whatsapp" callVariant="secondary" />
             </div>
-            <p className="mt-6 text-sm text-ink-400">
+            <p className="mt-5 text-sm text-ink-500">
               Or{' '}
               <Link
                 to="/contact#enquiry"
-                className="inline-flex min-h-10 items-center gap-1.5 font-semibold text-brand-200 hover:text-white"
+                className="inline-flex min-h-11 items-center gap-1.5 font-semibold text-ink-800 hover:text-brand-700"
               >
                 {ui['cta.enquiry']}
                 <IconArrowRight width={16} height={16} />

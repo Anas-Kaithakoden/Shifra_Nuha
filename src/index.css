@@ -1,35 +1,69 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Inter carries the whole interface; the site is English only. */
+  /*
+   * ---------------------------------------------------------------------------
+   * TYPOGRAPHY
+   * ---------------------------------------------------------------------------
+   * One family, Inter, for the whole interface. The site is English only, so a
+   * single family is enough and a second one would only dilute the hierarchy.
+   */
   --font-sans:
     'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
-  /* Ink — near-black navy neutrals */
-  --color-ink-50: #f6f7f9;
-  --color-ink-100: #eceef2;
-  --color-ink-200: #d5dae3;
-  --color-ink-300: #b0b9c9;
-  --color-ink-400: #8593aa;
-  --color-ink-500: #66748f;
-  --color-ink-600: #515d76;
-  --color-ink-700: #424b5f;
-  --color-ink-800: #39404f;
-  --color-ink-900: #1d222e;
-  --color-ink-950: #0b1220;
+  /*
+   * ---------------------------------------------------------------------------
+   * INK — text, borders, dark surfaces
+   * ---------------------------------------------------------------------------
+   * A warm near-black charcoal. Dark enough to read as authority, warm enough
+   * to sit on an off-white page without looking like a terminal.
+   */
+  --color-ink-50: #f7f6f4;
+  --color-ink-100: #edebe7;
+  --color-ink-200: #dcd8d2;
+  --color-ink-300: #bdb8b1;
+  --color-ink-400: #918c84;
+  --color-ink-500: #6e6962;
+  --color-ink-600: #55514b;
+  --color-ink-700: #403d38;
+  --color-ink-800: #2a2825;
+  --color-ink-900: #1b1a18;
+  --color-ink-950: #111110;
 
-  /* Brand — deep ocean teal */
-  --color-brand-50: #eefbfa;
-  --color-brand-100: #d5f4f1;
-  --color-brand-200: #ade9e6;
-  --color-brand-300: #78d8d6;
-  --color-brand-400: #43bcbd;
-  --color-brand-500: #22a0a6;
-  --color-brand-600: #14808c;
-  --color-brand-700: #146674;
-  --color-brand-800: #155159;
-  --color-brand-900: #174449;
-  --color-brand-950: #06272c;
+  /*
+   * ---------------------------------------------------------------------------
+   * PAPER — page and section surfaces
+   * ---------------------------------------------------------------------------
+   * A warm off-white. The page is `paper-50`, cards are white, and an
+   * alternating section is `paper-100`. Three surfaces in total: the brief is
+   * explicit that not every section should be a different colour.
+   */
+  --color-paper-50: #fbfaf7;
+  --color-paper-100: #f4f1ec;
+  --color-paper-200: #e9e4db;
+  --color-paper-300: #d8d1c4;
+
+  /*
+   * ---------------------------------------------------------------------------
+   * BRAND — the single accent
+   * ---------------------------------------------------------------------------
+   * A deep petrol blue, pulled from the cyan in the logo and darkened until it
+   * reads as a printed ink rather than a highlight. It is deliberately pushed
+   * towards blue rather than green so that WhatsApp's green stays the only green
+   * on the page, and the WhatsApp button stays a recognisable signal rather than
+   * one more brand-coloured rectangle.
+   */
+  --color-brand-50: #eef5f8;
+  --color-brand-100: #d8e9ef;
+  --color-brand-200: #b2d2de;
+  --color-brand-300: #80b3c5;
+  --color-brand-400: #4c91a8;
+  --color-brand-500: #2c748a;
+  --color-brand-600: #1d5c71;
+  --color-brand-700: #194c5e;
+  --color-brand-800: #173f4e;
+  --color-brand-900: #173641;
+  --color-brand-950: #0d2129;
 }
 
 @layer base {
@@ -37,49 +71,27 @@
     -webkit-text-size-adjust: 100%;
   }
 
-  /**
-   * ---------------------------------------------------------------------------
-   * MOBILE TYPOGRAPHY
-   * ---------------------------------------------------------------------------
-   * On a phone the content column is roughly 350px wide. A single narrow column
-   * of ragged-right text looks untidy rather than designed, so from phone width
-   * body copy is justified — both edges flush, last line left as normal. `sm`
-   * (640px) switches it back to left, which is the better look at a wider
-   * measure and is what tablet and desktop have always had.
+  /*
+   * Body copy is left-aligned at every width.
    *
-   * `hyphens-auto` is not decoration. Without permission to break words the
-   * browser can only break at spaces, so it stretches the gaps between them
-   * instead — the classic "rivers" of unjustified narrow text. `<html lang>` is
-   * set in `index.html`, so the hyphenation dictionary is the right one. It is
-   * switched off from `sm` up because there is no reason to hyphenate when the
-   * column is wide enough not to.
-   *
-   * Headings are the one thing `justify` cannot help: they are single-line, so
-   * it would do nothing to them. They are centred on mobile instead, which
-   * balances against the justified column beneath, and are never hyphenated —
-   * a heading broken across lines by a hyphen reads as a typo.
-   *
-   * To opt a block out, set `text-left` on it. Three do, each deliberately:
-   *
-   *  - The contact form. Browsers align text inside inputs themselves and do
-   *    not inherit `text-align` from the document, so a justified label over a
-   *    left-aligned field would look broken rather than deliberate.
-   *  - The mobile navigation. Menu items are scanned by their left edge.
-   *  - The footer's legal disclaimer. Justified grey fine print at `text-xs` is
-   *    markedly harder to read than a ragged right edge.
-   *
-   * (The partners table on the About page is left-aligned for the same class of
-   * reason, and predates this rule.)
+   * This was justified on phones, with automatic hyphenation, to tidy a narrow
+   * ragged column. On review that trade is a bad one: hyphenation dictionaries
+   * differ between browsers and languages, and where they are missing the
+   * justification stretches the gaps between words instead — the "rivers" that
+   * justified narrow columns are known for. Left-aligned text is the
+   * professional default and it never depends on a dictionary being available.
    */
   body {
-    @apply bg-white font-sans text-ink-800 antialiased text-justify hyphens-auto sm:text-left sm:hyphens-manual;
+    @apply bg-paper-50 font-sans text-ink-700 antialiased;
   }
 
   h1,
   h2,
   h3,
-  h4 {
-    @apply text-center hyphens-manual sm:text-left;
+  h4,
+  h5,
+  h6 {
+    @apply text-ink-950;
   }
 
   :focus-visible {
@@ -96,25 +108,10 @@
      control looks identical across browsers. */
   .select-field {
     @apply appearance-none bg-white pr-11;
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2366748f' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236e6962' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 0.9rem center;
     background-size: 1.05rem 1.05rem;
-  }
-
-  /* Subtle technical grid used behind hero / dark sections */
-  .bg-grid {
-    background-image:
-      linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
-    background-size: 64px 64px;
-  }
-
-  .bg-grid-light {
-    background-image:
-      linear-gradient(to right, rgb(11 18 32 / 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(11 18 32 / 0.05) 1px, transparent 1px);
-    background-size: 64px 64px;
   }
 }
 

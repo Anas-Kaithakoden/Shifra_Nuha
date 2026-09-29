@@ -10,8 +10,20 @@ type Props = {
 }
 
 /**
- * Restrained scroll reveal: children fade and lift a few pixels into place.
- * Fully disabled when the visitor prefers reduced motion.
+ * ---------------------------------------------------------------------------
+ * REVEAL
+ * ---------------------------------------------------------------------------
+ * A single, restrained scroll reveal: the block fades from nothing to opaque
+ * once, when it first comes into view, and never moves again.
+ *
+ * There is no translation, no parallax, no stagger cascade beyond a short
+ * delay, and no motion at all once the transition has run. The brief allows
+ * "fade-in sections" and "very subtle entrance animations" and rules out
+ * flying cards, parallax and constant movement, so this is the whole of it.
+ * A block that has faded in stays exactly where it is.
+ *
+ * Fully disabled when the visitor prefers reduced motion, in which case the
+ * content is simply rendered as visible.
  */
 export function Reveal({ children, delay = 0, as: Tag = 'div', className = '' }: Props) {
   const ref = useRef<HTMLElement>(null)
@@ -35,7 +47,7 @@ export function Reveal({ children, delay = 0, as: Tag = 'div', className = '' }:
           }
         })
       },
-      { rootMargin: '0px 0px -12% 0px', threshold: 0.05 },
+      { rootMargin: '0px 0px -10% 0px', threshold: 0.04 },
     )
 
     observer.observe(node)
@@ -46,9 +58,7 @@ export function Reveal({ children, delay = 0, as: Tag = 'div', className = '' }:
     <Tag
       ref={ref}
       style={shown ? undefined : { transitionDelay: `${delay}ms` }}
-      className={`transition-[opacity,transform] duration-700 ease-out will-change-[opacity,transform] ${
-        shown ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'
-      } ${className}`}
+      className={`transition-opacity duration-500 ease-out ${shown ? 'opacity-100' : 'opacity-0'} ${className}`}
     >
       {children}
     </Tag>

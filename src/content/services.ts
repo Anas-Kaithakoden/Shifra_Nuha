@@ -11,7 +11,10 @@
  *
  *  - No invented pricing. Every cost note says what drives the price and
  *    points at a quotation, and `startingFrom` is empty until a real figure is
- *    confirmed.
+ *    confirmed. The one figure that is real — the ₹2,999 starting fee for LLP
+ *    and Company registration — comes from `offer.ts`, so it reads from the same
+ *    place as the hero, the FAQ and the closing CTA rather than being retyped
+ *    here.
  *  - No processing times and no guarantee of approval. Requirements, fees and
  *    timelines change, and the visitor is told to confirm them.
  *  - No professional claims that have not been verified. Regulated work is
@@ -20,6 +23,8 @@
  *  - No services outside the agreed list. The nine below are the whole
  *    registration and professional-services catalogue.
  */
+
+import { registrationOffer } from './offer'
 
 export type ServiceIconKey =
   | 'building'
@@ -182,7 +187,7 @@ const serviceSources: ServiceSource[] = [
       'We do not promise an approval date. Timelines depend on the workload at the Ministry and on how quickly documents are corrected if something is queried.',
     ],
     pricingNote:
-      'Get a personalised quotation. Company registration cost is normally the professional fee plus government fees, and both change with the number of directors, the authorised capital and the state. Government fees are always shown separately, never folded into a single headline number.',
+      'The total is the professional fee plus government fees, and both change with the number of directors, the authorised capital and the state. Government fees are always shown separately, never folded into a single headline number.',
     faqs: [
       {
         question: 'What documents are required to register a company?',
@@ -192,7 +197,7 @@ const serviceSources: ServiceSource[] = [
       {
         question: 'How much does company registration cost?',
         answer:
-          'It depends on your structure, so we do not publish a single figure. The total is the professional fee plus government fees such as the MCA filing fee, stamp duty and any state charges. Government fees vary with the number of directors, the authorised share capital and the state, and they change from time to time. We prepare a quotation once we know your case, and the government component is always shown separately.',
+          `Our company registration service starts at ${registrationOffer.price} plus applicable charges. The total is that professional fee plus government fees such as the MCA filing fee, stamp duty and any state charges. Government fees vary with the number of directors, the authorised share capital and the state, and they change from time to time. We prepare a quotation once we know your case, and the government component is always shown separately.`,
       },
       {
         question: 'How long does company registration take?',
@@ -304,7 +309,7 @@ const serviceSources: ServiceSource[] = [
       'We do not promise an approval date. The timeline depends on the Ministry and on how complete the filing is.',
     ],
     pricingNote:
-      'Get a personalised quotation. LLP registration cost is the professional fee plus government fees, which vary with the number of partners and the state. Government fees are always shown separately.',
+      'The total is the professional fee plus government fees, which vary with the number of partners and the state. Government fees are always shown separately.',
     faqs: [
       {
         question: 'Is an LLP better than a private limited company for me?',
@@ -319,7 +324,7 @@ const serviceSources: ServiceSource[] = [
       {
         question: 'How much does LLP registration cost?',
         answer:
-          'It depends on the number of partners, the state and the scope of the LLP agreement. Government fees are payable separately and change over time. We prepare a quotation once we know your structure, and the government component is always itemised rather than hidden inside a single number.',
+          `Our LLP registration service starts at ${registrationOffer.price} plus applicable charges. The total is that professional fee plus government fees, which depend on the number of partners, the state and the scope of the LLP agreement, and which change over time. We prepare a quotation once we know your structure, and the government component is always itemised rather than hidden inside a single number.`,
       },
       {
         question: 'Is the LLP agreement really necessary?',

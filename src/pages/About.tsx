@@ -59,7 +59,7 @@ export default function About() {
         </section>
 
         {/* How we work with professional partners */}
-        <section className="border-t border-ink-200 py-14 sm:py-16">
+        <section className="border-t border-paper-200 py-14 sm:py-16">
           <Reveal>
             <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
               <div>
@@ -74,7 +74,7 @@ export default function About() {
                 {aboutPage.boundaries.points.map((point) => (
                   <li
                     key={point}
-                    className="rounded-xl border border-ink-200 bg-white p-5 text-sm leading-relaxed text-ink-700"
+                    className="rounded-xl border border-paper-200 bg-white p-5 text-sm leading-relaxed text-ink-700"
                   >
                     {point}
                   </li>
@@ -85,7 +85,7 @@ export default function About() {
         </section>
 
         {/* Partner network */}
-        <section className="border-t border-ink-200 py-14 sm:py-16">
+        <section className="border-t border-paper-200 py-14 sm:py-16">
           <Reveal>
             <h2 className="text-2xl font-semibold tracking-tight text-ink-950 sm:text-3xl">
               {aboutPage.partners.title}
@@ -94,44 +94,29 @@ export default function About() {
               {aboutPage.partners.intro}
             </p>
 
-            {/* The table scrolls horizontally on narrow screens rather than
-                forcing the whole page to overflow. */}
-            <div className="mt-8 overflow-x-auto rounded-xl border border-ink-200 bg-white">
-              <table className="w-full min-w-[520px] border-collapse text-left text-sm">
-                <caption className="sr-only">Professional partners and their responsibilities</caption>
-                <thead>
-                  <tr className="border-b border-ink-200 bg-ink-50">
-                    <th
-                      scope="col"
-                      className="px-5 py-3.5 text-xs font-semibold tracking-[0.14em] text-ink-500 uppercase"
-                    >
-                      Partner
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-5 py-3.5 text-xs font-semibold tracking-[0.14em] text-ink-500 uppercase"
-                    >
-                      Main responsibility
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {aboutPage.partners.rows.map((row) => (
-                    <tr key={row.role} className="border-b border-ink-100 last:border-0">
-                      <th scope="row" className="px-5 py-4 align-top font-semibold text-ink-950">
-                        {row.role}
-                      </th>
-                      <td className="px-5 py-4 align-top text-ink-600">{row.responsibility}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            {/*
+              A list, not a table. This was a two-column table with a
+              `min-w-[520px]` and an `overflow-x-auto` wrapper, which meant a
+              sideways scroll inside a 320px screen to read seven short rows.
+              The content is a role and its responsibility, not a data
+              comparison, so a definition list reads better at every width and
+              there is nothing left to overflow.
+            */}
+            <dl className="mt-8 divide-y divide-paper-200 overflow-hidden rounded-xl border border-paper-200 bg-white">
+              {aboutPage.partners.rows.map((row) => (
+                <div key={row.role} className="p-5 sm:flex sm:gap-8 sm:p-6">
+                  <dt className="text-sm font-semibold tracking-tight text-ink-950 sm:w-56 sm:shrink-0">
+                    {row.role}
+                  </dt>
+                  <dd className="mt-1.5 text-sm leading-relaxed text-ink-600 sm:mt-0">{row.responsibility}</dd>
+                </div>
+              ))}
+            </dl>
           </Reveal>
         </section>
 
         {/* How an engagement grows */}
-        <section className="border-t border-ink-200 py-14 sm:py-16">
+        <section className="border-t border-paper-200 py-14 sm:py-16">
           <Reveal>
             <h2 className="text-2xl font-semibold tracking-tight text-ink-950 sm:text-3xl">
               {aboutPage.journey.title}
@@ -143,7 +128,7 @@ export default function About() {
             <ol className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
               {aboutPage.journey.steps.map((step, index) => (
                 <Reveal key={step.title} as="li" delay={index * 60} className="h-full">
-                  <div className="flex h-full flex-col rounded-xl border border-ink-200 bg-white p-5">
+                  <div className="flex h-full flex-col rounded-xl border border-paper-200 bg-white p-5">
                     <span className="font-mono text-xs font-semibold text-brand-600">
                       {String(index + 1).padStart(2, '0')}
                     </span>
@@ -157,17 +142,17 @@ export default function About() {
         </section>
 
         {/* Closing CTA */}
-        <section className="border-t border-ink-200 py-14 sm:py-16">
+        <section className="border-t border-paper-200 py-14 sm:py-16">
           <Reveal>
-            <div className="rounded-2xl bg-ink-950 p-8 text-white sm:p-10">
-              <h2 className="text-2xl font-semibold tracking-tight text-balance text-white sm:text-3xl">
+            <div className="rounded-xl border border-paper-200 bg-white p-7 sm:p-9">
+              <h2 className="text-xl font-semibold tracking-tight text-balance text-ink-950 sm:text-2xl">
                 {aboutPage.closing.title}
               </h2>
-              <p className="mt-5 max-w-2xl text-base leading-relaxed text-pretty text-ink-300">
+              <p className="mt-4 max-w-2xl text-base leading-relaxed text-pretty text-ink-600">
                 {aboutPage.closing.body}
               </p>
-              <div className="mt-8">
-                <CtaPair place="about-closing" whatsappVariant="whatsapp" callVariant="onDark" />
+              <div className="mt-7">
+                <CtaPair place="about-closing" whatsappVariant="whatsapp" callVariant="secondary" />
               </div>
             </div>
           </Reveal>

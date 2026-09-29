@@ -42,7 +42,7 @@ export default function Contact() {
       >
         <div className="mt-9 flex flex-col gap-3 sm:max-w-md sm:flex-row">
           <WhatsAppButton place="contact-hero" size="lg" variant="whatsapp" className="w-full" />
-          <CallButton place="contact-hero" size="lg" variant="onDark" className="w-full" />
+          <CallButton place="contact-hero" size="lg" variant="secondary" className="w-full" />
         </div>
       </PageIntro>
 
@@ -62,7 +62,7 @@ export default function Contact() {
 
           <Reveal delay={80}>
             <div className="space-y-5">
-              <div className="rounded-xl border border-ink-200 bg-white p-6">
+              <div className="rounded-xl border border-paper-200 bg-white p-6">
                 <h2 className="text-xs font-semibold tracking-[0.18em] text-ink-500 uppercase">
                   {contactPage.directTitle}
                 </h2>
@@ -134,14 +134,14 @@ export default function Contact() {
                     ) : null}
                   </dl>
                 ) : (
-                  <p className="mt-5 rounded-lg border border-dashed border-ink-300 bg-ink-50 px-4 py-4 text-sm leading-relaxed text-ink-600">
+                  <p className="mt-5 rounded-lg border border-dashed border-ink-300 bg-paper-100 px-4 py-4 text-sm leading-relaxed text-ink-600">
                     <span className="font-semibold text-ink-900">Placeholder.</span>{' '}
                     {ui['placeholder.contact']}
                   </p>
                 )}
               </div>
 
-              <div className="rounded-xl border border-ink-200 bg-white p-6">
+              <div className="rounded-xl border border-paper-200 bg-white p-6">
                 <h2 className="text-xs font-semibold tracking-[0.18em] text-ink-500 uppercase">
                   {contact.serviceAreaTitle}
                 </h2>
@@ -150,7 +150,7 @@ export default function Contact() {
                   {contact.serviceAreas.map((area) => (
                     <li
                       key={area}
-                      className="rounded-md bg-ink-50 px-2.5 py-1 text-xs font-medium text-ink-700 ring-1 ring-ink-200 ring-inset"
+                      className="rounded-md bg-paper-100 px-2.5 py-1 text-xs font-medium text-ink-700 ring-1 ring-ink-300 ring-inset"
                     >
                       {area}
                     </li>
@@ -162,11 +162,11 @@ export default function Contact() {
         </div>
 
         {/* What happens after an enquiry */}
-        <section className="mt-16 border-t border-ink-200 pt-12 sm:mt-20">
+        <section className="mt-16 border-t border-paper-200 pt-12 sm:mt-20">
           <h2 className="text-2xl font-semibold tracking-tight text-balance text-ink-950">
             {ui['section.next']}
           </h2>
-          <ol className="mt-8 grid gap-px overflow-hidden rounded-xl bg-ink-200 ring-1 ring-ink-200 sm:grid-cols-3">
+          <ol className="mt-8 grid gap-px overflow-hidden rounded-xl bg-paper-200 ring-1 ring-ink-300 sm:grid-cols-3">
             {contactPage.nextSteps.map((step, index) => (
               <Reveal key={step.number} as="li" delay={index * 70} className="h-full bg-white p-6">
                 <span className="font-mono text-xs font-semibold text-brand-600">{step.number}</span>

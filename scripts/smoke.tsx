@@ -4,6 +4,7 @@ import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom/server'
 import App from '../src/App'
 import { CONFIG } from '../src/config/site.config'
+import { registrationOffer } from '../src/content/offer'
 import { coreServices, serviceBySlug } from '../src/content/services'
 import { contact, social } from '../src/content/site'
 import { INDEXABLE_ROUTES, ROUTES } from '../src/routes'
@@ -253,10 +254,43 @@ function isNegated(text: string, at: number) {
 /** `matchAll` needs the global flag; the flag is not part of the pattern's meaning. */
 const globalOf = (pattern: RegExp) => new RegExp(pattern.source, `${pattern.flags.replace('g', '')}g`)
 
+/**
+ * The one price the business has actually committed to publishing, and the exact
+ * strings it is allowed to appear as.
+ *
+ * The `a price` pattern below exists to catch a figure typed into a component by
+ * hand — an invented discount, a "was ₹X" comparison, a stray figure copied
+ * from another business. A real offer is a different thing, so it is named here
+ * instead of by loosening the pattern, which would have quietly permitted every
+ * other price on the site too.
+ *
+ * Longest first, so removing one cannot leave a fragment of another behind.
+ */
+const APPROVED_PRICE_STRINGS = [
+  registrationOffer.headline,
+  registrationOffer.priceFrom,
+  registrationOffer.priceOnly,
+  registrationOffer.price,
+].sort((a, b) => b.length - a.length)
+
+/** Blanked to the same length, so match offsets in the context excerpt stay honest. */
+const scrub = (text: string, approved: string) =>
+  text.replace(
+    // The digit guards matter: without them `₹29,999` and `₹2,9999` would both
+    // contain `₹2,999` and a mistyped price would be scrubbed instead of caught.
+    new RegExp(`(?<![\\d,])${approved.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\d,])`, 'g'),
+    () => approved.replace(/[^\s]/g, 'x'),
+  )
+
 for (const { path, html } of pages) {
   // Strip the tags and decode the handful of entities that appear, so the
   // checks read the words a visitor reads rather than the markup.
+  //
+  // `<script>` bodies come out first. JSON-LD is machine-readable metadata that
+  // nobody reads on the page, and it quotes the same values as the visible copy,
+  // so leaving it in would double every claim the checks report.
   const text = html
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
     .replace(/<[^>]+>/g, ' ')
     .replace(/&amp;/g, '&')
     .replace(/&nbsp;/g, ' ')
@@ -266,21 +300,117 @@ for (const { path, html } of pages) {
     .replace(/&gt;/g, '>')
     .replace(/\s+/g, ' ')
 
+  // The approved offer, removed before the scan. A real published price is not
+  // a violation; see `APPROVED_PRICE_STRINGS`.
+  const scanText = APPROVED_PRICE_STRINGS.reduce(scrub, text)
+
   for (const [label, pattern] of forbidden) {
-    for (const match of text.matchAll(globalOf(pattern))) {
-      if (isNegated(text, match.index ?? 0)) continue
-      const context = text.slice(Math.max(0, (match.index ?? 0) - 60), (match.index ?? 0) + 60)
+    for (const match of scanText.matchAll(globalOf(pattern))) {
+      if (isNegated(scanText, match.index ?? 0)) continue
+      const context = scanText.slice(Math.max(0, (match.index ?? 0) - 60), (match.index ?? 0) + 60)
       fail(path, `claims ${label}: "...${context.trim()}..."`)
     }
   }
 }
 pass('claims', `no prices, timelines, guarantees, ratings or statistics in ${pages.length} pages`)
 
+/**
+ * And the converse: the approved offer has to actually be on the page. Without
+ * this, the scrub above would also pass if the offer were removed altogether —
+ * a green claims check would then mean nothing at all about the price.
+ *
+ * The qualifier is checked with it, because "₹2,999" on its own is the version
+ * of the offer the brief rules out.
+ */
+{
+  const home = pages.find((page) => page.path === '/')?.html ?? ''
+  const required: [string, string][] = [
+    ['the price', registrationOffer.price],
+    ['the starting-price wording', 'Starting at'],
+    ['the qualifier', registrationOffer.qualifier],
+  ]
+  const missing = required.filter(([, needle]) => !home.includes(needle)).map(([label]) => label)
+  if (missing.length) fail('/', `the approved offer is incomplete: missing ${missing.join(', ')}`)
+  else pass('offer', `${registrationOffer.headline}, homepage only`)
+}
+
 // The brief's own placeholder token must never reach a visitor.
 for (const { path, html } of pages) {
   if (/\[PRICE\]|\bTBD\b|\bLorem ipsum\b|\bTODO\b/i.test(html)) {
     fail(path, 'a placeholder token leaked into the page')
   }
+}
+
+// ===========================================================================
+// 5b. No horizontal overflow on the narrowest supported screen
+// ===========================================================================
+
+/**
+ * The brief requires no horizontal overflow from 320px upwards, and 320px is
+ * where it breaks: the narrowest real handset, minus the page's own `px-5`
+ * gutter on each side, leaves 280px of content box. Anything wider than that has
+ * to be either deliberately scrollable in its own right, or a bug.
+ *
+ * This runs over the rendered markup rather than a real layout engine, so it
+ * cannot measure anything. What it can do is catch the three ways a horizontal
+ * scrollbar actually appears in a Tailwind codebase — a hard-coded pixel width,
+ * `whitespace-nowrap`, and an unbreakable run of text — and it does that on every
+ * route, so a regression cannot hide on the page nobody looks at.
+ */
+const NARROW_CONTENT_BOX = 280
+
+/** Classes that let a child scroll or clip within its own box. Legitimate. */
+const SELF_SCROLLING = /\boverflow-x-(?:auto|scroll|hidden)\b/
+const WRAPPING_ALLOWED = /\b(?:break-words|break-all|break-keep-all|hyphens-auto|truncate)\b/
+
+/** Visible text only: no tags, no attributes, no SVG path data, no JSON-LD. */
+const visibleText = (html: string) =>
+  html
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+
+const overflowBefore = failures
+
+for (const { path, html } of pages) {
+  // --- Markup hazards -------------------------------------------------------
+  // A hard pixel width at or above the content box. A `w-4` icon is fine; a
+  // `w-[320px]` panel is not.
+  for (const match of html.matchAll(globalOf(/(?:^|\s)(?:min-)?w-\[(\d+)px\]/))) {
+    if (Number(match[1]) < NARROW_CONTENT_BOX) continue
+    const openTag = html.lastIndexOf('<', match.index ?? 0)
+    fail(path, `may overflow 320px: fixed width w-[${match[1]}px] in <${html.slice(openTag).split('>')[0].slice(0, 60)}>`)
+  }
+
+  for (const match of html.matchAll(globalOf(/(?:^|\s)whitespace-nowrap(?:\s|$)/))) {
+    const openTag = html.lastIndexOf('<', match.index ?? 0)
+    const tag = html.slice(openTag).split('>')[0]
+    if (SELF_SCROLLING.test(tag)) continue
+    fail(path, `may overflow 320px: whitespace-nowrap in <${tag.slice(0, 60)}>`)
+  }
+
+  // --- Unbreakable text -----------------------------------------------------
+  // The character class excludes `&` and `;` so a run can never straddle an
+  // HTML entity, which keeps the text offsets equal to the markup offsets.
+  const text = visibleText(html)
+  for (const match of text.matchAll(/[^\s"'<>&;]{28,}/g)) {
+    const run = match[0]
+    // Every occurrence is checked, not just the first: the same word can be
+    // wrapped in one place on the page and un-wrapped in another.
+    let at = html.indexOf(run)
+    while (at !== -1) {
+      const near = html.slice(Math.max(0, at - 260), at + run.length + 60)
+      if (!WRAPPING_ALLOWED.test(near) && !SELF_SCROLLING.test(near)) {
+        fail(path, `may overflow 320px: unbreakable "${run.slice(0, 40)}"`)
+        break
+      }
+      at = html.indexOf(run, at + 1)
+    }
+  }
+}
+
+if (failures === overflowBefore) {
+  pass('overflow', `no fixed-width, nowrap or unbreakable-text hazards at 320px across ${pages.length} pages`)
 }
 
 // ===========================================================================

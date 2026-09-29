@@ -13,7 +13,7 @@ export function ServiceCard({ service }: { service: CoreService }) {
   const Icon = serviceIcons[service.icon]
 
   return (
-    <article className="group relative flex h-full flex-col rounded-xl border border-ink-200 bg-white transition-colors duration-200 hover:border-brand-300 hover:shadow-sm hover:shadow-ink-950/5">
+    <article className="group relative flex h-full flex-col rounded-xl border border-paper-200 bg-white transition-colors duration-150 hover:border-brand-300">
       <div className="flex flex-1 flex-col p-6">
         <span className="inline-flex size-11 items-center justify-center rounded-lg bg-brand-50 text-brand-700 ring-1 ring-brand-200 ring-inset">
           <Icon width={20} height={20} />
