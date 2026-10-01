@@ -7,16 +7,17 @@ import {
   IconCalculator,
   IconChat,
   IconClipboard,
+  IconCpu,
   IconDocument,
+  IconGlobe,
   IconHandshake,
-  IconLayers,
+  IconLandmark,
   IconMail,
   IconMegaphone,
   IconMonitor,
   IconPalette,
   IconPartner,
   IconPercent,
-  IconPen,
   IconReceipt,
   IconScale,
   IconShield,
@@ -43,6 +44,9 @@ import {
  * Each registry is fully keyed, and the components that consume them still fall
  * back defensively, so a missing key degrades to a sensible icon instead of
  * crashing the page.
+ *
+ * Every drawing behind these keys is a `lucide-react` component; see `icons.tsx`
+ * for why the indirection exists and for the one hand-drawn exception.
  */
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>
@@ -60,28 +64,32 @@ export const serviceIcons: Record<ServiceIconKey, IconComponent> = {
   tag: IconTag,
 }
 
-/** Secondary digital and technology services. */
+/**
+ * Secondary digital services. Deliberately a short list: the tier-two offering
+ * is two things, not eight, and a registry padded with keys nobody renders is
+ * an invitation to put the padding back.
+ */
 export type DigitalIconKey = keyof typeof digitalIcons
 
 export const digitalIcons = {
-  branding: IconPalette,
-  website: IconMonitor,
-  email: IconMail,
-  marketing: IconMegaphone,
+  website: IconGlobe,
+  automation: IconCpu,
   crm: IconChat,
-  automation: IconAutomation,
-  content: IconPen,
+  branding: IconPalette,
+  marketing: IconMegaphone,
+  content: IconBook,
+  email: IconMail,
+  display: IconMonitor,
   whatsapp: IconWhatsApp,
 } satisfies Record<string, IconComponent>
 
-/** Supporting reasons on the homepage. */
+/** Supporting points on the homepage and the about page. */
 export type ReasonIconKey = keyof typeof reasonIcons
 
 export const reasonIcons = {
   steps: IconSteps,
   partner: IconPartner,
   shield: IconShield,
-  layers: IconLayers,
   users: IconUsers,
   target: IconTarget,
   wallet: IconWallet,
@@ -89,6 +97,10 @@ export const reasonIcons = {
   book: IconBook,
   calculator: IconCalculator,
   document: IconDocument,
+  landmark: IconLandmark,
+  cpu: IconCpu,
+  globe: IconGlobe,
+  automation: IconAutomation,
   /** "Responsive support" — the point is that someone replies, so it gets a bubble. */
   chat: IconChat,
 } satisfies Record<string, IconComponent>

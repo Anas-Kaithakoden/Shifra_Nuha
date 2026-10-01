@@ -15,55 +15,60 @@
    * ---------------------------------------------------------------------------
    * INK — text, borders, dark surfaces
    * ---------------------------------------------------------------------------
-   * A warm near-black charcoal. Dark enough to read as authority, warm enough
-   * to sit on an off-white page without looking like a terminal.
+   * A deep slate-navy scale. Deliberately not pure black: #0F172A reads as
+   * printed ink on an off-white page and keeps headings legible in long
+   * passages, where #000 reads as a screen. The two darkest steps are the
+   * brand's own deep tones — `ink-950` is the fill behind primary buttons and
+   * the colour of every heading, `ink-800` is the second surface.
    */
-  --color-ink-50: #f7f6f4;
-  --color-ink-100: #edebe7;
-  --color-ink-200: #dcd8d2;
-  --color-ink-300: #bdb8b1;
-  --color-ink-400: #918c84;
-  --color-ink-500: #6e6962;
-  --color-ink-600: #55514b;
-  --color-ink-700: #403d38;
-  --color-ink-800: #2a2825;
-  --color-ink-900: #1b1a18;
-  --color-ink-950: #111110;
+  --color-ink-50: #f8fafc;
+  --color-ink-100: #f1f5f9;
+  --color-ink-200: #e2e8f0;
+  --color-ink-300: #cbd5e1;
+  --color-ink-400: #94a3b8;
+  --color-ink-500: #64748b;
+  --color-ink-600: #475569;
+  --color-ink-700: #334155;
+  --color-ink-800: #1e293b;
+  --color-ink-900: #172033;
+  --color-ink-950: #0f172a;
 
   /*
    * ---------------------------------------------------------------------------
    * PAPER — page and section surfaces
    * ---------------------------------------------------------------------------
-   * A warm off-white. The page is `paper-50`, cards are white, and an
-   * alternating section is `paper-100`. Three surfaces in total: the brief is
-   * explicit that not every section should be a different colour.
+   * Off-white to white, three steps, no more. `paper-50` is the document, white
+   * is a raised plane sitting on it, `paper-100` is the quiet step for the
+   * sections that recede, and `paper-200` is the hairline that separates one
+   * plane from the next. Nothing else is a surface colour, which is what keeps
+   * the page from turning into a stack of differently coloured bands.
    */
-  --color-paper-50: #fbfaf7;
-  --color-paper-100: #f4f1ec;
-  --color-paper-200: #e9e4db;
-  --color-paper-300: #d8d1c4;
+  --color-paper-50: #f8fafc;
+  --color-paper-100: #f1f5f9;
+  --color-paper-200: #e2e8f0;
+  --color-paper-300: #cbd5e1;
 
   /*
    * ---------------------------------------------------------------------------
    * BRAND — the single accent
    * ---------------------------------------------------------------------------
-   * A deep petrol blue, pulled from the cyan in the logo and darkened until it
-   * reads as a printed ink rather than a highlight. It is deliberately pushed
-   * towards blue rather than green so that WhatsApp's green stays the only green
-   * on the page, and the WhatsApp button stays a recognisable signal rather than
-   * one more brand-coloured rectangle.
+   * A restrained corporate blue, kept well below the saturation of the old
+   * petrol accent so it never reads as a "tech" colour. It carries eyebrows,
+   * focus rings, the small mark beside a check, and the tint behind a service
+   * icon. WhatsApp's green is deliberately not part of this scale, so the one
+   * green on the page is always a WhatsApp action a visitor can recognise.
    */
-  --color-brand-50: #eef5f8;
-  --color-brand-100: #d8e9ef;
-  --color-brand-200: #b2d2de;
-  --color-brand-300: #80b3c5;
-  --color-brand-400: #4c91a8;
-  --color-brand-500: #2c748a;
-  --color-brand-600: #1d5c71;
-  --color-brand-700: #194c5e;
-  --color-brand-800: #173f4e;
-  --color-brand-900: #173641;
-  --color-brand-950: #0d2129;
+  --color-brand-50: #eff4fb;
+  --color-brand-100: #dbe6f5;
+  --color-brand-200: #bcd0e9;
+  --color-brand-300: #8fadd6;
+  --color-brand-400: #5c83bb;
+  --color-brand-500: #3a639b;
+  --color-brand-600: #274b7c;
+  --color-brand-700: #1d3a63;
+  --color-brand-800: #162c4a;
+  --color-brand-900: #101f34;
+  --color-brand-950: #0a1524;
 }
 
 @layer base {
@@ -139,7 +144,7 @@
      control looks identical across browsers. */
   .select-field {
     @apply appearance-none bg-white pr-11;
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236e6962' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 0.9rem center;
     background-size: 1.05rem 1.05rem;

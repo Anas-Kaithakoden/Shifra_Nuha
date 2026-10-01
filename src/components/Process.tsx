@@ -22,7 +22,7 @@ export function Process() {
       eyebrow={process.eyebrow}
       title={process.title}
       intro={process.intro}
-      surface="muted"
+      surface="page"
       divided
     >
       <ol className="grid gap-6 sm:grid-cols-3 sm:gap-8">

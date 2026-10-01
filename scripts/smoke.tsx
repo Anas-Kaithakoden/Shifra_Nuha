@@ -4,8 +4,7 @@ import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom/server'
 import App from '../src/App'
 import { CONFIG } from '../src/config/site.config'
-import { registrationOffer } from '../src/content/offer'
-import { coreServices, serviceBySlug } from '../src/content/services'
+import { coreServices, featuredServices, serviceBySlug } from '../src/content/services'
 import { contact, social } from '../src/content/site'
 import { INDEXABLE_ROUTES, ROUTES } from '../src/routes'
 import { ui } from '../src/content/ui'
@@ -209,7 +208,14 @@ if (!invented.length) pass('config', 'no invented contact, social or tracking va
  * reported when it is not negated - see `isNegated` below.
  */
 const forbidden: [string, RegExp][] = [
-  ['a price', /(?:₹|\bINR\s?|\bRs\.?\s)\s?\d/],
+  [
+    'a price',
+    // Strict and unnegotiable. This site publishes no figure at all — not a
+    // headline, not a "starting from", not a struck-through original — so there
+    // is nothing to allow-list and no string to scrub before the scan. Every
+    // price on the page would be a figure invented somewhere in the codebase.
+    /(?:₹|\bINR\s?|\bRs\.?\s)\s?\d/,
+  ],
   ['a processing time', /\b\d+\s*(?:-|–)?\s*(?:working\s*)?(?:days?|hours?|weeks?|months?)\b|\b(?:same[- ]day|same[- ]week|24[- ]hours?|48[- ]hours?|instantly|immediately)\b/i],
   ['a guarantee', /\b(?:guarantee[ds]?|guaranteeing|assured|100\s*%\s*(?:success|approval))\b/i],
   ['a rating or award', /\b\d(?:\.\d)?\s*(?:star|rated|stars)\b|\baward[- ]winning\b|\b#1\b/i],
@@ -254,34 +260,6 @@ function isNegated(text: string, at: number) {
 /** `matchAll` needs the global flag; the flag is not part of the pattern's meaning. */
 const globalOf = (pattern: RegExp) => new RegExp(pattern.source, `${pattern.flags.replace('g', '')}g`)
 
-/**
- * The one price the business has actually committed to publishing, and the exact
- * strings it is allowed to appear as.
- *
- * The `a price` pattern below exists to catch a figure typed into a component by
- * hand — an invented discount, a "was ₹X" comparison, a stray figure copied
- * from another business. A real offer is a different thing, so it is named here
- * instead of by loosening the pattern, which would have quietly permitted every
- * other price on the site too.
- *
- * Longest first, so removing one cannot leave a fragment of another behind.
- */
-const APPROVED_PRICE_STRINGS = [
-  registrationOffer.headline,
-  registrationOffer.priceFrom,
-  registrationOffer.priceOnly,
-  registrationOffer.price,
-].sort((a, b) => b.length - a.length)
-
-/** Blanked to the same length, so match offsets in the context excerpt stay honest. */
-const scrub = (text: string, approved: string) =>
-  text.replace(
-    // The digit guards matter: without them `₹29,999` and `₹2,9999` would both
-    // contain `₹2,999` and a mistyped price would be scrubbed instead of caught.
-    new RegExp(`(?<![\\d,])${approved.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\d,])`, 'g'),
-    () => approved.replace(/[^\s]/g, 'x'),
-  )
-
 for (const { path, html } of pages) {
   // Strip the tags and decode the handful of entities that appear, so the
   // checks read the words a visitor reads rather than the markup.
@@ -300,14 +278,10 @@ for (const { path, html } of pages) {
     .replace(/&gt;/g, '>')
     .replace(/\s+/g, ' ')
 
-  // The approved offer, removed before the scan. A real published price is not
-  // a violation; see `APPROVED_PRICE_STRINGS`.
-  const scanText = APPROVED_PRICE_STRINGS.reduce(scrub, text)
-
   for (const [label, pattern] of forbidden) {
-    for (const match of scanText.matchAll(globalOf(pattern))) {
-      if (isNegated(scanText, match.index ?? 0)) continue
-      const context = scanText.slice(Math.max(0, (match.index ?? 0) - 60), (match.index ?? 0) + 60)
+    for (const match of text.matchAll(globalOf(pattern))) {
+      if (isNegated(text, match.index ?? 0)) continue
+      const context = text.slice(Math.max(0, (match.index ?? 0) - 60), (match.index ?? 0) + 60)
       fail(path, `claims ${label}: "...${context.trim()}..."`)
     }
   }
@@ -315,23 +289,40 @@ for (const { path, html } of pages) {
 pass('claims', `no prices, timelines, guarantees, ratings or statistics in ${pages.length} pages`)
 
 /**
- * And the converse: the approved offer has to actually be on the page. Without
- * this, the scrub above would also pass if the offer were removed altogether —
- * a green claims check would then mean nothing at all about the price.
- *
- * The qualifier is checked with it, because "₹2,999" on its own is the version
- * of the offer the brief rules out.
+ * The Tier 1 grid on the homepage is built from `featuredServices`, and the count
+ * is pinned here rather than left implicit. Eight is a decision: it is what fits
+ * two clean rows at four across, and it is the set a business actually needs.
+ * Changing the grid is a content change that has to come through here.
+ */
+if (featuredServices.length !== 8) {
+  fail('services', `expected 8 featured services, found ${featuredServices.length}`)
+} else if (featuredServices.some((service) => !service.featured)) {
+  fail('services', 'a service is in the featured grid but not flagged as featured')
+} else {
+  const unlisted = coreServices.filter((service) => !featuredServices.includes(service))
+  pass(
+    'services',
+    `8 featured services in the Tier 1 grid; ${unlisted.map((s) => s.slug).join(', ') || 'none'} offered in text`,
+  )
+}
+
+/**
+ * And the converse of the price check: the homepage has to actually answer the
+ * cost question, because a site that simply never mentions cost reads as though
+ * it is hiding one. The visible text is checked for the honest answer rather than
+ * a figure — "depends", "quotation", "itemised" — so that removing the pricing
+ * policy fails here instead of passing quietly.
  */
 {
   const home = pages.find((page) => page.path === '/')?.html ?? ''
-  const required: [string, string][] = [
-    ['the price', registrationOffer.price],
-    ['the starting-price wording', 'Starting at'],
-    ['the qualifier', registrationOffer.qualifier],
+  const required: [string, RegExp][] = [
+    ['what the cost depends on', /\bdepends on\b/i],
+    ['the word "quotation"', /\bquotation\b/i],
+    ['government fees shown separately', /government fees[^.]{0,120}(separately|itemised)/i],
   ]
-  const missing = required.filter(([, needle]) => !home.includes(needle)).map(([label]) => label)
-  if (missing.length) fail('/', `the approved offer is incomplete: missing ${missing.join(', ')}`)
-  else pass('offer', `${registrationOffer.headline}, homepage only`)
+  const missing = required.filter(([, pattern]) => !pattern.test(home)).map(([label]) => label)
+  if (missing.length) fail('/', `the cost answer is incomplete: missing ${missing.join(', ')}`)
+  else pass('costs', 'no figure published; what drives the fee is stated on the homepage')
 }
 
 // The brief's own placeholder token must never reach a visitor.

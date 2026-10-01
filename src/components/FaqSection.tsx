@@ -9,10 +9,11 @@ import { Section } from './Section'
  * ---------------------------------------------------------------------------
  * Six questions, and the section is deliberately short.
  *
- * The first three are the ones the ₹2,999 price raises — what it costs, what is
- * in it, and what happens next — because those are what a visitor opens this
- * section to check. If the answer to "what does it cost" is not here, the
- * visitor leaves to ask somebody else and we never find out why.
+ * The first two are the questions every visitor opens an FAQ to check — what it
+ * costs, and how long it takes — and both get the answer that is actually true
+ * rather than the one that closes a sale. Answering them here is the point of
+ * having the section: a visitor who cannot get a straight answer to "what does
+ * it cost" from a firm leaves to ask somebody else, and we never find out why.
  *
  * It also carries the page's structured data from the same array, so the
  * FAQPage markup and the visible questions can never disagree.
@@ -30,6 +31,8 @@ export function FaqSection() {
       eyebrow={faqsSection.eyebrow}
       title={faqsSection.title}
       intro={faqsSection.intro}
+      surface="page"
+      divided
     >
       <Faq items={faqs} />
     </Section>

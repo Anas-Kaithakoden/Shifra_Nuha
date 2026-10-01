@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { registrationOffer } from '../content/offer'
+import { enquiry } from '../content/site'
 import { ui } from '../content/ui'
 import { callLink, onPhoneClick, onWhatsappClick, whatsappLink } from '../lib/contactLinks'
 import { ButtonAnchor, type Size, type Variant } from './Button'
@@ -26,10 +26,10 @@ import { IconPhone, IconWhatsApp } from './icons'
  * While a number is unconfirmed both buttons fall back to the enquiry form, so
  * the funnel works on day one and gets sharper when the config is filled in.
  *
- * The prefilled message defaults to the offer message from `content/offer.ts`,
- * which names the ₹2,999 offer. A service landing page overrides it with a
- * message about that specific service, so the first reply is always about what
- * the visitor actually asked about.
+ * The prefilled message defaults to the generic enquiry text in
+ * `content/site.ts`, which names no service and asks a question. A service
+ * landing page overrides it with a message about that specific service, so the
+ * first reply is always about what the visitor actually asked about.
  */
 
 type Common = {
@@ -60,7 +60,7 @@ type LinkProps = Common & {
 
 export function WhatsAppButton({
   place,
-  message = registrationOffer.whatsappMessage,
+  message = enquiry.whatsappMessage,
   size = 'lg',
   variant = 'whatsapp',
   className,

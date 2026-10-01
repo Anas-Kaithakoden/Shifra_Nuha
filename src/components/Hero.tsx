@@ -1,69 +1,73 @@
-import { CtaPair } from './CtaButtons'
-import { OfferCard } from './OfferCard'
+import { ButtonAnchor } from './Button'
+import { WhatsAppButton } from './CtaButtons'
 import { IconCheck } from './icons'
 import { hero } from '../content/site'
+import { ui } from '../content/ui'
 
 /**
  * ---------------------------------------------------------------------------
  * HERO
  * ---------------------------------------------------------------------------
- * The most important section on the site, and the only one with a fixed job
- * order. A visitor who arrived from a Facebook ad has to be able to answer four
- * questions in about five seconds: what does this company do, how much does it
- * start at, can I trust it, and how do I contact them.
+ * The first screen, and the only section with a fixed job order. It has to
+ * answer three questions in the time it takes to read one line: what does this
+ * company do, is it for a business like mine, and how do I start.
  *
- * The order below is that sequence, and it is also the order the brief asks
- * for — eyebrow, headline, price, supporting line, buttons, trust points.
+ * So it carries, in order: what this is, the headline naming the three pillars,
+ * one paragraph, the primary WhatsApp button with an in-page anchor beside it,
+ * and a short set of commitments. That is all. The full service list moved to
+ * the grid below, where it cannot push the WhatsApp button below the fold on a
+ * phone — which is the one thing this section is not allowed to do.
  *
- * On a 375px screen the price sits between the headline and the supporting
- * paragraph, so the figure is on screen before the visitor has scrolled at all.
- * Everything after the buttons is secondary and is allowed to fall below the
- * fold.
+ * THERE IS NO PRICE HERE, and that is a decision rather than an omission. The
+ * work is quoted per engagement once the facts are known. A headline figure on
+ * a hero is a number we would have to defend in a message at eleven at night,
+ * and the visitors who can compare it are exactly the ones who then argue about
+ * what was included.
  *
- * There is no illustration, no gradient, no glow and no secondary call to
- * action. The brief asks for the offer to be understood in three to five
- * seconds, and every extra element above the fold costs a fraction of one.
+ * The secondary action is an anchor to the service grid rather than a route.
+ * Someone who is still deciding between services should be able to read the
+ * whole list without changing page, and there is no second page to build.
  */
 export function Hero() {
   return (
-    <section className="border-b border-paper-200 bg-paper-50">
-      <div className="mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 sm:py-14 lg:py-16">
+    <section className="border-b border-paper-200 bg-white">
+      <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
         <div className="max-w-3xl">
           <p className="text-xs font-semibold tracking-[0.16em] text-brand-700 uppercase">
             {hero.eyebrow}
           </p>
 
-          <h1 className="mt-4 text-[2rem] leading-[1.12] font-semibold tracking-tight text-balance text-ink-950 sm:text-5xl lg:text-[3.5rem] lg:leading-[1.08]">
+          <h1 className="mt-4 text-[2rem] leading-[1.12] font-semibold tracking-tight text-balance text-ink-950 sm:text-5xl lg:text-[3.25rem] lg:leading-[1.08]">
             {hero.heading}
           </h1>
 
-          {/*
-            The offer goes here, directly under the headline and above the
-            supporting line. It is the reason the ad was clicked, so it is what
-            gets read first, and putting it here rather than below the
-            supporting paragraph is what keeps the figure on screen at 320px
-            without having to shorten the headline to do it.
-          */}
-          <OfferCard className="mt-6 sm:mt-8 sm:max-w-md" />
-
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-pretty text-ink-600 sm:text-lg">
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-pretty text-ink-600 sm:text-lg">
             {hero.supporting}
           </p>
 
-          <div className="mt-7 sm:mt-8">
-            <CtaPair
-              place="hero"
-              whatsappVariant="whatsapp"
-              callVariant="secondary"
-              size="lg"
-            />
+          {/*
+            WhatsApp first and full width on a phone, because that is where the
+            traffic lands. The anchor sits beside it from `sm` up and reads as the
+            quieter of the two — it is a way of finding out more, not a way of
+            committing.
+          */}
+          <div className="mt-8 flex w-full flex-col gap-3 sm:max-w-md sm:flex-row">
+            <WhatsAppButton place="hero" size="lg" variant="whatsapp" className="w-full" />
+            <ButtonAnchor href="#services" variant="secondary" size="lg" className="w-full">
+              {ui['cta.exploreServices']}
+            </ButtonAnchor>
           </div>
 
-          {/* Why the price is believable. Checkmarks rather than a rating. */}
-          <ul className="mt-7 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2.5">
-            {hero.trustPoints.map((point) => (
-              <li key={point} className="flex items-center gap-2 text-sm text-ink-600">
-                <IconCheck width={16} height={16} className="shrink-0 text-brand-600" />
+          {/*
+            What the business can honestly commit to before anything has been
+            measured: how the work is arranged, not what it has achieved. No
+            ratings, no client counts, no years — none of those have been
+            verified, and this is exactly the audience that checks.
+          */}
+          <ul className="mt-10 flex flex-col gap-2.5 border-t border-paper-200 pt-6 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2.5">
+            {hero.points.map((point) => (
+              <li key={point} className="flex items-start gap-2 text-sm text-ink-600 sm:items-center">
+                <IconCheck width={16} height={16} className="mt-0.5 shrink-0 text-brand-600 sm:mt-0" />
                 {point}
               </li>
             ))}

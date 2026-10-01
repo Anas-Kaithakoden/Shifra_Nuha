@@ -10,7 +10,7 @@ import { IconClose, IconMenu } from './icons'
  * ---------------------------------------------------------------------------
  * NAVBAR
  * ---------------------------------------------------------------------------
- * Three things, and nothing else: the logo, five links, and one WhatsApp button.
+ * Three things, and nothing else: the logo, four links, and one WhatsApp button.
  *
  * The brief is explicit that there is no mega-menu, and the site does not need
  * one. The nine service pages are all listed on `/services`, in the footer and
@@ -117,7 +117,7 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile navigation: the same five links and the enquiry form, nothing more. */}
+      {/* Mobile navigation: the same four links and the enquiry form, nothing more. */}
       <div
         id="mobile-nav"
         hidden={!open}

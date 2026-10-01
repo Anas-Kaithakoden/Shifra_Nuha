@@ -5,7 +5,6 @@ import { Faq } from '../components/Faq'
 import { Reveal } from '../components/Reveal'
 import { serviceIcons } from '../components/iconRegistry'
 import { IconArrowRight, IconCheck, IconWarning } from '../components/icons'
-import { isOfferedService, offerPriceLine } from '../content/offer'
 import { coreServices, serviceBySlug, type CoreService } from '../content/services'
 import { ui } from '../content/ui'
 import { absoluteUrl, siteConfig, siteOrigin } from '../config/site.config'
@@ -27,8 +26,12 @@ import { PageIntro, PageShell } from './PageShell'
  *  2. What does it actually involve?         — the plain-English explanation
  *  3. What do I get, and what do you not?    — includes, and the caveats
  *  4. What do you need from me?             — documents and information
- *  5. What will it cost and how long?       — honest answer, not a promise
+ *  5. What will it cost, and how long?      — what drives the fee; no promise
  *  6. How do I start?                        — WhatsApp and Call, everywhere
+ *
+ * There is no price on this page. `pricingNote` states what the fee depends on
+ * instead, which is the only version of that answer that is true before we have
+ * read the client's case.
  *
  * The WhatsApp button is prefilled with a message about that specific service,
  * so the conversation starts with the visitor's actual interest already stated.
@@ -38,12 +41,13 @@ export function ServicePage({ service }: { service: CoreService }) {
   const message = service.whatsapp
   const related = service.related.map((slug) => serviceBySlug[slug]).filter(Boolean)
   /*
-   * LLP and Company are the two registrations the ₹2,999 offer covers, so their
-   * pages lead with it — with the qualifier attached, never as a bare number.
-   * The other seven services quote nothing and explain what drives their cost,
-   * which is the honest answer for work that depends on the client's situation.
+   * The one line that stands in for a price. No figure appears on this site —
+   * every service is quoted per engagement once the facts are known — so what
+   * the page gives the visitor instead is an explanation of what the fee depends
+   * on. That is the honest version of the question, and it is the same sentence
+   * that sits under the CTA in the aside, so the two never disagree.
    */
-  const pricingLine = offerPriceLine(isOfferedService(service.slug), service.pricingNote)
+  const pricingLine = service.pricingNote
 
   useDocumentMeta({
     title: service.seo.title,

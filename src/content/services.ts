@@ -9,12 +9,11 @@
  * Editorial rules that shaped the copy below, and that should be kept when it
  * is updated:
  *
- *  - No invented pricing. Every cost note says what drives the price and
- *    points at a quotation, and `startingFrom` is empty until a real figure is
- *    confirmed. The one figure that is real — the ₹2,999 starting fee for LLP
- *    and Company registration — comes from `offer.ts`, so it reads from the same
- *    place as the hero, the FAQ and the closing CTA rather than being retyped
- *    here.
+ *  - No published pricing. There is no "starting from" figure anywhere, and no
+ *    service-specific price either. Every cost note says what drives the price
+ *    and points at a written quotation. A published figure on this kind of work
+ *    is either a promise we cannot keep or a number the visitor then has to
+ *    argue about in a message.
  *  - No processing times and no guarantee of approval. Requirements, fees and
  *    timelines change, and the visitor is told to confirm them.
  *  - No professional claims that have not been verified. Regulated work is
@@ -22,9 +21,13 @@
  *    professional.
  *  - No services outside the agreed list. The nine below are the whole
  *    registration and professional-services catalogue.
+ *
+ * `featured` decides what appears in the Tier 1 grid on the homepage. It is
+ * true for the eight services most businesses need, and false for
+ * `partnership-registration`, which is a real service with its own page but a
+ * structure choice rather than a universal one — so it is linked in a line
+ * beneath the grid instead of taking a card.
  */
-
-import { registrationOffer } from './offer'
 
 export type ServiceIconKey =
   | 'building'
@@ -59,6 +62,13 @@ type ServiceSource = {
   metaTitle: string
   metaDescription: string
   icon: ServiceIconKey
+  /**
+   * Whether the service takes a card in the Tier 1 grid on the homepage. A real
+   * service can be false when it is a structure choice rather than something
+   * every business needs, in which case it is linked in a line of text beneath
+   * the grid instead of taking one of the eight places on it.
+   */
+  featured: boolean
   /** Prefilled WhatsApp message, English. Used by every button on this page. */
   whatsappMessage: string
   /** The "Clear explanation" part of the page. */
@@ -73,12 +83,6 @@ type ServiceSource = {
   documents: string[]
   /** "Important caveats" — the honest limitations, stated up front. */
   caveats: string[]
-  /**
-   * A genuine fixed "starting from" figure, written as a bare number.
-   * Empty until one is confirmed, which renders "Get a personalised quotation"
-   * instead. The `₹[PRICE]` token from the brief is never shown to a visitor.
-   */
-  startingFrom: string
   pricingNote: string
   faqs: FaqItem[]
   /** Slugs of related services, for internal linking. */
@@ -97,16 +101,16 @@ const serviceSources: ServiceSource[] = [
   // ==========================================================================
   {
     slug: 'company-registration',
-    name: 'Company Incorporation',
+    name: 'Company Registration',
     navLabel: 'Company Registration',
     summary:
-      'Professional support to incorporate a private limited company in India — from name approval through to the certificate of incorporation and first filings.',
+      'Company registration support in India — private limited companies and one person companies, from name approval through to the certificate of incorporation and the first filings.',
     metaTitle: 'Company Registration Kerala | Shifra Nuha Technologies',
     metaDescription:
       'Private limited company incorporation support in Kerala. Name approval, MOA and AOA, DIN, PAN and TAN, and Registrar of Companies coordination. Message us for a quotation.',
     icon: 'building',
+    featured: true,
     whatsappMessage: 'Hi, I am interested in company registration.',
-    startingFrom: '',
     explanation: [
       {
         heading: 'What company incorporation actually involves',
@@ -197,7 +201,7 @@ const serviceSources: ServiceSource[] = [
       {
         question: 'How much does company registration cost?',
         answer:
-          `Our company registration service starts at ${registrationOffer.price} plus applicable charges. The total is that professional fee plus government fees such as the MCA filing fee, stamp duty and any state charges. Government fees vary with the number of directors, the authorised share capital and the state, and they change from time to time. We prepare a quotation once we know your case, and the government component is always shown separately.`,
+          'It depends on the number of directors, the authorised share capital, the state, and whether anything extra is needed such as a registered office in another state or an object clause for a regulated activity. Government fees such as the MCA filing fee and stamp duty are payable in addition to the professional fee, and they change from time to time. We prepare a written quotation once we know your case, with the government component itemised rather than folded into a single number.',
       },
       {
         question: 'How long does company registration take?',
@@ -229,8 +233,8 @@ const serviceSources: ServiceSource[] = [
     metaDescription:
       'LLP registration services in Kerala. Name approval, LLP agreement, DPIN, PAN and TAN, and MCA coordination. Talk to us on WhatsApp or call for a quotation.',
     icon: 'scale',
+    featured: true,
     whatsappMessage: 'Hi, I am interested in LLP registration.',
-    startingFrom: '',
     explanation: [
       {
         heading: 'What an LLP is',
@@ -324,7 +328,7 @@ const serviceSources: ServiceSource[] = [
       {
         question: 'How much does LLP registration cost?',
         answer:
-          `Our LLP registration service starts at ${registrationOffer.price} plus applicable charges. The total is that professional fee plus government fees, which depend on the number of partners, the state and the scope of the LLP agreement, and which change over time. We prepare a quotation once we know your structure, and the government component is always itemised rather than hidden inside a single number.`,
+          'It depends on the number of partners, the state, and how much of the LLP agreement needs to be drafted. Government fees are payable in addition to the professional fee and change over time. We prepare a written quotation once we know your structure, with the government component itemised separately rather than hidden inside a single number.',
       },
       {
         question: 'Is the LLP agreement really necessary?',
@@ -351,8 +355,8 @@ const serviceSources: ServiceSource[] = [
     metaDescription:
       'Partnership firm registration in Kerala with the Registrar of Firms. Firm name approval, partnership deed drafting, PAN and TAN, and GST coordination. Get a quotation.',
     icon: 'handshake',
+    featured: false,
     whatsappMessage: 'Hi, I am interested in partnership registration.',
-    startingFrom: '',
     explanation: [
       {
         heading: 'How a partnership works in India',
@@ -472,8 +476,8 @@ const serviceSources: ServiceSource[] = [
     metaDescription:
       'GST registration, amendment, return filing and notice support for businesses in Kerala. Eligibility check, filing and ongoing compliance. Message us for a quotation.',
     icon: 'receipt',
+    featured: true,
     whatsappMessage: 'Hi, I need help with GST.',
-    startingFrom: '',
     explanation: [
       {
         heading: 'What GST registration involves',
@@ -594,8 +598,8 @@ const serviceSources: ServiceSource[] = [
     metaDescription:
       'Outsourced bookkeeping and business accounting services in Kerala. Books maintained monthly, reconciliations, financial statements and management reports. Talk to us.',
     icon: 'calculator',
+    featured: true,
     whatsappMessage: 'Hi, I need help with accounting and bookkeeping.',
-    startingFrom: '',
     explanation: [
       {
         heading: 'Bookkeeping and accounting are different jobs',
@@ -712,8 +716,8 @@ const serviceSources: ServiceSource[] = [
     metaDescription:
       'Income tax return preparation and filing, TDS and advance tax support, and notice replies for businesses and individuals in Kerala. Talk to us on WhatsApp or call.',
     icon: 'percent',
+    featured: true,
     whatsappMessage: 'Hi, I need help with income tax.',
-    startingFrom: '',
     explanation: [
       {
         heading: 'What we do',
@@ -831,8 +835,8 @@ const serviceSources: ServiceSource[] = [
     metaDescription:
       'Business audit coordination in Kerala, including tax audit support, book audit and financial statement preparation, through a practising chartered accountant.',
     icon: 'clipboard',
+    featured: true,
     whatsappMessage: 'Hi, I need help with auditing.',
-    startingFrom: '',
     explanation: [
       {
         heading: 'When an audit is required',
@@ -949,8 +953,8 @@ const serviceSources: ServiceSource[] = [
     metaDescription:
       'Business project report and CMA data preparation for banks, DICs and institutions in Kerala. Projections, break-even, means of finance and lender-format submission.',
     icon: 'document',
+    featured: true,
     whatsappMessage: 'Hi, I need help with a project report.',
-    startingFrom: '',
     explanation: [
       {
         heading: 'What a project report is for',
@@ -1065,16 +1069,16 @@ const serviceSources: ServiceSource[] = [
   // ==========================================================================
   {
     slug: 'trademark',
-    name: 'Trademark',
-    navLabel: 'Trademark',
+    name: 'Trademark & Legal Registration',
+    navLabel: 'Trademark & Legal',
     summary:
-      'Trademark search, class selection and filing support, coordinated with the appropriate IP professional.',
+      'Trademark search, class selection and filing support, alongside the other legal registrations a business needs, coordinated with the appropriate professionals.',
     metaTitle: 'Trademark Registration Services Kerala | Shifra Nuha',
     metaDescription:
       'Trademark search, class selection and filing support in Kerala. Word mark and logo registration coordination with an IP professional. Message us on WhatsApp.',
     icon: 'tag',
+    featured: true,
     whatsappMessage: 'Hi, I am interested in trademark registration.',
-    startingFrom: '',
     explanation: [
       {
         heading: 'What a trademark does',
@@ -1240,6 +1244,15 @@ export const businessTypeOptions: string[] = [
 export type CoreService = Service
 
 export const coreServices: CoreService[] = services
+
+/**
+ * The eight services that take a card in the Tier 1 grid on the homepage.
+ * `partnership-registration` is deliberately not here: it is a real service with
+ * its own page, but choosing between a partnership, an LLP and a company is a
+ * structure decision rather than something every business needs, so it is
+ * offered in a line of text under the grid.
+ */
+export const featuredServices: CoreService[] = services.filter((service) => service.featured)
 
 /** Slug to core service. Alias of `serviceBySlug`, for the same reason. */
 export const coreServiceBySlug: Record<string, CoreService> = serviceBySlug

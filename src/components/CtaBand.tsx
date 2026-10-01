@@ -1,21 +1,20 @@
 import { cta } from '../content/site'
 import { CtaPair } from './CtaButtons'
-import { OfferPrice } from './OfferPrice'
 import { Reveal } from './Reveal'
 
 /**
  * ---------------------------------------------------------------------------
  * CLOSING CTA
  * ---------------------------------------------------------------------------
- * The last thing on the homepage: the same offer, the same two buttons, in the
- * same order as the hero. Someone who scrolled the whole page is at the point
- * of deciding, and they should not have to scroll back up to find out how to
- * start.
+ * The last thing on the homepage, and it repeats the hero exactly: the same two
+ * buttons, in the same order. Someone who scrolled the whole page is at the
+ * point of deciding, and they should not have to scroll back up to find out how
+ * to start.
  *
- * The surface is white with a hairline above rather than a dark band. A dark
- * full-bleed panel with a glow behind it is the look the brief is asking us to
- * remove, and on a page that is mostly warm off-white it would read as a
- * different website bolted onto the end.
+ * The surface is white with a hairline above rather than a dark band with a glow
+ * behind it. A dark full-bleed panel is the landing-page look the redesign
+ * removes, and on a document that is mostly white and off-white it would read as
+ * a different website bolted onto the end.
  */
 export function CtaBand() {
   return (
@@ -29,8 +28,6 @@ export function CtaBand() {
             <p className="mt-4 text-base leading-relaxed text-pretty text-ink-600 sm:text-lg">
               {cta.body}
             </p>
-
-            <OfferPrice size="inline" className="mt-7" />
 
             <div className="mt-7">
               <CtaPair place="cta-band" whatsappVariant="whatsapp" callVariant="secondary" size="lg" />

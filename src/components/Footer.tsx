@@ -2,11 +2,10 @@ import { Link } from 'react-router-dom'
 import { coreServices } from '../content/services'
 import { footer, site, social } from '../content/site'
 import { ui } from '../content/ui'
-import { CONFIG } from '../config/site.config'
 import { callLink, mailtoLink, whatsappLink } from '../lib/contactLinks'
 import { WhatsAppButton } from './CtaButtons'
 import { Logo } from './Logo'
-import { IconMail, IconPhone } from './icons'
+import { IconCheck, IconMail, IconPhone } from './icons'
 
 const socialEntries = [
   { key: 'linkedin', label: 'LinkedIn', href: social.linkedin },
@@ -19,17 +18,26 @@ const socialEntries = [
  * ---------------------------------------------------------------------------
  * FOOTER
  * ---------------------------------------------------------------------------
- * Three columns: who this is, what we do, how to reach us. Then a hairline and
- * the legal pages.
+ * Three columns — who this is, what we do, how to reach us — then a hairline,
+ * the legal pages, and the disclaimer.
  *
- * The nine services are listed here as real links, which is both how somebody on
- * a phone reaches a specific page and how a crawler finds them — `/services`
- * alone would leave the service pages one hop from the home page and two from
- * anything else.
+ * THE SERVICE CHECKLIST. All nine services are listed here as real links, not
+ * just the eight on the homepage grid. That is how somebody on a phone reaches a
+ * specific page, and it is how a crawler finds them: `/services` alone would
+ * leave every service page two hops from the home page and further from anything
+ * else. A footer link list is the least glamorous internal-linking there is, and
+ * it does more work here than any other single element on the site.
  *
- * Contact details are printed only when they exist. An unverified number that
- * does not connect is worse than a labelled placeholder, so while nothing is
- * configured the block says so rather than showing a link that goes nowhere.
+ * CONTACT DETAILS. Printed only when they exist. An unverified number that does
+ * not connect is worse than a labelled placeholder, so while nothing is
+ * configured the block says so plainly instead of showing a link that goes
+ * nowhere.
+ *
+ * The disclaimer states plainly that nothing here is advice, that regulated
+ * work is done or supervised by the appropriate professional, and that fees are
+ * quoted rather than published. Those three sentences are the site's whole claim
+ * to being a business rather than a brochure, and they are the first thing a
+ * careful buyer looks for.
  *
  * The extra bottom padding on small screens leaves room for the sticky mobile
  * bar, so it never sits on top of the last line.
@@ -40,18 +48,27 @@ export function Footer() {
   const whatsapp = whatsappLink()
   const phone = callLink()
   const email = mailtoLink()
-  const hasContact = Boolean(phone.ready || email.ready)
+  const hasContact = Boolean(phone.ready || email.ready || whatsapp.ready)
 
   return (
     <footer className="border-t border-paper-200 bg-paper-100">
-      <div className="mx-auto w-full max-w-6xl px-5 pt-14 pb-28 sm:px-8 sm:pt-16 sm:pb-14">
+      <div className="mx-auto w-full max-w-6xl px-5 pt-16 pb-28 sm:px-8 sm:pt-16 sm:pb-14">
         <div className="grid gap-10 md:grid-cols-3 md:gap-8">
           <div>
             <Logo />
-            <p className="mt-5 max-w-xs text-sm leading-relaxed text-ink-600">
-              {footer.blurb}
-            </p>
-            <p className="mt-4 text-sm text-ink-500">Serving businesses across {site.market}.</p>
+            <p className="mt-5 text-sm leading-relaxed text-ink-600">{footer.blurb}</p>
+
+            <ul className="mt-5 space-y-2">
+              {[
+                `Serving businesses across ${site.region}.`,
+                'Registration work is filed with the central or state authority wherever you are based.',
+              ].map((line) => (
+                <li key={line} className="flex gap-2 text-sm leading-relaxed text-ink-500">
+                  <IconCheck width={15} height={15} className="mt-0.5 shrink-0 text-ink-400" />
+                  <span className="text-pretty">{line}</span>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <nav aria-label={footer.servicesTitle}>
@@ -74,7 +91,7 @@ export function Footer() {
 
           <div>
             <h2 className="text-xs font-semibold tracking-[0.14em] text-ink-500 uppercase">
-              Contact
+              {footer.contactTitle}
             </h2>
 
             {hasContact ? (
@@ -116,9 +133,8 @@ export function Footer() {
                 ) : null}
               </ul>
             ) : (
-              <p className="mt-4 rounded-[10px] border border-dashed border-ink-300 bg-white px-4 py-3 text-sm leading-relaxed text-ink-500">
-                Our phone number, WhatsApp number and email address have not been published on this
-                site yet. Use the enquiry form — we read those and we reply.
+              <p className="mt-4 border border-dashed border-ink-300 bg-white px-4 py-3 text-sm leading-relaxed text-ink-500">
+                {ui['placeholder.contact']}
               </p>
             )}
 
@@ -154,7 +170,7 @@ export function Footer() {
         </div>
 
         {/* Legal pages and the disclaimer. Linked for trust and for search. */}
-        <div className="mt-12 flex flex-col gap-4 border-t border-paper-200 pt-6 sm:flex-row sm:items-start sm:justify-between">
+        <div className="mt-14 flex flex-col gap-5 border-t border-paper-200 pt-6 sm:flex-row sm:items-start sm:justify-between sm:gap-10">
           <div>
             <p className="text-xs text-ink-500">
               © {year} {site.name}. All rights reserved.
@@ -177,9 +193,10 @@ export function Footer() {
               in the footer, and justified grey fine print at this size is much
               harder to read than a ragged right edge. */}
           <p className="max-w-md text-left text-xs leading-relaxed text-ink-500">
-            Information on this website is general and is not legal, tax or financial advice. Work
-            that requires a qualified professional is performed or supervised by the appropriate
-            professional. {CONFIG.WEBSITE_DOMAIN ? '' : 'Prices and processing times depend on your circumstances.'}
+            The information on this website is general and is not legal, tax, accounting or financial
+            advice. Work that requires a qualified professional is performed or supervised by the
+            appropriate professional. Fees are quoted per engagement once we understand the case, and
+            government fees are always shown separately from our professional fee.
           </p>
         </div>
       </div>

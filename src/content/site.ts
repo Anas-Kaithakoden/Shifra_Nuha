@@ -1,7 +1,6 @@
 import { hasEmail, hasPhone, hasWhatsapp, siteConfig, siteOrigin } from '../config/site.config'
 import type { DigitalIconKey, ReasonIconKey } from '../components/iconRegistry'
 import type { FaqItem } from './services'
-import { registrationOffer } from './offer'
 
 /**
  * ---------------------------------------------------------------------------
@@ -9,8 +8,7 @@ import { registrationOffer } from './offer'
  * ---------------------------------------------------------------------------
  * Everything a visitor reads that is not a short interface string comes from
  * this file and from `services.ts`, so wording can be changed without touching
- * a component. The offer itself lives in `offer.ts`, because the price has to be
- * identical everywhere it appears.
+ * a component.
  *
  * TRANSLATION MODEL
  *  The site is English only. `ui.ts` holds short chrome — button labels, nav,
@@ -25,13 +23,17 @@ import { registrationOffer } from './offer'
  *    work.
  *  - Claims. No customer numbers, ratings, testimonials, awards, years of
  *    experience, government affiliation or success rates appear anywhere on
- *    this site, because none of them have been verified. The `whyUs` points and
- *    the trust section are written as statements about how the work is
- *    organised, which is the only kind of claim that can be made honestly today.
+ *    this site, because none of them has been verified. Every point in `whyUs`
+ *    and every line in `company` is a statement about how the work is
+ *    organised, which is the only kind of claim that can be made honestly.
+ *  - Published pricing. There is no price on this site, not even a "starting
+ *    from". Work of this kind is quoted per engagement after the facts are
+ *    known, and a figure on a web page is either a promise we cannot keep or a
+ *    number the visitor then has to argue about.
  *  - Timelines and approvals. Both belong to the authority, not to us.
- *  - Testimonials. When real ones exist they go in the trust section. Until then
- *    the section says what we can actually stand behind, which is a far better
- *    answer than a paragraph of invented praise.
+ *  - Testimonials. When real ones exist they go in `company.testimonials`. Until
+ *    then the section says what we can actually stand behind, which is a far
+ *    better answer than a paragraph of invented praise.
  */
 
 // ============================================================================
@@ -41,24 +43,25 @@ import { registrationOffer } from './offer'
 export const site = {
   name: siteConfig.COMPANY_NAME,
   /** The main promise, in the company's own words. */
-  tagline: 'Business registration, made straightforward.',
+  tagline: 'Registration, tax and compliance, handled properly.',
   /** Short supporting line for the footer and the meta description. */
-  supportingLine: 'LLP and Company registration support for new businesses in Kerala.',
+  supportingLine:
+    'Business registration, accounting, tax and compliance support for businesses across Kerala.',
   /**
    * The homepage `<title>`, the `og:title` and the `twitter:title`. They are one
    * string in one place because the crawler, the link unfurl and the browser tab
    * must never disagree, and the copy in `index.html` is the pre-JavaScript
    * version of the same value.
    */
-  seoTitle: `Business Registration in Kerala | ${siteConfig.COMPANY_NAME}`,
+  seoTitle: `Business Registration, Accounting & Compliance in Kerala | ${siteConfig.COMPANY_NAME}`,
   /**
-   * The same for the meta description. The price is interpolated from
-   * `registrationOffer` so the search snippet cannot quote a different figure
-   * from the hero.
+   * The same for the meta description. No price and no promise of a timeline:
+   * a search snippet that quotes either is a commitment the site cannot keep.
    */
-  seoDescription: `Affordable LLP and Company registration assistance in Kerala. Get started from ${registrationOffer.price} + applicable charges.`,
+  seoDescription:
+    'LLP and company registration, GST, income tax, accounting, auditing, project reports and trademark support for businesses across Kerala. Talk to us on WhatsApp.',
   description:
-    'Affordable LLP and Company registration assistance in Kerala. Documentation guidance, application preparation and support throughout the registration process. Get started from ₹2,999 + applicable charges.',
+    'Business registration, accounting, tax and compliance support for new and existing businesses across Kerala — LLP and company registration, GST, income tax, bookkeeping, auditing, project reports and trademark.',
   /**
    * The live origin, or an empty string until the domain is confirmed. While it
    * is empty the site withholds canonical and og:url tags and does not publish a
@@ -79,7 +82,7 @@ export const brand = {
   faviconSvg: '/favicon.svg',
   appleTouchIcon: '/brand/apple-touch-icon.png',
   ogImage: '/brand/og-image.png',
-  ogImageAlt: `${siteConfig.COMPANY_NAME} — LLP and Company registration in Kerala.`,
+  ogImageAlt: `${siteConfig.COMPANY_NAME} — business registration, accounting and compliance in Kerala.`,
 } as const
 
 // ============================================================================
@@ -107,6 +110,20 @@ export const contact = {
   serviceAreas: ['All of Kerala'],
 } as const
 
+/**
+ * The prefilled WhatsApp message used by every button that is *not* on a service
+ * page — the navbar, the hero, the footer, the sticky bar and the two digital
+ * services. It has to open a conversation rather than make a claim: it states
+ * the visitor's interest and asks a question, and it names no service, because
+ * at that point they have not chosen one yet.
+ *
+ * Each service page overrides it with a message about that service, so a
+ * conversation always starts with the visitor's actual interest already stated.
+ */
+export const enquiry = {
+  whatsappMessage: 'Hi, I would like to speak to you about your business services.',
+} as const
+
 /** Lets the UI skip an entire contact block while a value is still blank. */
 export const contactConfigured = {
   phone: hasPhone,
@@ -130,17 +147,22 @@ export const social = {
 export type NavItem = { to: string; label: string }
 
 /**
- * Five items, in the brief's order. Home, Services, How It Works, FAQ and
- * Contact: the two anchor links are on the homepage, and everything else is one
- * click from the home page. There is deliberately no services mega-menu — the
- * nine service pages are all listed on `/services`, in the footer, and on this
- * site's service pages, so none of them is more than two clicks away.
+ * Four items, and no more. Services, About Us, How We Work and Contact: two
+ * destinations, one section of this page, and one page that holds the contact
+ * details and the form.
+ *
+ * "How We Work" is an in-page anchor rather than its own route because three
+ * steps do not need a page of their own — and because a nav item that scrolls
+ * somewhere useful is better than a nav item that 404s.
+ *
+ * There is deliberately no services mega-menu. The nine service pages are all
+ * listed on `/services`, in the footer, and on the homepage, so none of them is
+ * more than one click away.
  */
 export const nav: NavItem[] = [
-  { to: '/', label: 'Home' },
   { to: '/services', label: 'Services' },
-  { to: '/#how-it-works', label: 'How It Works' },
-  { to: '/#faq', label: 'FAQ' },
+  { to: '/about', label: 'About Us' },
+  { to: '/#how-it-works', label: 'How We Work' },
   { to: '/contact', label: 'Contact' },
 ]
 
@@ -149,106 +171,142 @@ export const nav: NavItem[] = [
 // ============================================================================
 
 /**
- * The hero does one job: a visitor who arrived from a Facebook ad should
- * understand the offer within a few seconds, and see the WhatsApp button.
+ * The hero does one job: tell a first-time visitor within a few seconds what
+ * this company does for a business, and make it trivial to start a
+ * conversation.
  *
- * So it carries, in order: what this is, the headline, the price with its
- * qualifier, one sentence of explanation, the two buttons, and three things
- * that make the price believable. Nothing else. The full service list moved to
- * the footer and the `/services` page, where it cannot push the price below the
- * fold on a phone.
+ * So it carries, in order: what this is, the headline, one paragraph that names
+ * the actual service lines, the two buttons, and a short set of commitments.
+ * Nothing else. The full service list moved to the Tier 1 grid and the footer,
+ * where it cannot push the WhatsApp button below the fold on a phone.
+ *
+ * There is no price here, and no "starting from" line either. The work is
+ * quoted per engagement once the facts are known; a number on the hero would be
+ * a number we would have to defend in a message at eleven at night.
  */
 export const hero = {
-  eyebrow: 'Business registration in Kerala',
-  heading: 'Start Your Business Without the Paperwork Hassle',
+  eyebrow: 'Professional business services',
+  heading: 'Business registration, accounting and legal compliance in Kerala',
   supporting:
-    'Get professional assistance with LLP and Company registration, with a simple process and transparent pricing.',
+    'We help new and existing businesses get registered, stay compliant and keep the paperwork in order. One point of contact from the first conversation to the finished documents.',
   /**
-   * The three points that make a starting price credible. They are statements
-   * about how we work rather than claims about our history, which is why they
-   * are safe to make before anything has been measured.
+   * Statements about how we work rather than claims about our history, which is
+   * why they are safe to make before anything has been measured.
    */
-  trustPoints: [
-    'Simple process',
-    'Transparent pricing',
-    'Support throughout the registration process',
+  points: [
+    'One point of contact throughout',
+    'Scope and cost agreed before we start',
+    'Qualified professionals carry out regulated work',
   ],
 } as const
 
 // ============================================================================
-// HOME — WHAT THE PRICE COVERS
+// HOME — TIER 1: PROFESSIONAL SERVICES
 // ============================================================================
 
 /**
- * The brief asks for a small "what's included" block next to the price. It
- * exists to answer the objection the price raises — "what am I actually paying
- * for?" — and its wording comes from `registrationOffer.includes`, so the two
- * can never drift apart.
+ * The professional services, front and centre. These are what the business
+ * actually does, they are what an owner comes to us for, and every one of them
+ * has its own page on the site.
+ *
+ * The order is roughly the order a business meets them in: get the entity
+ * right, register for tax, keep the books, do the tax, prove it to an auditor
+ * or a bank, then protect the name. That ordering is a small thing, but it is
+ * the difference between a catalogue and a service map.
  */
-export const offerSection = {
-  eyebrow: 'What the fee covers',
-  title: 'What we help with',
-  intro: 'The starting fee is for our work on the registration. These are the parts of it you can expect to be involved in.',
-} as const
-
-// ============================================================================
-// HOME — REGISTRATION SERVICES
-// ============================================================================
-
-/**
- * Only the two registration services the offer covers, because those are the
- * two the advertising is about. The other seven are real and are linked from
- * `/services`, the footer and each service page — a founder deciding between an
- * LLP and a company should not be reading eight cards first.
- */
-export const registrationSection = {
-  eyebrow: 'Registration services',
-  title: 'Business Registration Made Simple',
+export const coreSection = {
+  eyebrow: 'Our services',
+  title: 'Professional services for new and running businesses',
   intro:
-    "Whether you're starting a new company or formalizing a partnership, we help simplify the registration process.",
-  cards: [
-    {
-      slug: 'llp-registration',
-      name: 'LLP Registration',
-      body: 'For partners who want to establish a formal limited-liability business structure.',
-    },
-    {
-      slug: 'company-registration',
-      name: 'Company Registration',
-      body: 'For entrepreneurs looking to establish a registered company.',
-    },
-  ],
+    'Eight services, and between them most of what a small business needs done to its registrations, its books and its tax. Open any one to see what it covers, what it needs from you, and where the limits are.',
+  /**
+   * The single line under the grid. Partnership firm registration is a real
+   * service with its own page, but it is a niche structure choice rather than
+   * one of the eight things most businesses need, so it is linked rather than
+   * given a card of its own.
+   */
+  footnoteLead: 'Also available:',
+  footnote: 'Partnership firm registration',
+  footnoteSlug: 'partnership-registration',
+  footnoteBody:
+    'for firms that are not incorporating — see the full service page for how a partnership compares to an LLP.',
 } as const
 
 // ============================================================================
-// HOME — HOW IT WORKS
+// HOME — TIER 2: DIGITAL SERVICES
 // ============================================================================
 
 /**
- * Three steps, because three is what a person can hold in their head. There is
- * no step four promising a delivery date: the timeline belongs to the authority,
- * and the note underneath says so.
+ * Two things, and they are genuinely secondary. The professional work is what
+ * the business is built on; this is the digital layer a business chooses once it
+ * exists.
+ *
+ * It sits on the quiet surface, after the primary work has been established,
+ * as two plain entries rather than a card grid — a grid of two would be a
+ * mistake, and a grid of eight would be the generic startup landing page the
+ * design is meant to avoid.
+ */
+export const digitalSection = {
+  eyebrow: 'Secondary services',
+  title: 'Digital services, when you are ready for them',
+  intro:
+    'Both of these are optional and neither is needed to get started. They are here because a business that is properly registered and still invisible online is leaving enquiries on the table.',
+  items: [
+    {
+      icon: 'website',
+      title: 'Business Websites',
+      body: 'A straightforward, fast website for the business — the pages customers actually look for, structured so it can be found in search and maintained by your own staff.',
+      points: [
+        'Service pages written around what customers search for',
+        'Mobile-first, with fast load on a phone connection',
+        'A content structure your team can update without a developer',
+      ],
+    },
+    {
+      icon: 'automation',
+      title: 'Business Automation & Digital Workflow',
+      body: 'The repetitive part of running a business removed from a person’s day: enquiries captured, followed up on time, quotes and reminders issued, and the records written back where they belong.',
+      points: [
+        'Enquiry capture and follow-up, so nothing sits in a phone',
+        'Quotes, invoices, reminders and routine reports on a schedule',
+        'Hand-offs between WhatsApp, email and your accounting records',
+      ],
+    },
+  ] as { icon: DigitalIconKey; title: string; body: string; points: string[] }[],
+} as const
+
+// ============================================================================
+// HOME — HOW WE WORK
+// ============================================================================
+
+/**
+ * Three steps, because three is what a person can hold in their head.
+ *
+ * There is no step four promising a delivery date: the timeline belongs to the
+ * authority, and the note underneath says so. A registration business that
+ * quotes a completion date it does not control loses the customer in the second
+ * week.
  */
 export const process = {
-  eyebrow: 'How it works',
-  title: 'How It Works',
+  eyebrow: 'How we work',
+  title: 'Three steps, the same for almost everyone',
   intro:
-    'The same three steps for almost everyone. What changes is the content of each one, which depends on your business and on the authority involved.',
+    'What changes from one client to the next is the content of each step, because it depends on your business and on the authority involved. The shape of it does not.',
   steps: [
     {
       number: '01',
-      title: 'Tell Us What You Need',
-      body: 'Contact us on WhatsApp or call us and tell us about your business.',
+      title: 'Initial Consultation',
+      body: 'We talk through what you are setting up or what has gone wrong, and what you actually need done. You get a straight answer on whether we are the right firm for it, and what it will involve, before anything is committed.',
     },
     {
       number: '02',
-      title: 'We Guide You Through the Process',
-      body: 'We help with the required documentation and registration process.',
+      title: 'Documentation & Filing',
+      body: 'We tell you exactly what documents are needed and why, collect them digitally, prepare the forms and agreements, and file with the relevant authority. You can see what is going out before it goes out.',
     },
     {
       number: '03',
-      title: 'Get Your Business Registered',
-      body: 'Complete the required process and receive the relevant registration documents.',
+      title: 'Ongoing Compliance & Support',
+      body: 'Returns, filings, renewals and deadlines are tracked on a calendar for you, with reminders before each one. The same person who did the registration stays on the work.',
     },
   ],
   /**
@@ -256,7 +314,7 @@ export const process = {
    * oversells is a date. Promising one we do not control is how a firm loses a
    * customer in week two.
    */
-  note: 'We do not quote a fixed completion time. Processing time depends on documentation, the authority involved and its workload — we will tell you what is realistic for your case instead.',
+  note: 'We do not quote a guaranteed completion time. Processing time depends on the documentation, the authority involved and its workload — we will tell you what is realistic for your case instead.',
 } as const
 
 // ============================================================================
@@ -265,110 +323,69 @@ export const process = {
 
 /**
  * Four points, all of them statements about how the work is organised. No
- * "Kerala's best", no client counts, no awards: the brief rules them out, and
- * so does the fact that none of them has been verified.
+ * "Kerala's best", no client counts, no awards: none of them has been verified,
+ * and a first-time business owner is exactly the person who checks.
  */
 export const whyUs = {
-  eyebrow: 'Why choose us',
-  title: 'Why Choose Shifra Nuha?',
-  intro: 'Four things that decide whether a registration goes smoothly or turns into a runaround.',
+  eyebrow: 'Why work with us',
+  title: 'What you are actually getting',
+  intro: 'Four things that decide whether a filing goes smoothly or turns into a runaround.',
   points: [
     {
-      icon: 'wallet',
-      title: 'Affordable',
-      body: 'Competitive pricing designed for startups and small businesses.',
-    },
-    {
-      icon: 'steps',
-      title: 'Simple Process',
-      body: 'We make the registration process easier to understand.',
-    },
-    {
       icon: 'chat',
-      title: 'Responsive Support',
-      body: 'Get assistance when you have questions about the process.',
+      title: 'One point of contact',
+      body: 'The person who takes your first message also sees the filing through. You are not explaining your business again to every new vendor.',
+    },
+    {
+      icon: 'document',
+      title: 'Scope agreed in writing',
+      body: 'What we will do, what it costs and which parts involve an external professional are agreed before any work begins.',
     },
     {
       icon: 'shield',
-      title: 'Transparent',
-      body: 'Clearly communicate pricing, requirements and applicable charges.',
+      title: 'Qualified professionals on regulated work',
+      body: 'Accounting, tax, audit, incorporation and IP work is carried out or supervised by the appropriate chartered accountant, company secretary or practitioner.',
+    },
+    {
+      icon: 'steps',
+      title: 'Deadlines tracked, not remembered',
+      body: 'Returns, renewals and annual filings go on a calendar with a reminder ahead of each one, so compliance does not depend on someone remembering.',
     },
   ],
 } as const
 
 // ============================================================================
-// HOME — TRUST
+// HOME — COMPANY CONTEXT
 // ============================================================================
 
 /**
- * The credibility section. The brief asks for a clean one, and it deliberately
- * has no statistics in it: the number of businesses assisted, customer
- * testimonials, review counts and professional credentials all belong here when
- * they are real, and none of them is real yet. Rather than pad the section with
- * placeholders a visitor would read as failures, it makes the argument the
- * business can actually make — that there is a real person on the other end of
- * the WhatsApp message.
+ * The "who we are" block. Deliberately free of statistics: the number of
+ * businesses assisted, customer testimonials, review counts and professional
+ * credentials all belong here when they are real, and none of them is real yet.
+ * Rather than pad the section with placeholders a visitor would read as
+ * failures, it makes the argument the business can actually make — that there
+ * is a real person on the other end of the WhatsApp message.
  *
  * When a testimonial is collected, it belongs in `testimonials` below and in
- * the render inside `components/Trust.tsx`. Inventing one instead is the
+ * the render inside `components/Company.tsx`. Inventing one instead is the
  * fastest way to lose a first-time business owner's trust.
  */
-export const trust = {
-  eyebrow: 'Start with a conversation',
-  title: "Starting Your Business? Let's Get It Done.",
-  body: "Whether you're starting your first business or formalizing an existing one, we're here to help you navigate the process.",
+export const company = {
+  eyebrow: 'About us',
+  title: 'A small firm that tells you what it will and will not do',
+  body: 'Shifra Nuha Technologies helps businesses across Kerala get properly registered, stay compliant, and keep the professional work in one place rather than split across a dozen vendors. Registration is where a relationship usually starts. It is not the whole of it.',
   points: [
-    'You deal with the same person from the first message to the registration documents.',
+    'You deal with the same person from the first message to the finished documents.',
     'We tell you what the documents are before you start gathering them, not after.',
-    'Applicable charges are explained up front, so the invoice is not a surprise.',
-    'If registration is not what you need, we will tell you that instead of selling it.',
+    'If what you need is not something we handle, we will tell you that instead of selling it.',
+    'We will tell you in advance which part of the work is being done by an external professional.',
   ],
   /**
    * Deliberately empty. Populate with real, attributable, verifiable quotes only
    * — name, business, and the words they actually said.
    */
   testimonials: [] as { quote: string; name: string; business: string }[],
-  button: 'Talk to Us on WhatsApp',
-} as const
-
-// ============================================================================
-// HOME — OTHER SERVICES
-// ============================================================================
-
-/**
- * Secondary, and presented as secondary. The brief is explicit: registration is
- * the main service, and these are additional support available to customers
- * once their business exists. They sit on the quietest surface on the page, as
- * a plain list rather than a grid of cards, because a grid of eight equal cards
- * is exactly the "repetitive cards" the brief asks us to remove.
- */
-export const otherServices = {
-  eyebrow: 'Also available',
-  title: 'More Services for Your Business',
-  intro:
-    'Registration is where we start. Once your business exists, the ongoing professional work is usually what you actually need next — and it is easier to keep it with one contact than to find a new vendor for each piece.',
-  professionalTitle: 'Business and compliance services',
-  professional: [
-    'GST Registration',
-    'Income Tax Services',
-    'Accounting',
-    'Bookkeeping',
-    'Auditing',
-    'Project Reports',
-    'Trademark',
-    'Other business compliance services',
-  ],
-  digitalTitle: 'Digital Solutions',
-  digitalIntro:
-    'Also available once the business is set up, if you want it to be found online and to stop losing enquiries.',
-  digital: [
-    { icon: 'website', title: 'Business Websites', body: 'A simple, fast site for the business, set up to be found in search.' },
-    { icon: 'crm', title: 'WhatsApp Automation', body: 'Enquiries answered and followed up without them sitting in a phone.' },
-    { icon: 'automation', title: 'Business Automation', body: 'Quotes, reminders, follow-ups and reports handled automatically.' },
-    { icon: 'marketing', title: 'Digital Marketing', body: 'Facebook, Instagram, Google Ads and search visibility.' },
-    { icon: 'branding', title: 'Branding and Design', body: 'Logo, brand colours, print and social media templates.' },
-    { icon: 'email', title: 'Email and Google Workspace', body: 'Domain-based email on your own business address.' },
-  ] as { icon: DigitalIconKey; title: string; body: string }[],
+  button: 'Talk to us on WhatsApp',
 } as const
 
 // ============================================================================
@@ -377,31 +394,20 @@ export const otherServices = {
 
 export const faqsSection = {
   eyebrow: 'FAQ',
-  title: 'Questions People Ask',
-  intro: 'The six questions we are asked most, answered honestly. Where the honest answer is "it depends", that is what it says.',
+  title: 'Questions we are asked most',
+  intro: 'Answered honestly. Where the honest answer is "it depends", that is what it says.',
 } as const
 
 /**
- * The homepage FAQ. The first three are the questions the ₹2,999 price raises —
- * what it costs, what is in it, and what happens next — and they are the first
- * thing a visitor opens after reading the hero.
- *
- * The price answer is built from `registrationOffer` so it cannot quote a figure
- * different from the one in the hero.
+ * The homepage FAQ. The first two are the questions a visitor always opens an
+ * FAQ to check — what it costs, and how long it takes — and both get the answer
+ * that is actually true rather than the one that closes a sale.
  */
 export const faqs: FaqItem[] = [
   {
-    question: 'How much does LLP registration cost?',
-    answer: `Our LLP registration service starts at ${registrationOffer.price} plus applicable charges. The final cost depends on the specific registration requirements and applicable government/professional charges. We will tell you what applies to your case before you commit to anything.`,
-  },
-  {
-    question: 'How much does company registration cost?',
-    answer: `Our company registration service starts at ${registrationOffer.price} plus applicable charges. The total is our professional fee plus the government fees that apply — the MCA filing fee, stamp duty and any state charges — which vary with the number of directors, the authorised capital and the state. Those charges are additional to the starting figure, and they are always shown separately rather than folded into a single number.`,
-  },
-  {
-    question: 'What documents are required?',
+    question: 'How much do your services cost?',
     answer:
-      'The exact list depends on the applicant and the business structure. For a company we normally need, for each director, PAN and Aadhaar (or passport), date of birth, a passport-size photograph, a signature, proof of current address, an email address and a mobile number — plus proof of the registered office address, a short description of the business activity, and two or three preferred names in order of preference. We send you the exact list for your registration before you start gathering anything.',
+      'It depends on your situation, so we do not publish a figure that would only be right for one kind of case. The cost depends on the work involved, the number of people involved, the state, the transaction volume, and the government fees that apply at the time. Tell us what you need and we will prepare a written quotation for it, with government fees shown separately from our professional fee.',
   },
   {
     question: 'How long does registration take?',
@@ -409,14 +415,24 @@ export const faqs: FaqItem[] = [
       'We do not quote a guaranteed timeline, because we do not control it. Processing time depends on how complete and correct the documentation is, on the authority handling the filing, and on its workload at the time. What we will do is tell you what is realistic for your specific case and keep you updated rather than going quiet.',
   },
   {
+    question: 'What documents are required?',
+    answer:
+      'The exact list depends on the applicant and the business structure. For a company we normally need, for each director, PAN and Aadhaar (or passport), date of birth, a passport-size photograph, a signature, proof of current address, an email address and a mobile number — plus proof of the registered office address, a short description of the business activity, and two or three preferred names in order of preference. We send you the exact list for your registration before you start gathering anything.',
+  },
+  {
     question: 'Do I need to visit an office?',
     answer:
       'In most cases, no. We collect your documents digitally over WhatsApp or email, prepare the application and handle the filing, and you receive the registration documents the same way. If something in your case does need to be signed or verified in person, we will tell you exactly what and why before you pay anything.',
   },
   {
+    question: 'Who actually does the work?',
+    answer:
+      'Some business services are regulated and must be performed or supervised by qualified professionals. Where that applies, the appropriate professional carries out the work — a chartered accountant for accounting, taxation, GST and audit-related work; a company secretary for incorporation and corporate compliance; a lawyer for agreements and contracts; and a trademark or IP professional for IP work. We coordinate the engagement and tell you in advance which part involves an external partner.',
+  },
+  {
     question: 'Can you help after registration?',
     answer:
-      'Yes. GST registration and return filing, accounting, bookkeeping, income tax support, auditing, project reports and trademark work are all services we handle, and the digital work — website, WhatsApp automation, business automation and digital marketing — is available too. The same contact continues, so you are not explaining your business again to each new vendor.',
+      'Yes, and that is usually where the bulk of the work is. GST registration and return filing, accounting, bookkeeping, income tax support, auditing, project reports and trademark work are all services we handle, and the digital work — website and business automation — is available too. The same contact continues, so you are not explaining your business again to each new vendor.',
   },
 ]
 
@@ -425,9 +441,13 @@ export const faqs: FaqItem[] = [
 // ============================================================================
 
 export const cta = {
-  title: 'Ready to Start Your Business?',
-  body: 'Get professional assistance with LLP and Company registration.',
-  note: 'Tell us what you are setting up and we will tell you what it involves and what it will cost, before you commit to anything.',
+  title: 'Tell us what you need done',
+  body: 'A short message is enough to start. We will tell you what applies, what it involves, and what it costs, before you commit to anything.',
+  /**
+   * The line under the buttons. It exists to remove the last objection to
+   * sending a message: that this is the point at which we start selling.
+   */
+  note: 'There is no obligation to go ahead, and we will not put a figure on it until we have understood what the work actually involves.',
 } as const
 
 // ============================================================================
@@ -441,8 +461,8 @@ export const servicesPage = {
     'Registration is where we start. The services below cover starting a business and keeping it properly run — open any one to see what it covers, what documents it needs, and what we will ask you for before we start.',
   /** Rendered above the grid, so the cost policy is visible up front. */
   pricingPolicy: {
-    title: 'About pricing',
-    body: `Registration starts at ${registrationOffer.price} plus applicable charges. For the other services, the cost depends on your situation: the number of people involved, the state, the authorised capital, the transaction volume, and the government fees that apply at the time. We prepare a quotation for your case, and government fees are always shown separately from our professional fee.`,
+    title: 'How we quote',
+    body: 'There is no published price list, and we would rather explain why than look as though we have one. Professional fees depend on the scope of the work, the number of people involved, the state, the transaction volume and how much reconciliation is included. Government fees — filing fees, stamp duty and statutory charges — are always itemised separately from our own fee, never folded into a single figure. We prepare a written quotation once we understand the case, and that is the figure you are held to.',
   },
 } as const
 
@@ -491,7 +511,7 @@ export const aboutPage = {
       { title: 'Comply', body: 'Accounting, bookkeeping, income tax, audit' },
       { title: 'Build', body: 'Branding, logo, website, email, WhatsApp Business' },
       { title: 'Grow', body: 'Facebook and Instagram ads, Google Ads, lead generation' },
-      { title: 'Automate', body: 'CRM, WhatsApp automation, AI, workflow automation' },
+      { title: 'Automate', body: 'CRM, WhatsApp automation, and workflow automation' },
     ],
   },
   closing: {
@@ -506,7 +526,7 @@ export const aboutPage = {
 
 export const contactPage = {
   eyebrow: 'Contact',
-  heading: 'Ready to Get Started?',
+  heading: 'Tell us what you need done',
   intro: 'WhatsApp or a phone call is fastest and we read both. Use the form if you would rather not start a conversation yet — it asks for very little and we will come back to you either way.',
   formTitle: 'Send an enquiry',
   formIntro: 'Three things are required — your name, a number we can reply to, and what you need. Everything else is optional.',
@@ -535,8 +555,10 @@ export const contactPage = {
 // ============================================================================
 
 export const footer = {
-  blurb: 'Business registration and business support services for new and existing businesses across Kerala.',
+  blurb:
+    'Business registration, accounting, tax and compliance support for new and existing businesses across Kerala.',
   servicesTitle: 'Services',
+  contactTitle: 'Contact',
   legalTitle: 'Legal',
   legal: [
     { label: 'Privacy Policy', to: '/privacy' },

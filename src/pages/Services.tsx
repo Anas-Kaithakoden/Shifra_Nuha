@@ -21,14 +21,15 @@ import { PageIntro, PageShell } from './PageShell'
  * The pricing policy sits above the grid rather than being buried at the
  * bottom. The most common question about these services is what it costs, and
  * the honest answer is "it depends, and here is what it depends on". Saying that
- * early is more persuasive than a number we would later have to retract.
+ * before the grid — rather than after it, where it reads as an apology — is more
+ * persuasive than a figure we would have to defend in every message afterwards.
  */
 export default function ServicesPage() {
 
   useDocumentMeta({
     title: `Business Registration, GST, Tax & Accounting Services in Kerala | ${site.name}`,
     description:
-      'Company incorporation, LLP and partnership registration, GST, accounting and bookkeeping, income tax, auditing, project reports and trademark support for businesses across Kerala.',
+      'Company and LLP registration, GST, income tax, accounting and bookkeeping, auditing, project reports and trademark and legal registration support for businesses across Kerala.',
     path: '/services',
   })
 

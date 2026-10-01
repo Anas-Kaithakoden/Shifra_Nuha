@@ -59,7 +59,7 @@ function RouteEffects() {
 
 export default function App() {
   return (
-    <div className="flex min-h-dvh flex-col bg-white">
+    <div className="flex min-h-dvh flex-col bg-paper-50">
       <RouteEffects />
 
       <Navbar />
