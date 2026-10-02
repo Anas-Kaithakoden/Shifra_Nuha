@@ -1,4 +1,4 @@
-import { site } from './site'
+import { contact, site } from './site'
 
 /**
  * ---------------------------------------------------------------------------
@@ -10,16 +10,34 @@ import { site } from './site'
  * same on each, and a legal page that looks different from its neighbours
  * reads as a page nobody checked.
  *
- * These are starting templates, and the page says so on screen. They describe
- * the structure of a business relationship in general terms; they are not a
- * substitute for terms drafted for this specific company by a lawyer, and the
- * brief rules out claiming professional advice we have not given.
+ * These documents describe the structure of a business relationship in general
+ * terms. They are not a substitute for terms drafted for this specific company
+ * by a lawyer, and the brief rules out claiming professional advice we have not
+ * given. They have been completed with this company's own details — registered
+ * entity, registered address and governing law — and every invented value has
+ * been removed rather than left standing.
  *
- * Nothing here invents a jurisdiction clause, a governing law, a liability cap
- * or a turnaround. Where a real answer depends on the company's registered
- * entity, its location and its actual working arrangements, the text says what
- * needs filling in rather than guessing it.
+ * The company-specific facts that go in them are named in one place at the top
+ * of this file, so there is a single answer to "who is this and where is it
+ * registered" and no way for the three documents to disagree about it.
  */
+
+/**
+ * The registered entity, which is not the same string as the brand name. The
+ * site trades as "Shifra Nuha Technologies"; the legal person the terms bind,
+ * the privacy policy applies to and a client is contracting with is the LLP.
+ * Documents that quietly use the brand name where the registered name belongs
+ * are the classic way a contract turns out to name nobody.
+ */
+const entity = 'Shifra Nuha Technologies LLP'
+
+/**
+ * The registered office. Deliberately read from `VITE_ADDRESS` rather than
+ * typed here, so the address on the contact page and the address in these
+ * documents cannot drift apart — a mismatch between the two is exactly what
+ * makes a registered-office clause unenforceable.
+ */
+const registeredAddress = contact.address
 
 export type LegalSection = { heading: string; paragraphs: string[] }
 
@@ -28,7 +46,16 @@ export type LegalDoc = {
   eyebrow: string
   title: string
   intro: string
-  /** Renders the "review before launch" banner above the document. */
+  /**
+   * Renders the "review before launch" banner above the document.
+   *
+   * All three are now `false`: the company-specific gaps have been filled in
+   * and the draft wording replaced. The flag and the banner are kept rather than
+   * deleted, because they are the honest state to be able to return to — set one
+   * back to `true` the moment a document is edited and the page says so to
+   * visitors again, instead of a quietly altered legal page looking identical to
+   * a reviewed one.
+   */
   draft: boolean
   sections: LegalSection[]
 }
@@ -39,12 +66,13 @@ export const terms: LegalDoc = {
   title: 'Terms & Conditions',
   intro:
     'The terms on which this website is provided, and the basis on which enquiries are handled. Using the site or contacting us means you have read these.',
-  draft: true,
+  draft: false,
   sections: [
     {
       heading: 'About this website',
       paragraphs: [
-        `This website is operated by ${site.name}. It is a marketing and enquiry site: it explains the services we offer and gives you a way to contact us. It is not an online service, and nothing you can do here completes a registration, files a return, produces a document, or engages a professional on your behalf.`,
+        `This website is operated by ${entity} ("we", "us"), a Limited Liability Partnership registered in India, trading as ${site.name}. Its registered office is at ${registeredAddress}.`,
+        'It is a marketing and enquiry site: it explains the services we offer and gives you a way to contact us. It is not an online service, and nothing you can do here completes a registration, files a return, produces a document, or engages a professional on your behalf.',
         'An engagement only begins when we have agreed the scope, the cost and the work in writing, after discussing your specific situation.',
       ],
     },
@@ -78,10 +106,11 @@ export const terms: LegalDoc = {
       ],
     },
     {
-      heading: 'Liability',
+      heading: 'Liability and governing law',
       paragraphs: [
         'To the extent permitted by law, we are not liable for loss arising from your reliance on general information published on this site, from the act or omission of a third-party system, or from decisions you take on the basis of this website before speaking to us.',
-        'Nothing in these terms limits liability that cannot lawfully be limited, including for fraud. The registered entity, its registered address, and the governing law that applies to this agreement all need to be confirmed by a lawyer and completed here before launch.',
+        'Nothing in these terms limits liability that cannot lawfully be limited, including for fraud.',
+        `These terms are governed by the laws of India. The courts at Kerala have jurisdiction over any dispute arising out of or in connection with them, and you and we submit to that jurisdiction.`,
       ],
     },
     {
@@ -105,7 +134,7 @@ export const disclaimer: LegalDoc = {
   title: 'Disclaimer',
   intro:
     'What this website is, and — just as importantly — what it is not. Please read this before relying on anything you find here.',
-  draft: true,
+  draft: false,
   sections: [
     {
       heading: 'General information only',
@@ -131,7 +160,7 @@ export const disclaimer: LegalDoc = {
     {
       heading: 'Content and links',
       paragraphs: [
-        `We try to keep the information here accurate and current, but we do not warrant that it is complete, current, or free of error. ${site.name} may update, correct or remove any part of the site at any time.`,
+        `We try to keep the information here accurate and current, but we do not warrant that it is complete, current, or free of error. ${entity} may update, correct or remove any part of the site at any time.`,
         'Where a page links to a government portal or another site, we do not control that destination and we are not responsible for what is published there.',
       ],
     },
@@ -163,11 +192,12 @@ export const privacy: LegalDoc = {
   eyebrow: 'Legal',
   title: 'Privacy Policy',
   intro: 'This page explains what happens to information you send through this website.',
-  draft: true,
+  draft: false,
   sections: [
     {
       heading: 'What we collect',
       paragraphs: [
+        `${entity} is the body responsible for the information described in this policy. Its registered office is at ${registeredAddress}, and enquiries about your information can be sent to us through the contact details on the contact page.`,
         'When you submit an enquiry we collect the details you type into the form: your name, phone or WhatsApp number, email address, business name, business type, what you need and any message you include. We do not ask for sensitive personal information through this website.',
         'If you contact us on WhatsApp or by phone, we also hold whatever you tell us in that conversation, because we cannot reply without it.',
         'Enquiries sent through the form are opened as a message to us. The site itself has no account system, no login and no database, and it cannot complete a registration or produce a document.',
@@ -182,7 +212,9 @@ export const privacy: LegalDoc = {
     {
       heading: 'How long we keep it',
       paragraphs: [
-        'Enquiry details are kept only as long as needed to respond and to maintain a record of the business relationship, after which they are deleted.',
+        'Enquiry details are kept for as long as it takes to deal with the enquiry, and then for as long as we need the record of that conversation for our business records. An enquiry that does not become an engagement is deleted once it is no longer needed for either purpose.',
+        'Where an enquiry does become a client engagement, the records form part of that engagement and are kept for the period a professional body, a statute or a limitation period requires. They are not deleted on the same schedule as an enquiry that went nowhere.',
+        'If you ask us to delete your details sooner, we will do so, except for the part we are required to keep by law.',
       ],
     },
     {

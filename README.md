@@ -158,8 +158,19 @@ anywhere.
 
 ### Business hours
 
-`contact.hours` in `src/content/site.ts` is empty and the contact page omits the
-row entirely rather than guessing. Fill it in when the hours are settled.
+`contact.hours` in `src/content/site.ts` is **"Enquiries any time — we reply
+during working hours"**, and the contact page omits the row entirely when it is
+empty.
+
+Deliberately not "24/7". The phone line and WhatsApp number are open at any
+hour, but the honest claim is *when a reply comes*, not *when a message can be
+sent* — and on a page whose primary button is WhatsApp, "24/7" reads as "someone
+is on WhatsApp at 3am". Stating the honest version sets that expectation before
+the enquiry is sent rather than after.
+
+It is still slightly incomplete: it says *working* hours without saying which.
+Adding the real window ("replies 9am–7pm, Mon–Sat") would close that gap, and is
+worth doing — say the word and it is a one-line edit.
 
 ---
 
@@ -477,15 +488,27 @@ Verify after the first deploy, in this order:
 - [x] Add the real social profile URLs to `social` in `src/content/site.ts`.
 - [x] Add the Meta Pixel and Google Analytics IDs.
 - [x] Generate `public/brand/og-image.png`.
-- [ ] Add the same eight variables to the Cloudflare Pages dashboard, for both
-      Production and Preview.
+- [ ] Add the Cloudflare Pages environment variables — all eight under
+      Production, the six non-domain ones under Preview.
 - [ ] Attach `shifranuhatech.com` as the custom domain, and settle apex vs `www`.
-- [ ] Decide on business hours and fill in `contact.hours`.
+- [x] Set `contact.hours` to the honest wording.
+- [x] Complete the three legal documents: registered entity, registered address,
+      governing law and retention. Draft banners are off.
+- [ ] Add the actual working-hours window to `contact.hours` — it currently says
+      "during working hours" without saying which hours.
+- [ ] **Have a lawyer or CA review the three legal documents.** The company
+      details are filled in and the draft banners are removed, which means the
+      pages now present as settled documents. They are still general templates
+      completed with real facts, not terms drafted for this business, and the
+      two are not the same thing. `draft` is kept in `legal.ts` precisely so it
+      can go back to `true` the moment a document changes.
+- [ ] Confirm the trademark and logo are held by the LLP rather than a partner.
+      The IP clause in the Terms says they belong to the trading name; if a
+      partner owns the registration, that clause names the wrong owner.
 - [ ] Replace `submitEnquiry()` with a real endpoint, or confirm that opening
-      WhatsApp is the intended behaviour.
-- [ ] Replace the three legal documents with text reviewed for this company.
-      Each still carries a visible "review before launch" banner, and
-      `legal.ts` says so on screen — a visitor can see they are drafts.
+      WhatsApp is the intended behaviour. If it stays as it is, the Privacy
+      Policy's claim that enquiry details are collected and kept describes a
+      process that has no database behind it.
 - [ ] **Have a native English speaker review the long-form copy in
       `site.ts` and `services.ts`.** It was machine-drafted as a placeholder, and
       the brief rules out unverified text for complex legal and accounting

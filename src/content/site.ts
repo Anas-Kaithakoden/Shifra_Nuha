@@ -99,7 +99,17 @@ export const contact = {
   whatsapp: siteConfig.WHATSAPP_NUMBER,
   email: siteConfig.EMAIL,
   address: siteConfig.ADDRESS,
-  hours: '',
+  /**
+   * Deliberately not "24/7". The phone line and the WhatsApp number are open at
+   * any hour, but the honest claim is when a reply comes, not when a message can
+   * be sent — and "available 24/7" on a page whose primary button is WhatsApp
+   * reads as "someone is on WhatsApp at 3am". Stating the honest version sets
+   * that expectation before an enquiry is sent rather than after.
+   *
+   * The contact page omits the row entirely when this is empty, so it is only
+   * ever shown if it says something true.
+   */
+  hours: 'Enquiries any time — we reply during working hours',
   serviceAreaTitle: 'Where we work',
   serviceAreaBody:
     'We work with businesses across Kerala, and remotely with businesses elsewhere in India. Registration work is filed with the appropriate central or state authority wherever you are based.',
