@@ -312,7 +312,7 @@ public/
 scripts/
   smoke.tsx               Renders every route; content and claim checks
   a11y-check.tsx          Renders every route; markup checks
-  make-og-image.py        Regenerates public/brand/og-image.png (optional)
+  make-og-image.py        Regenerates public/brand/og-image-v2.png (optional)
 src/
   components/
     Analytics.tsx         Loads the pixel / GA scripts, if configured
@@ -415,12 +415,12 @@ means starting again from a new source file.
 
 | File | Size | Used for |
 |---|---|---|
-| `public/brand/logo.png` | 640 x 189 | Header and footer lockup |
-| `public/brand/logo-white.png` | 640 x 189 | The `tone="dark"` variant |
+| `public/brand/logo.png` | 640 x 192 | Header and footer lockup |
+| `public/brand/logo-white.png` | 640 x 192 | The `tone="dark"` variant |
 | `public/brand/mark.png` | 256 x 256 | The monogram on its own |
 | `public/brand/favicon-32.png` | 32 x 32 | Raster favicon fallback |
 | `public/brand/apple-touch-icon.png` | 180 x 180 | iOS home screen icon |
-| `public/brand/og-image.png` | 1200 x 630 | Social share card — generated, see below |
+| `public/brand/og-image-v2.png` | 1200 x 630 | Social share card — generated, see below |
 | `public/favicon.svg` | 4.4 KB | Vector favicon, traced from the mark |
 
 Regenerating the logo derivatives needs a **vector** source (for `favicon.svg`)
@@ -428,17 +428,33 @@ and a **white knockout** of the lockup (for `logo-white.png`) — neither can be
 derived reliably from a flattened raster.
 
 The share card is the exception, because it is code rather than artwork.
-`scripts/make-og-image.py` draws it from the site's own brand tokens and
-tagline, and measures every line before drawing: it refuses to write the file if
-two text blocks would overlap or anything would run off the canvas. Edit the
-constants at the top and re-run it. It needs Python and Pillow
-(`pip install Pillow`), and it is **not** part of the build — the PNG is checked
-in, so Cloudflare Pages never needs Python. Re-run it only when the tagline,
-domain or colours change.
+`scripts/make-og-image.py` composites the white lockup onto a deep brand ground
+with the domain beneath it. It crops the logo to its real ink first, so the pair
+centres optically rather than by its bounding box, and it measures every block
+before drawing: it refuses to write the file if anything would run off the canvas
+or overlap. Three further guards catch a card that would look fine in the file
+listing and blank in a chat — a logo with no alpha channel, a fully transparent
+one, and one too dark for the ground it sits on. Edit the constants at the top
+and re-run it. It needs Python and Pillow (`pip install Pillow`), and it is **not**
+part of the build — the PNG is checked in, so Cloudflare Pages never needs
+Python.
 
 ```
 python scripts/make-og-image.py
 ```
+
+**Publish changed artwork under a new filename.** `og-image-v2.png` is not a
+typo, it is the fix for the reason a share card can look months out of date while
+the code is correct. `/brand/*` is served with `Cache-Control: public,
+max-age=86400`, and WhatsApp, Facebook and LinkedIn each cache an unfurled preview
+far longer than a day. Overwriting the file leaves all of them serving the old
+card with no error anywhere; a new filename is a new cache key at every one of
+them at once. When the card next changes, bump the version in `OUT`, in
+`index.html` and in `brand.ogImage`.
+
+One consequence is not fixable from here: previews already sent in a chat are
+frozen and will never update. Share a link with a cache-busting query string —
+`https://shifranuhatech.com/?v=2` — and it unfurls fresh.
 
 `og:image` and `twitter:image` are rewritten to absolute URLs at build time by
 the plugin in `vite.config.ts`. This has to happen in the build rather than in
@@ -535,7 +551,7 @@ Verify after the first deploy, in this order:
 - [x] Fill in `.env` with the real phone, WhatsApp, email, address and domain.
 - [x] Add the real social profile URLs to `social` in `src/content/site.ts`.
 - [x] Add the Meta Pixel and Google Analytics IDs.
-- [x] Generate `public/brand/og-image.png`.
+- [x] Generate `public/brand/og-image-v2.png`.
 - [ ] Add the Cloudflare Pages environment variables — all eight under
       Production, the six non-domain ones under Preview.
 - [ ] Attach `shifranuhatech.com` as the custom domain, and settle apex vs `www`.

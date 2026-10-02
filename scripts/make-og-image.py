@@ -1,15 +1,27 @@
 """
-Generates public/brand/og-image.png — the 1200x630 social share card.
+Generates public/brand/og-image-v2.png — the 1200x630 social share card.
 
 The card is the one image that has to exist as a real raster file: Facebook,
 LinkedIn and WhatsApp all fetch og:image over HTTP and will not render an SVG.
 Colours and the typeface come from the site itself (src/index.css), so the card
 matches the pages it is linked from.
 
-Every text placement is measured before anything is drawn, and the script refuses
-to write the file if two blocks would overlap or a block would run off the
-canvas. A share card with colliding type looks broken in the one place it is
-impossible to preview it, so this fails loudly instead.
+The card is the logo on a deep brand ground, and nothing else. When the link is
+unfurled in a chat the surrounding text — the og:title and og:description — is
+already the message, so the image carries no headline of its own. Everything a
+share card needs to look deliberate at thumbnail size, the mark on a clean
+ground with the domain under it, is here.
+
+Note the filename. This is og-image-v2, not og-image: `/brand/*` is served with
+max-age=86400, and WhatsApp, Facebook and LinkedIn each cache the image URL far
+longer than that. Overwriting the existing file would leave every one of them
+serving the old card for a day or more. A new filename is a new cache key
+everywhere at once, which is the only reliable way to ship changed artwork.
+
+Every placement is measured before anything is drawn, and the script refuses to
+write the file if two blocks would overlap or a block would run off the canvas.
+A share card with colliding type looks broken in the one place it is impossible
+to preview it, so this fails loudly instead.
 
 Run from the repo root:  python scripts/make-og-image.py
 """
@@ -17,79 +29,104 @@ Run from the repo root:  python scripts/make-og-image.py
 import sys
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageStat
 
 WIDTH, HEIGHT = 1200, 630
-OUT = Path(__file__).resolve().parent.parent / "public" / "brand" / "og-image.png"
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT / "public" / "brand" / "og-image-v2.png"
+LOGO_SRC = ROOT / "public" / "brand" / "logo-white.png"
 
-# src/index.css — brand ramp.
-INK_950 = (15, 23, 42)
+# src/index.css — brand ramp. Only the two ends of the ground gradient and the
+# domain's colour are used; the card carries no other type.
 BRAND_800 = (22, 44, 74)
-BRAND_700 = (29, 58, 99)
-BRAND_600 = (39, 75, 124)
-BRAND_400 = (92, 131, 187)
+INK_950 = (15, 23, 42)
 BRAND_200 = (188, 208, 233)
-PAPER_50 = (248, 250, 252)
 
 FONT_SEMIBOLD = "C:/Windows/Fonts/seguisb.ttf"
-FONT_BOLD = "C:/Windows/Fonts/segoeuib.ttf"
-FONT_REGULAR = "C:/Windows/Fonts/segoeui.ttf"
 
-LEFT = 84
-TOP = 120
-
-HEADLINE_FONT = ImageFont.truetype(FONT_BOLD, 74)
-EYEBROW_FONT = ImageFont.truetype(FONT_SEMIBOLD, 30)
-BODY_FONT = ImageFont.truetype(FONT_REGULAR, 31)
-NAME_FONT = ImageFont.truetype(FONT_SEMIBOLD, 36)
-
-HEADLINE_LINES = ["Registration, tax and", "compliance, handled", "properly."]
-LINE_HEIGHT = 88
-
-RULE_Y = TOP + 62 + 176 + 116
-MARKET_Y = RULE_Y + 30
-NAME_Y = HEIGHT - 74
-DOMAIN_Y = HEIGHT - 68
-
-NAME = "Shifra Nuha Technologies"
 DOMAIN = "shifranuhatech.com"
-# Clearance between the two bottom strings. The domain is positioned from the
-# name's measured right edge rather than a fixed offset, so this stays a real
-# gap even if the font is substituted and the name measures wider.
-NAME_DOMAIN_GAP = 44
-EYEBROW = "BUSINESS REGISTRATION  \u00b7  TAX  \u00b7  COMPLIANCE"
-MARKET = "Supporting businesses across Kerala"
+
+# The lockup is 640x192 natively, so this is a ~1.25x upscale. Enough to read as
+# a confident mark at chat-thumbnail size without softening it noticeably.
+LOGO_WIDTH = 800
+
+# Clearance between the bottom of the logo and the top of the domain's ink.
+DOMAIN_GAP = 48
+
+DOMAIN_FONT = ImageFont.truetype(FONT_SEMIBOLD, 30)
 
 
-def blocks():
-    """Every text run, as (label, x, y, font, text, colour).
+def load_logo():
+    """The mark cropped to its real ink, resized, and proven fit for this ground.
 
-    The domain sits after the name on the same baseline, so its x depends on how
-    wide the name actually measures. Everything else is a fixed offset from TOP.
+    Three guards, each catching a failure that is invisible in review and
+    obvious in a chat: a logo with no alpha would paste as a solid rectangle and
+    cover the card; a fully transparent one would leave a blank ground; and a
+    dark logo on a dark ground would simply not be there.
     """
-    runs = [("eyebrow", LEFT, TOP, EYEBROW_FONT, EYEBROW, BRAND_200)]
-    for i, line in enumerate(HEADLINE_LINES):
-        runs.append(
-            (f"headline{i + 1}", LEFT, TOP + 62 + i * LINE_HEIGHT, HEADLINE_FONT, line, PAPER_50)
+    source = Image.open(LOGO_SRC)
+    if source.mode != "RGBA":
+        raise SystemExit(f"{LOGO_SRC.name} has no alpha channel ({source.mode}); cannot composite it")
+
+    box = source.getchannel("A").getbbox()
+    if box is None:
+        raise SystemExit(f"{LOGO_SRC.name} is fully transparent; there is nothing to draw")
+    if box == (0, 0, source.width, source.height):
+        print(f"  note  {LOGO_SRC.name} has no transparent padding; nothing to trim")
+
+    # Cropping to the alpha bounds before scaling keeps the centring honest —
+    # transparent margins would otherwise offset the mark from the middle.
+    logo = source.crop(box)
+
+    height = round(logo.height * LOGO_WIDTH / logo.width)
+    logo = logo.resize((LOGO_WIDTH, height), Image.LANCZOS)
+
+    # Mean luminance of the logo's visible pixels only. Compositing against the
+    # mask rather than iterating the pixels keeps this vectorised and off the
+    # deprecated getdata().
+    opaque_mask = logo.getchannel("A").point(lambda a: 255 if a > 200 else 0)
+    opaque = Image.composite(logo.convert("RGB"), Image.new("RGB", logo.size), opaque_mask)
+    totals = ImageStat.Stat(opaque).sum[:3]
+    # Dividing by the masked pixel count, not the canvas: the transparent part of
+    # the lockup contributes black to the totals and would drag the mean down.
+    count = ImageStat.Stat(opaque_mask).sum[0] / 255.0
+    luminance = (0.2126 * totals[0] + 0.7152 * totals[1] + 0.0722 * totals[2]) / count
+    if luminance < 180:
+        raise SystemExit(
+            f"{LOGO_SRC.name} is too dark for the {BRAND_800} ground "
+            f"(mean luminance {luminance:.0f}); it would be invisible on the card"
         )
-    runs.append(("market", LEFT, MARKET_Y, BODY_FONT, MARKET, BRAND_200))
-    runs.append(("name", LEFT, NAME_Y, NAME_FONT, NAME, PAPER_50))
 
-    name_x1 = box(LEFT, NAME_Y, NAME_FONT, NAME)[2]
-    runs.append(("domain", name_x1 + NAME_DOMAIN_GAP, DOMAIN_Y, BODY_FONT, DOMAIN, BRAND_400))
-    return runs
+    print(f"  logo   {source.width}x{source.height} -> {logo.width}x{logo.height}, luminance {luminance:.0f}")
+    return logo
 
 
-def box(x, y, font, text):
-    """Ink bounds of `text` at (x, y), matching PIL's default left-ascender anchor."""
-    b = font.getbbox(text)
-    return (x + b[0], y + b[1], x + b[2], y + b[3])
+def blocks(logo):
+    """The logo and the domain, centred as one group, as (label, x0, y0, x1, y1).
+
+    Centred by measured ink rather than by a fixed offset, so the group stays
+    optically centred even if the logo is regenerated at a different aspect.
+    """
+    ink = DOMAIN_FONT.getbbox(DOMAIN)
+    domain_w, domain_h = ink[2] - ink[0], ink[3] - ink[1]
+
+    group_h = logo.height + DOMAIN_GAP + domain_h
+    top = (HEIGHT - group_h) // 2
+
+    domain_x = (WIDTH - domain_w) // 2
+    domain_top = top + logo.height + DOMAIN_GAP
+    # draw.text anchors to the ascender, so ink starts `ink[1]` below the y given.
+    domain_y = domain_top - ink[1]
+
+    return [
+        ("logo", (WIDTH - logo.width) // 2, top, (WIDTH - logo.width) // 2 + logo.width, top + logo.height),
+        ("domain", domain_x, domain_top, domain_x + domain_w, domain_top + domain_h),
+    ], (domain_x, domain_y)
 
 
-def check_layout(runs):
+def check_layout(placed):
     """Fails loudly on anything that would look broken. Returns nothing."""
     problems = []
-    placed = [(label, *box(x, y, f, t)) for label, x, y, f, t, _ in runs]
 
     for label, x0, y0, x1, y1 in placed:
         if x0 < 0 or y0 < 0 or x1 > WIDTH or y1 > HEIGHT:
@@ -97,18 +134,9 @@ def check_layout(runs):
                 f"{label} runs off the canvas: x[{x0}..{x1}] y[{y0}..{y1}] vs {WIDTH}x{HEIGHT}"
             )
 
-    # No two blocks may share ink. Name and domain are side by side on one
-    # baseline, so they are allowed to overlap vertically but never
-    # horizontally — which is why the domain is placed off the name's width.
     for i, (la, ax0, ay0, ax1, ay1) in enumerate(placed):
         for lb, bx0, by0, bx1, by1 in placed[i + 1:]:
-            same_baseline = {la, lb} == {"name", "domain"}
-            v_overlap = ay0 < by1 and by0 < ay1
-            h_overlap = ax0 < bx1 and bx0 < ax1
-            if same_baseline:
-                if h_overlap:
-                    problems.append(f"{la} and {lb} overlap horizontally; they share a baseline")
-            elif v_overlap and h_overlap:
+            if ay0 < by1 and by0 < ay1 and ax0 < bx1 and bx0 < ax1:
                 problems.append(f"{la} and {lb} overlap")
 
     if problems:
@@ -132,34 +160,22 @@ def vertical_gradient(size, top, bottom):
 
 
 def main():
-    runs = blocks()
-    placed = check_layout(runs)
+    logo = load_logo()
+    placed, (domain_x, domain_y) = blocks(logo)
+    check_layout(placed)
 
     image = vertical_gradient((WIDTH, HEIGHT), BRAND_800, INK_950)
+    image.paste(logo, (placed[0][1], placed[0][2]), logo)
+
     draw = ImageDraw.Draw(image)
-
-    # Two quiet diagonal bands, echoing the mark's upward stroke without
-    # competing with the text. Drawn first so the type sits on top of them.
-    draw.polygon(
-        [(0, HEIGHT), (WIDTH * 0.42, HEIGHT), (WIDTH * 0.78, 0), (WIDTH * 0.62, 0)],
-        fill=BRAND_700,
-    )
-    draw.polygon(
-        [(WIDTH * 0.44, HEIGHT), (WIDTH * 0.52, HEIGHT), (WIDTH * 0.88, 0), (WIDTH * 0.80, 0)],
-        fill=BRAND_600,
-    )
-
-    draw.rectangle([LEFT, RULE_Y, LEFT + 96, RULE_Y + 6], fill=BRAND_400)
-
-    for _label, x, y, font, text, colour in runs:
-        draw.text((x, y), text, font=font, fill=colour)
+    draw.text((domain_x, domain_y), DOMAIN, font=DOMAIN_FONT, fill=BRAND_200)
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     image.save(OUT, format="PNG", optimize=True)
 
     print(f"wrote {OUT} ({OUT.stat().st_size // 1024} KB, {WIDTH}x{HEIGHT})")
     for label, x0, y0, x1, y1 in placed:
-        print(f"  {label:10} x[{x0:4}..{x1:4}] y[{y0:4}..{y1:4}]")
+        print(f"  {label:8} x[{x0:4}..{x1:4}] y[{y0:4}..{y1:4}]")
 
 
 if __name__ == "__main__":
