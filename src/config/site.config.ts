@@ -19,6 +19,7 @@
  *  - PHONE_NUMBER / WHATSAPP_NUMBER — the matching button links to the enquiry
  *    form, prefilled with a relevant message, so the funnel still works.
  *  - EMAIL — a labelled placeholder is shown instead of a link.
+ *  - ADDRESS — the address line is omitted rather than shown half-written.
  *  - WEBSITE_DOMAIN — canonical/og:url tags and sitemap.xml are skipped.
  *  - META_PIXEL_ID / GOOGLE_ANALYTICS_ID — the corresponding script is not
  *    loaded at all, and no request is ever made to a third party.
@@ -33,6 +34,8 @@ export const siteConfig = {
   /** International format without `+` or spaces, e.g. `919876543210`. */
   WHATSAPP_NUMBER: env.VITE_WHATSAPP_NUMBER?.trim() ?? '',
   EMAIL: env.VITE_EMAIL?.trim() ?? '',
+  /** Registered office, as one display line. Left blank until confirmed. */
+  ADDRESS: env.VITE_ADDRESS?.trim() ?? '',
   WEBSITE_DOMAIN: env.VITE_WEBSITE_DOMAIN?.trim() ?? '',
   META_PIXEL_ID: env.VITE_META_PIXEL_ID?.trim() ?? '',
   GOOGLE_ANALYTICS_ID: env.VITE_GOOGLE_ANALYTICS_ID?.trim() ?? '',
@@ -76,5 +79,6 @@ export const absoluteUrl = (path = '/') => {
 export const hasPhone = siteConfig.PHONE_NUMBER.length > 0
 export const hasWhatsapp = siteConfig.WHATSAPP_NUMBER.length > 0
 export const hasEmail = siteConfig.EMAIL.length > 0
+export const hasAddress = siteConfig.ADDRESS.length > 0
 export const hasMetaPixel = siteConfig.META_PIXEL_ID.length > 0
 export const hasGoogleAnalytics = siteConfig.GOOGLE_ANALYTICS_ID.length > 0

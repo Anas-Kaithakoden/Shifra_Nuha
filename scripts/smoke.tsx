@@ -160,27 +160,52 @@ if (dupSlugs.length) fail('services', `duplicate slugs: ${[...new Set(dupSlugs)]
 pass('services', `${coreServices.length} services, routes + content complete`)
 
 // ===========================================================================
-// 4. No invented values
+// 4. Real values, and nothing invented
 // ===========================================================================
 
-// Contact details and social profiles stay blank until real ones are supplied.
-const invented = [
-  contact.phone,
-  contact.whatsapp,
-  contact.email,
-  contact.address,
-  contact.hours,
-  social.linkedin,
-  social.facebook,
-  social.instagram,
-  social.x,
-].filter((v) => v && v !== CONFIG.COMPANY_NAME)
+// Contact details and social profiles are supplied for real, but they still have
+// to look like real contact details: an https URL for every profile, no leftover
+// draft token, and nothing that would render as a dead link.
+const socialValues = {
+  linkedin: social.linkedin,
+  facebook: social.facebook,
+  instagram: social.instagram,
+  x: social.x,
+}
 
-if (invented.length) fail('config', `invented contact/social values: ${invented.join(', ')}`)
+for (const [network, value] of Object.entries(socialValues)) {
+  if (!value) continue
+  if (!/^https:\/\//.test(value)) {
+    fail('config', `social.${network} must be an https URL, got: ${value}`)
+  }
+  if (/\bexample\.(com|org|net)\b|\byoursite\b|\bTODO\b/i.test(value)) {
+    fail('config', `social.${network} still points at a placeholder host: ${value}`)
+  }
+}
 
-// Tracking IDs must never be baked in; they only come from the environment.
-for (const key of ['META_PIXEL_ID', 'GOOGLE_ANALYTICS_ID'] as const) {
-  if (CONFIG[key] && !process.env[`VITE_${key}`]) fail('config', `${key} is set but not from the environment`)
+// The address is free text, so the only thing worth asserting is that it is not
+// left as one of the brief's own draft tokens.
+if (/\[\[|\{\{|X{3,}|\bTBD\b/i.test(contact.address)) {
+  fail('config', `contact.address still contains a placeholder token: ${contact.address}`)
+}
+
+// Tracking IDs must never be hard-coded in the source. Vite exposes `.env`
+// through `import.meta.env` but not through `process.env`, so the way to test
+// this is to look for the literal ID in the files themselves rather than
+// comparing two different views of the environment.
+const trackingIds = [
+  ['META_PIXEL_ID', CONFIG.META_PIXEL_ID],
+  ['GOOGLE_ANALYTICS_ID', CONFIG.GOOGLE_ANALYTICS_ID],
+] as const
+
+for (const [key, id] of trackingIds) {
+  if (!id) continue
+  for (const file of ['index.html', 'src/lib/tracking.ts', 'src/components/Analytics.tsx']) {
+    const text = readFileSync(resolve(process.cwd(), file), 'utf8')
+    if (text.includes(id)) {
+      fail('config', `${key} is hard-coded in ${file}; it must only come from the environment`)
+    }
+  }
 }
 
 if (CONFIG.PHONE_NUMBER && !/^[+\d][\d\s()-]{5,}$/.test(CONFIG.PHONE_NUMBER)) {
@@ -192,7 +217,18 @@ if (CONFIG.WHATSAPP_NUMBER && !/^\d{10,15}$/.test(CONFIG.WHATSAPP_NUMBER)) {
 if (CONFIG.EMAIL && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(CONFIG.EMAIL)) {
   fail('config', 'EMAIL is not a valid address')
 }
-if (!invented.length) pass('config', 'no invented contact, social or tracking values')
+
+// A phone and a WhatsApp number that do not match is the easiest real-world
+// mistake to make, and it sends every WhatsApp click to the wrong person.
+if (CONFIG.PHONE_NUMBER && CONFIG.WHATSAPP_NUMBER) {
+  const phoneDigits = CONFIG.PHONE_NUMBER.replace(/\D/g, '')
+  const waDigits = CONFIG.WHATSAPP_NUMBER.replace(/\D/g, '')
+  if (!phoneDigits.endsWith(waDigits) && !waDigits.endsWith(phoneDigits)) {
+    fail('config', `PHONE_NUMBER and WHATSAPP_NUMBER do not match (${phoneDigits} vs ${waDigits})`)
+  }
+}
+
+pass('config', 'contact details and social profiles are valid')
 
 // ===========================================================================
 // 5. No unsubstantiated claims anywhere on the site

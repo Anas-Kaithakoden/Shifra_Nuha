@@ -42,7 +42,7 @@ function seoFiles(): Plugin {
     },
 
     /**
-     * --- robots meta -------------------------------------------------------
+     * --- robots meta, and absolute share-image URLs ------------------------
      * `index.html` ships a static `robots` tag, because a crawler that does not
      * run JavaScript would otherwise find none. But the correct value depends
      * on the domain, so the tag is rewritten here at build time: with no
@@ -51,37 +51,85 @@ function seoFiles(): Plugin {
      * deployed before the domain was set would advertise itself as indexable
      * under an address that does not exist.
      *
-     * Only the robots tag is touched. A static canonical is deliberately *not*
-     * injected: every route of this SPA serves the same `index.html`, so a
-     * hard-coded canonical would tell a crawler that all nine service pages are
-     * the homepage. `useDocumentMeta` sets the correct canonical per route once
-     * it knows the origin.
+     * `og:image` and `twitter:image` get the same treatment, for a different
+     * reason. They are declared as root-relative paths in `index.html` because
+     * the origin is not known when that file is written. `useDocumentMeta` does
+     * resolve them to absolute URLs, but only in the browser — and the crawlers
+     * that consume these tags are precisely the ones that do not run JavaScript.
+     * Facebook, LinkedIn and WhatsApp all fetch `index.html` as plain text, so a
+     * runtime fix never reaches the link unfurl it was written for. Rewriting
+     * them here is what makes the share card actually appear.
+     *
+     * Only the robots tag is conditional on the domain being set. The share
+     * images are only rewritten when there is an origin to rewrite them to;
+     * with no domain they keep their relative paths, and `useDocumentMeta`
+     * upgrades them later if one appears.
+     *
+     * A static canonical is deliberately *not* injected: every route of this SPA
+     * serves the same `index.html`, so a hard-coded canonical would tell a
+     * crawler that all nine service pages are the homepage. `useDocumentMeta`
+     * sets the correct canonical per route once it knows the origin.
      */
     transformIndexHtml(html) {
       if (isSsr) return html
 
-      const content = siteOrigin(config)
+      const origin = siteOrigin(config)
+      const content = origin
         ? 'index, follow, max-image-preview:large'
         : 'noindex, follow'
 
-      return html.replace(
+      let out = html.replace(
         /(<meta\s+name="robots"\s+content=")[^"]*(")/,
         (_match, open: string, close: string) => `${open}${content}${close}`,
       )
+
+      if (origin) {
+        // A root-relative path becomes an absolute URL against the origin. Both
+        // tags are handled because a share is read from whichever one the
+        // receiving platform looks at first — hence the global flag, since there
+        // is one `og:image` and one `twitter:image` and both must be rewritten.
+        out = out.replace(
+          /(<meta\s+(?:property|name)="(?:og:image|twitter:image)"\s+content=")(\/[^"]*)(")/g,
+          (_match, open: string, path: string, close: string) => `${open}${origin}${path}${close}`,
+        )
+      }
+
+      return out
     },
 
     // --- sitemap.xml ------------------------------------------------------
     async generateBundle() {
       if (isSsr) return
 
+      /**
+       * Names every launch-critical variable that is not set. This matters more
+       * on a host like Cloudflare Pages than it does locally, because `.env` is
+       * gitignored and never reaches the build: the values have to be entered in
+       * the dashboard as environment variables instead, and a forgotten one
+       * produces a build that succeeds and a site that quietly does the wrong
+       * thing — no sitemap, `noindex` on every page, and dead contact buttons.
+       * A build is the last cheap moment to notice that.
+       */
+      const launchVars = [
+        'VITE_WEBSITE_DOMAIN',
+        'VITE_PHONE_NUMBER',
+        'VITE_WHATSAPP_NUMBER',
+        'VITE_EMAIL',
+        'VITE_ADDRESS',
+      ] as const
+      const missing = launchVars.filter((key) => !(config.env[key] as string | undefined)?.trim())
+      if (missing.length) {
+        this.warn(
+          `Unset environment variables: ${missing.join(', ')}. ` +
+            `Without VITE_WEBSITE_DOMAIN this build ships no sitemap, no canonical URLs ` +
+            `and noindex on every page; without the rest, the contact CTAs fall back ` +
+            `to the enquiry form. Set them in the host's environment before building.`,
+        )
+      }
+
       const { INDEXABLE_ROUTES } = await import('./src/routes')
       const origin = siteOrigin(config)
-      if (!origin) {
-        this.warn(
-          'VITE_WEBSITE_DOMAIN is not set, so sitemap.xml was not generated. Canonical URLs stay hidden for the same reason.',
-        )
-        return
-      }
+      if (!origin) return
 
       const lastmod = new Date().toISOString().slice(0, 10)
       const urls = INDEXABLE_ROUTES.map((route) => {

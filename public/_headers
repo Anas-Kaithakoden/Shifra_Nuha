@@ -1,0 +1,31 @@
+# Cloudflare Pages `_headers`. Copied verbatim into `dist/` by the build, so
+# these rules apply to every response the site serves.
+#
+# The one rule that matters most is the HTML cache. Pages serves `index.html`
+# for every client-side route via `_redirects`, so if that file is cached even
+# briefly, a deploy ships stale asset filenames to every visitor and those
+# fingerprints 404. Fingerprinted assets go the other way and are cached
+# forever, because their contents can never change under the same name.
+#
+# Not here on purpose: a Content-Security-Policy. This page loads the Meta Pixel
+# and Google Analytics, both of which inject inline scripts. A policy written
+# without watching those requests fail in production is worse than no policy —
+# the breakage is silent and only visible in a browser console nobody opens.
+# Add one once the tag set is settled, with `report-only` first.
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Vite content-hashes these filenames, so a given name always has the same
+# bytes and can be cached permanently.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# The brand images are referenced by name from index.html and from the content
+# files rather than fingerprinted, so they get a shorter leash than /assets.
+/brand/*
+  Cache-Control: public, max-age=86400

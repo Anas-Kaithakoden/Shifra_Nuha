@@ -15,10 +15,16 @@ have just decided to start a business. The funnel is:
 Facebook / Instagram ad  ->  landing page  ->  WhatsApp  ->  enquiry
 ```
 
-The offer the ad leads with is **LLP & Company registration starting at ₹2,999 +
-applicable charges**. It is set above the fold on the home page, and every place
-it appears reads from `src/content/offer.ts` so the figure cannot differ between
-the hero, the FAQ and the landing pages.
+The brief leads with **LLP & Company registration starting at ₹2,999 + applicable
+charges**, and that figure appears throughout it. It is deliberately **not** on
+this site: no price, not even a "starting from". Work of this kind is quoted per
+engagement once the facts are known, and the brief's own guidance is that a
+figure on a page is a commitment. The pages instead explain what drives the fee
+and point at a quotation. If the ₹2,999 offer is to be reinstated, it needs a
+single `src/content/offer.ts` read by the hero, the inclusions block and both
+registration landing pages, so the figure cannot differ between them — that
+module does not exist yet, and the smoke test will fail if a price is typed
+straight into a page.
 
 WhatsApp and Call are the primary calls to action, on every page, above the fold
 and repeated at the foot of the page. The contact form exists but is third: it
@@ -39,7 +45,7 @@ registration" and should not land on the same page.
 | Build | Vite 6 |
 | Styling | Tailwind CSS 4 |
 | Routing | React Router 6 |
-| Runtime dependencies | 3 (`react`, `react-dom`, `react-router-dom`) |
+| Runtime dependencies | 4 (`react`, `react-dom`, `react-router-dom`, `lucide-react`) |
 
 No UI kit, no state library, no animation library, no analytics library, no SEO
 library. The design system is a small set of components plus a custom colour
@@ -83,12 +89,16 @@ the button label keeps its contrast over whatever is scrolling underneath it.
 
 ```bash
 npm install
-cp .env.example .env      # optional - every value is allowed to stay blank
-npm run dev              # http://localhost:5173
-npm run build            # typecheck + production build into dist/
-npm run preview          # serve the production build locally
-npm run test             # typecheck + render smoke test + accessibility checks
+cp .env.example .env      # Windows: copy .env.example .env
+npm run dev               # http://localhost:5173
+npm run build             # typecheck + production build into dist/
+npm run preview           # serve the production build locally
+npm run test              # typecheck + render smoke test + accessibility checks
 ```
+
+`.env` holds the real contact details and the domain. It is gitignored, so on
+Cloudflare Pages the same values have to be entered in the dashboard as well —
+see [Deploying](#deploying).
 
 | Command | What it does |
 |---|---|
@@ -104,38 +114,52 @@ npm run test             # typecheck + render smoke test + accessibility checks
 
 ## Configuration
 
-Every value the company has not confirmed is blank, and blank is a supported
-state: the interface degrades to a labelled placeholder rather than publishing a
-phone number that does not work or a pixel ID that belongs to someone else.
-
 Copy `.env.example` to `.env` and fill in what you have. All of them are
-optional.
+optional; anything left blank stays a labelled placeholder rather than becoming a
+phone number that does not work.
 
-| Variable | Effect while empty |
-|---|---|
-| `VITE_COMPANY_NAME` | Falls back to `Shifra Nuha Technologies` |
-| `VITE_PHONE_NUMBER` | "Call now" links to the enquiry form instead of `tel:` |
-| `VITE_WHATSAPP_NUMBER` | "Chat on WhatsApp" links to the enquiry form, prefilled |
-| `VITE_EMAIL` | A placeholder is shown instead of a `mailto:` link |
-| `VITE_WEBSITE_DOMAIN` | No canonical tags, no `og:url`, no `sitemap.xml`, and every page is `noindex, follow` |
-| `VITE_META_PIXEL_ID` | No Meta Pixel script is loaded and no request is made |
-| `VITE_GOOGLE_ANALYTICS_ID` | No Google Analytics script is loaded |
+| Variable | Currently set to | Effect while empty |
+|---|---|---|
+| `VITE_COMPANY_NAME` | `Shifra Nuha Technologies` | Falls back to the same name |
+| `VITE_PHONE_NUMBER` | `+91 9447979616` | "Call now" links to the enquiry form instead of `tel:` |
+| `VITE_WHATSAPP_NUMBER` | `919447979616` | "Chat on WhatsApp" links to the enquiry form, prefilled |
+| `VITE_EMAIL` | `info@shifranuhatech.com` | A placeholder is shown instead of a `mailto:` link |
+| `VITE_ADDRESS` | Ryan Complex, Chungathara, Malappuram, Kerala 679334 | The address line is omitted from the contact page |
+| `VITE_WEBSITE_DOMAIN` | `https://shifranuhatech.com` | No canonical tags, no `og:url`, no `sitemap.xml`, and every page is `noindex, follow` |
+| `VITE_META_PIXEL_ID` | `1755965385669533` | No Meta Pixel script is loaded and no request is made |
+| `VITE_GOOGLE_ANALYTICS_ID` | `G-BGWZ0ZWB15` | No Google Analytics script is loaded |
+
+`.env` is gitignored, so it never reaches Cloudflare Pages. These have to be set
+in the dashboard as environment variables as well — see
+[Deploying](#deploying) — and the two copies kept in step by hand.
 
 `VITE_WEBSITE_DOMAIN` takes a domain with or without a scheme
-(`shifranuha.com` or `https://shifranuha.com`). It is the single switch that
-turns the technical SEO on; set it before launch.
+(`shifranuhatech.com` or `https://shifranuhatech.com`). It is the single switch
+that turns the technical SEO on. Set it to whichever form the custom domain is
+actually served on: if Pages answers on the apex but the canonical says `www`,
+every URL in the sitemap points at a redirect.
 
-> **The site is `noindex` until you set it.** With no domain, every page is
+> **The site is `noindex` until it is set.** With no domain, every page is
 > served as `noindex, follow` (the 404 is `noindex` either way) and no sitemap is
 > written. That is deliberate: a build deployed before the domain is confirmed
 > should not be indexable under an address that does not exist. Setting
 > `VITE_WEBSITE_DOMAIN` switches every real page to
 > `index, follow, max-image-preview:large` and starts emitting canonical tags,
-> `og:url` and `sitemap.xml`. Check the `<meta name="robots">` in the built
-> `index.html` after deploying, before handing the URL to anyone.
+> `og:url` and `sitemap.xml`. The build warns and names any variable that is
+> missing, so read the build log. Then check the `<meta name="robots">` in the
+> deployed `index.html` says `index, follow` before handing the URL to anyone.
 
 No component hard-codes a phone number, an email address, a pixel ID or a
-domain. They are all read through `src/config/site.config.ts`.
+domain. They are all read through `src/config/site.config.ts`. The only
+exceptions are the social profile URLs, which are plain strings in `social` in
+`src/content/site.ts` — Instagram, Facebook and LinkedIn are set there, and `x`
+is empty because there is no account. An empty one is hidden, not linked
+anywhere.
+
+### Business hours
+
+`contact.hours` in `src/content/site.ts` is empty and the contact page omits the
+row entirely rather than guessing. Fill it in when the hours are settled.
 
 ---
 
@@ -146,15 +170,15 @@ for a wording change.**
 
 | File | Holds |
 |---|---|
-| `src/content/offer.ts` | The ₹2,999 LLP & Company registration offer, and its price helpers |
 | `src/content/services.ts` | The nine core services - the single most important file |
 | `src/content/site.ts` | Everything else: hero, sections, page copy, footer, contact |
 | `src/content/legal.ts` | Privacy Policy, Terms & Conditions, Disclaimer |
 | `src/content/ui.ts` | Short interface strings, in English |
 
-Edit `src/content/offer.ts` to change the price or what it covers. It is the only
-place a figure is typed, so the hero, the "what we help with" block, the FAQ, the
-closing CTA and both registration landing pages all move together.
+Contact details are **not** edited in `site.ts`. Phone, WhatsApp, email and the
+address live in `.env` and are read through `src/config/site.config.ts`; the
+social profile URLs are the one exception and are edited in `social` in
+`site.ts`.
 
 `src/content/services.ts` is the file to edit when adding or changing a
 service. The homepage cards, the `/services` hub, the route table, the sitemap,
@@ -185,11 +209,9 @@ Latin text uses Inter, loaded from Google Fonts in `index.html`.
 
 The brief rules these out, and the smoke test enforces it:
 
-- **Prices.** The one real, committed figure is the LLP & Company registration
-  offer, which lives in `src/content/offer.ts` and is read by the hero, the
-  inclusions block, the FAQ, the closing CTA and both registration landing pages
-  so they cannot drift apart. Every other cost note explains what drives the
-  price and points at a quotation.
+- **Prices.** None are published anywhere, including the brief's ₹2,999 LLP &
+  Company registration offer. Every cost note explains what drives the fee and
+  points at a quotation. See the note at the top of this file if that changes.
 - **Processing times or approval guarantees.** Requirements, fees and timelines
   are the authority's to decide, and they change.
 - **Testimonials, statistics, client counts, awards, client logos.**
@@ -199,15 +221,17 @@ The brief rules these out, and the smoke test enforces it:
 `npm run test:smoke` scans every rendered page for prices, timelines,
 guarantees, ratings and statistics, and fails if it finds one that is not a
 negation of it. This is why "we do not guarantee approval" is allowed to
-appear on the disclaimer page but "we guarantee approval" is not. The approved
-offer is the single exception, and it is named explicitly rather than by
-loosening the pattern — with a companion assertion that the price, the "starting
-at" wording and the `+ applicable charges` qualifier are all still on the home
-page, so removing the offer cannot pass quietly.
+appear on the disclaimer page but "we guarantee approval" is not.
 
 The same script also checks every route for the three things that produce a
 horizontal scrollbar on a 320px screen: a hard-coded pixel width at or above the
 content box, `whitespace-nowrap`, and an unbreakable run of visible text.
+
+It also validates the real contact values now that they are configured: every
+social profile must be an `https` URL and not a leftover example host, and a
+phone and WhatsApp number that do not match each other fails the build — that is
+the easiest mistake to make and it sends every WhatsApp click to the wrong
+person.
 
 ---
 
@@ -217,34 +241,33 @@ content box, `whitespace-nowrap`, and an unbreakable run of visible text.
 public/
   brand/                  Generated web-ready derivatives
   favicon.svg             Vector favicon, traced from the mark
+  _headers                Cloudflare Pages response headers (cache + security)
   _redirects              SPA rewrite for Netlify / Cloudflare Pages
 scripts/
   smoke.tsx               Renders every route; content and claim checks
   a11y-check.tsx          Renders every route; markup checks
+  make-og-image.py        Regenerates public/brand/og-image.png (optional)
 src/
   components/
     Analytics.tsx         Loads the pixel / GA scripts, if configured
     Button.tsx            Button / ButtonLink / ButtonAnchor
+    Company.tsx           The "who we are" block — no invented statistics
     ContactForm.tsx       The tertiary CTA
+    CoreServices.tsx      The nine-service grid on the homepage
     CtaBand.tsx           Closing call-to-action
     CtaButtons.tsx        WhatsAppButton / CallButton / CtaPair
+    DigitalServices.tsx   The secondary digital services
     Faq.tsx               Accordion list
     FaqSection.tsx        Homepage FAQ + FAQPage structured data
     Footer.tsx
-    Hero.tsx              Above the fold: headline, ₹2,999, WhatsApp, Call
+    Hero.tsx              Above the fold: headline, WhatsApp, Call
     Logo.tsx              Brand lockup + dark variant
     Navbar.tsx            Sticky nav
-    OfferCard.tsx         The price, its small print, and its CTA
-    OfferIncludes.tsx     What the ₹2,999 fee covers
-    OfferPrice.tsx        The price itself, in hero and inline sizes
-    OtherServices.tsx     Secondary services, on the quietest surface
     Process.tsx           How it works — three steps
-    RegistrationServices.tsx  The two registrations the offer covers
     Reveal.tsx            Scroll fade (respects reduced motion)
     Section.tsx           Section shell + heading block
     ServiceCard.tsx
     StickyCtaBar.tsx      Mobile WhatsApp + Call bar
-    Trust.tsx             Credibility, with no invented claims
     WhyUs.tsx             Four reasons
     iconRegistry.tsx      Icon key -> SVG component
     icons.tsx             The SVG icon set
@@ -252,9 +275,8 @@ src/
     site.config.ts        Env reading, CONFIG, phone/digit helpers
   content/
     legal.ts              Privacy, Terms, Disclaimer
-    offer.ts              The ₹2,999 offer — the single source for the price
     services.ts           The nine services
-    site.ts               Site copy
+    site.ts               Site copy, contact values, social profile URLs
     ui.ts                 Interface strings
   lib/
     contactLinks.ts       wa.me / tel: / mailto: builders + click tracking
@@ -268,6 +290,7 @@ src/
     Legal.tsx             Renders all three legal documents
     NotFound.tsx
     PageShell.tsx         Shared page frame + intro header
+    PrivacyPolicy.tsx
     ServicePage.tsx       The nine landing pages' shared template
     Services.tsx          The /services hub
   App.tsx                 Provider, routes, page-view tracking, sticky bar
@@ -338,12 +361,31 @@ means starting again from a new source file.
 | `public/brand/mark.png` | 256 x 256 | The monogram on its own |
 | `public/brand/favicon-32.png` | 32 x 32 | Raster favicon fallback |
 | `public/brand/apple-touch-icon.png` | 180 x 180 | iOS home screen icon |
-| `public/brand/og-image.png` | 1200 x 630 | Social share card |
+| `public/brand/og-image.png` | 1200 x 630 | Social share card — generated, see below |
 | `public/favicon.svg` | 4.4 KB | Vector favicon, traced from the mark |
 
-Regenerating these needs a **vector** source (for `favicon.svg`) and a **white
-knockout** of the lockup (for `logo-white.png`) - neither can be derived
-reliably from a flattened raster.
+Regenerating the logo derivatives needs a **vector** source (for `favicon.svg`)
+and a **white knockout** of the lockup (for `logo-white.png`) — neither can be
+derived reliably from a flattened raster.
+
+The share card is the exception, because it is code rather than artwork.
+`scripts/make-og-image.py` draws it from the site's own brand tokens and
+tagline, and measures every line before drawing: it refuses to write the file if
+two text blocks would overlap or anything would run off the canvas. Edit the
+constants at the top and re-run it. It needs Python and Pillow
+(`pip install Pillow`), and it is **not** part of the build — the PNG is checked
+in, so Cloudflare Pages never needs Python. Re-run it only when the tagline,
+domain or colours change.
+
+```
+python scripts/make-og-image.py
+```
+
+`og:image` and `twitter:image` are rewritten to absolute URLs at build time by
+the plugin in `vite.config.ts`. This has to happen in the build rather than in
+the browser: Facebook, LinkedIn and WhatsApp read `index.html` as plain text and
+do not run JavaScript, so a share card fixed up at runtime never reaches the
+link unfurl it was written for.
 
 ---
 
@@ -355,8 +397,8 @@ Because this is a single-page app, the host must rewrite unknown paths to
 `index.html` so `/services`, `/company-registration` and `/privacy` resolve on a
 hard refresh.
 
-- **Netlify / Cloudflare Pages** - `public/_redirects` is already included
-  (`/* /index.html 200`).
+- **Cloudflare Pages** - see below. Nothing further to configure.
+- **Netlify** - `public/_redirects` is already included (`/* /index.html 200`).
 - **Vercel** - add a rewrite, or add `vercel.json`.
 - **Nginx** - `try_files $uri $uri/ /index.html;`
 
@@ -364,19 +406,90 @@ Set `VITE_WEBSITE_DOMAIN` in the host's environment before building, or the
 canonical tags and sitemap will be missing from the deployed site. If you deploy
 to a subdirectory, set `base` in `vite.config.ts`.
 
----
+### Cloudflare Pages
 
-## Before launch
+Connect the repository, then:
 
-- [ ] Fill in `.env` with the real phone, WhatsApp, email and domain.
-- [ ] Add real social profile URLs to `social` in `src/content/site.ts`.
+| Setting | Value |
+|---|---|
+| Framework preset | None, or Vite |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Root directory | repository root (leave blank) |
+| Node version | 22 — from `.node-version`, no need to override |
+
+`npm run build` runs `tsc --noEmit` first, so a type error fails the Pages build
+rather than shipping.
+
+**Environment variables must be added in the dashboard**, under
+*Settings → Environment variables*, because `.env` is gitignored and never
+reaches the build. Add these eight under **both** Production and Preview —
+Preview builds otherwise produce a `noindex` site with dead contact buttons:
+
+```
+VITE_COMPANY_NAME        Shifra Nuha Technologies
+VITE_PHONE_NUMBER        +91 9447979616
+VITE_WHATSAPP_NUMBER     919447979616
+VITE_EMAIL               info@shifranuhatech.com
+VITE_ADDRESS             Ryan Complex, Chungathara, Malappuram, Kerala 679334
+VITE_WEBSITE_DOMAIN      https://shifranuhatech.com
+VITE_META_PIXEL_ID       1755965385669533
+VITE_GOOGLE_ANALYTICS_ID G-BGWZ0ZWB15
+```
+
+Pages only exposes variables prefixed `VITE_` to the bundle. A forgotten one
+produces a build that succeeds and a site that quietly misbehaves, so the build
+warns and names anything unset — read the log rather than assuming it worked.
+
+Two files in `public/` are copied into `dist/` and picked up automatically, so
+neither needs to be configured anywhere:
+
+- `_redirects` — the SPA rewrite, `/* /index.html 200`.
+- `_headers` — caching and security headers. Fingerprinted files in `/assets/`
+  are cached for a year; everything else, `index.html` included, is
+  `must-revalidate`. That last part matters: every route serves the same
+  `index.html`, so caching it would leave visitors holding asset filenames from
+  a previous deploy, which 404.
+
+Then attach the custom domain (`shifranuhatech.com`) under *Workers & Pages →
+the project → Custom domains*. Enable **Always Use HTTPS**, and redirect
+`www` to the apex (or the reverse) so there is one canonical host — otherwise
+both serve the same pages and the sitemap's absolute URLs point at whichever one
+you did not choose.
+
+Verify after the first deploy, in this order:
+
+1. `https://shifranuhatech.com/` loads, and `/company-registration` survives a
+   hard refresh — that is `_redirects` working.
+2. `https://shifranuhatech.com/robots.txt` lists the sitemap under the real
+   domain.
+3. `https://shifranuhatech.com/sitemap.xml` opens.
+4. View source on the homepage and confirm
+   `<meta name="robots" content="index, follow, max-image-preview:large">` and
+   an absolute `og:image`. If robots still says `noindex`, the domain variable
+   did not reach the build.
+5. Paste the URL into the Facebook/LinkedIn Sharing Debugger and confirm the
+   card renders with the text on it.
+
+### Before launch
+
+- [x] Fill in `.env` with the real phone, WhatsApp, email, address and domain.
+- [x] Add the real social profile URLs to `social` in `src/content/site.ts`.
+- [x] Add the Meta Pixel and Google Analytics IDs.
+- [x] Generate `public/brand/og-image.png`.
+- [ ] Add the same eight variables to the Cloudflare Pages dashboard, for both
+      Production and Preview.
+- [ ] Attach `shifranuhatech.com` as the custom domain, and settle apex vs `www`.
+- [ ] Decide on business hours and fill in `contact.hours`.
 - [ ] Replace `submitEnquiry()` with a real endpoint, or confirm that opening
       WhatsApp is the intended behaviour.
-- [ ] Add the Meta Pixel and Google Analytics IDs.
 - [ ] Replace the three legal documents with text reviewed for this company.
+      Each still carries a visible "review before launch" banner, and
+      `legal.ts` says so on screen — a visitor can see they are drafts.
 - [ ] **Have a native English speaker review the long-form copy in
       `site.ts` and `services.ts`.** It was machine-drafted as a placeholder, and
       the brief rules out unverified text for complex legal and accounting
       explanations. A wrong explanation of a statutory process is worse than a
       plainer correct one.
-- [ ] Replace `public/brand/og-image.png` if the tagline on it has changed.
+- [ ] Decide whether the brief's ₹2,999 offer is being published after all. See
+      the note at the top of this file — it needs code, not just copy.

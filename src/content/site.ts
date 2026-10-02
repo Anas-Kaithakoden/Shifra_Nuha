@@ -98,7 +98,7 @@ export const contact = {
   phone: siteConfig.PHONE_NUMBER,
   whatsapp: siteConfig.WHATSAPP_NUMBER,
   email: siteConfig.EMAIL,
-  address: '',
+  address: siteConfig.ADDRESS,
   hours: '',
   serviceAreaTitle: 'Where we work',
   serviceAreaBody:
@@ -134,9 +134,9 @@ export const contactConfigured = {
 
 /** Social profiles — empty links are hidden rather than pointed anywhere fake. */
 export const social = {
-  linkedin: '',
-  facebook: '',
-  instagram: '',
+  linkedin: 'https://www.linkedin.com/company/shifra-nuha-technologies',
+  facebook: 'https://www.facebook.com/people/Shifra-Nuha-Technologies/61595113285377/',
+  instagram: 'https://www.instagram.com/shifranuhatechnologies/',
   x: '',
 } as const
 
