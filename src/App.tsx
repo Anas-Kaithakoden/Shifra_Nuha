@@ -18,8 +18,8 @@ import { ServicePage } from './pages/ServicePage'
 import ServicesPage from './pages/Services'
 
 /**
- * Restores scroll position on navigation, honours in-page hash links such as
- * /contact#enquiry, and reports the page view.
+ * Restores scroll position on navigation, honours in-page hash links, and
+ * reports the page view.
  *
  * Page-view tracking lives here rather than in each page because this is the
  * one place that knows a navigation actually happened. The document title is

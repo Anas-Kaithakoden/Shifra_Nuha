@@ -122,16 +122,19 @@ export const contact = {
 
 /**
  * The prefilled WhatsApp message used by every button that is *not* on a service
- * page — the navbar, the hero, the footer, the sticky bar and the two digital
- * services. It has to open a conversation rather than make a claim: it states
- * the visitor's interest and asks a question, and it names no service, because
- * at that point they have not chosen one yet.
+ * page — the navbar, the hero, the footer, the sticky bar and the contact page.
  *
- * Each service page overrides it with a message about that service, so a
- * conversation always starts with the visitor's actual interest already stated.
+ * It has to open a conversation rather than make a claim, and it names no
+ * specific service, because at that point the visitor has not chosen one yet.
+ * It does name what the business does, so the first thing read in the chat is
+ * the reason they are there rather than a bare "hello".
+ *
+ * Every service page overrides it with a message about that service, as do the
+ * two digital services, so a conversation always starts with the visitor's
+ * actual interest already stated.
  */
 export const enquiry = {
-  whatsappMessage: 'Hi, I would like to speak to you about your business services.',
+  whatsappMessage: 'Hi, I would like to know more about your business registration services.',
 } as const
 
 /** Lets the UI skip an entire contact block while a value is still blank. */
@@ -265,6 +268,7 @@ export const digitalSection = {
     {
       icon: 'website',
       title: 'Business Websites',
+      whatsappMessage: 'Hi, I am interested in a website for my business.',
       body: 'A straightforward, fast website for the business — the pages customers actually look for, structured so it can be found in search and maintained by your own staff.',
       points: [
         'Service pages written around what customers search for',
@@ -275,6 +279,7 @@ export const digitalSection = {
     {
       icon: 'automation',
       title: 'Business Automation & Digital Workflow',
+      whatsappMessage: 'Hi, I am interested in business automation.',
       body: 'The repetitive part of running a business removed from a person’s day: enquiries captured, followed up on time, quotes and reminders issued, and the records written back where they belong.',
       points: [
         'Enquiry capture and follow-up, so nothing sits in a phone',
@@ -282,7 +287,13 @@ export const digitalSection = {
         'Hand-offs between WhatsApp, email and your accounting records',
       ],
     },
-  ] as { icon: DigitalIconKey; title: string; body: string; points: string[] }[],
+  ] as {
+    icon: DigitalIconKey
+    title: string
+    whatsappMessage: string
+    body: string
+    points: string[]
+  }[],
 } as const
 
 // ============================================================================
@@ -534,18 +545,54 @@ export const aboutPage = {
 // /contact
 // ============================================================================
 
+/**
+ * ---------------------------------------------------------------------------
+ * /contact
+ * ---------------------------------------------------------------------------
+ * WHATSAPP-FIRST, NO FORM. The page answers one question — how do I get hold of
+ * this business — and it answers it three times over: WhatsApp first, phone
+ * second, email third for whoever prefers it. There is no form, so there is no
+ * set of fields to read before the first message, and nothing for a visitor to
+ * get wrong.
+ *
+ * The three route cards are descriptive rather than three more big buttons: the
+ * call to action is the pair of buttons in the intro, and the cards explain what
+ * each route is actually for so a visitor can pick the one that suits them.
+ */
 export const contactPage = {
   eyebrow: 'Contact',
-  heading: 'Tell us what you need done',
-  intro: 'WhatsApp or a phone call is fastest and we read both. Use the form if you would rather not start a conversation yet — it asks for very little and we will come back to you either way.',
-  formTitle: 'Send an enquiry',
-  formIntro: 'Three things are required — your name, a number we can reply to, and what you need. Everything else is optional.',
-  directTitle: 'Direct contact',
+  heading: 'Have questions about your business?',
+  intro:
+    'We are happy to help with business registration and our other services. WhatsApp is the fastest way to reach us — it is a short message rather than a form, and we read every one.',
+  routes: [
+    {
+      icon: 'whatsapp',
+      title: 'WhatsApp',
+      lead: 'Fastest — usually the quickest reply',
+      body: 'Opens a chat with a short message already written, so you can add a few lines about your business and send it. Best if you are on your phone and want an answer in the same conversation.',
+      action: 'Message us on WhatsApp',
+    },
+    {
+      icon: 'phone',
+      title: 'Call',
+      lead: 'Best if you want to talk it through',
+      body: 'Reaches us directly and works well if you already know what you need and would rather settle it on a call than in writing.',
+      action: 'Call us now',
+    },
+    {
+      icon: 'email',
+      title: 'Email',
+      lead: 'For anything you want in writing',
+      body: 'A business address you can use for documents, detailed questions, or anything that is easier to explain than to type into a chat. We read email too.',
+      action: 'Write to us',
+    },
+  ],
+  directTitle: 'Contact details',
   nextSteps: [
     {
       number: '01',
-      title: 'You send an enquiry',
-      body: 'Message us on WhatsApp, call us, or fill in the form. A short description is enough to start.',
+      title: 'You message us',
+      body: 'Send a few lines on WhatsApp, call, or write by email. A short description of your business is enough to start.',
     },
     {
       number: '02',

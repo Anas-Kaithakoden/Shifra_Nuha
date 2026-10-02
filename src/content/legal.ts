@@ -72,14 +72,14 @@ export const terms: LegalDoc = {
       heading: 'About this website',
       paragraphs: [
         `This website is operated by ${entity} ("we", "us"), a Limited Liability Partnership registered in India, trading as ${site.name}. Its registered office is at ${registeredAddress}.`,
-        'It is a marketing and enquiry site: it explains the services we offer and gives you a way to contact us. It is not an online service, and nothing you can do here completes a registration, files a return, produces a document, or engages a professional on your behalf.',
+        'It is a marketing website: it explains the services we offer and gives you a way to contact us. It is not an online service, and nothing you can do here completes a registration, files a return, produces a document, or engages a professional on your behalf.',
         'An engagement only begins when we have agreed the scope, the cost and the work in writing, after discussing your specific situation.',
       ],
     },
     {
       heading: 'Enquiries and quotations',
       paragraphs: [
-        'Sending an enquiry — by WhatsApp, by phone, or through the form on this site — does not create a contract, a client relationship, or an obligation on either side to do any work. It means only that you have asked us a question and we will try to answer it.',
+        'Contacting us — by WhatsApp, by phone, or by email — does not create a contract, a client relationship, or an obligation on either side to do any work. It means only that you have asked us a question and we will try to answer it.',
         'Any figure we give you before a written scope is agreed is an estimate for the situation described, not a quotation. It is based on what you have told us, on the authority involved, and on the fees in force at that time, and it can change if any of those change.',
         'Where government fees apply, they are shown separately from our professional fee. Government fees are payable to the authority and are not refundable by us if an application is rejected or withdrawn.',
       ],
@@ -122,7 +122,7 @@ export const terms: LegalDoc = {
     {
       heading: 'Contact',
       paragraphs: [
-        'If anything here is unclear, or you think something has gone wrong, say so. Use the contact details published on the contact page, or send an enquiry through the form, and we will pick it up.',
+        'If anything here is unclear, or you think something has gone wrong, say so. Use the contact details published on the contact page — WhatsApp, phone or email — and we will pick it up.',
       ],
     },
   ],
@@ -198,29 +198,29 @@ export const privacy: LegalDoc = {
       heading: 'What we collect',
       paragraphs: [
         `${entity} is the body responsible for the information described in this policy. Its registered office is at ${registeredAddress}, and enquiries about your information can be sent to us through the contact details on the contact page.`,
-        'When you submit an enquiry we collect the details you type into the form: your name, phone or WhatsApp number, email address, business name, business type, what you need and any message you include. We do not ask for sensitive personal information through this website.',
-        'If you contact us on WhatsApp or by phone, we also hold whatever you tell us in that conversation, because we cannot reply without it.',
-        'Enquiries sent through the form are opened as a message to us. The site itself has no account system, no login and no database, and it cannot complete a registration or produce a document.',
+        'This website has no contact form. Nothing you type on this site is sent to us or stored by it: tapping WhatsApp opens WhatsApp, tapping the phone number opens your dialler, and tapping the email address opens your own mail app. Whatever you write then happens in that service, under its own privacy policy, and reaches us only because you sent it.',
+        'We therefore hold only what you choose to send us — your name, contact details, and whatever you tell us about your business and what you need. We do not ask for sensitive personal information.',
+        'The site itself has no account system, no login and no database, and it cannot complete a registration or produce a document.',
       ],
     },
     {
       heading: 'Why we collect it',
       paragraphs: [
-        'We use these details only to respond to your enquiry, understand what you need, and discuss scope, timeline and pricing. We do not sell your details, and we do not use them for unrelated marketing without your agreement.',
+        'We use these details only to respond to you, understand what you need, and discuss scope, timeline and pricing. We do not sell your details, and we do not use them for unrelated marketing without your agreement.',
       ],
     },
     {
       heading: 'How long we keep it',
       paragraphs: [
-        'Enquiry details are kept for as long as it takes to deal with the enquiry, and then for as long as we need the record of that conversation for our business records. An enquiry that does not become an engagement is deleted once it is no longer needed for either purpose.',
+        'Messages are kept for as long as it takes to deal with your enquiry, and then for as long as we need the record of that conversation for our business records. An enquiry that does not become an engagement is deleted once it is no longer needed for either purpose.',
         'Where an enquiry does become a client engagement, the records form part of that engagement and are kept for the period a professional body, a statute or a limitation period requires. They are not deleted on the same schedule as an enquiry that went nowhere.',
         'If you ask us to delete your details sooner, we will do so, except for the part we are required to keep by law.',
       ],
     },
     {
-      heading: 'Analytics and advertising',
+      heading: 'Cookies, analytics and advertising',
       paragraphs: [
-        'If analytics are enabled on this site, they are used to understand which pages are visited and which buttons are used, in aggregate. No analytics script is loaded at all until a tracking ID is configured, and nothing is requested from a third party while that ID is empty.',
+        'If analytics and advertising tags are enabled on this site, they are used to understand which pages are visited and which buttons are used, in aggregate. No analytics script is loaded at all until a tracking ID is configured, and nothing is requested from a third party while that ID is empty.',
         'Advertising and analytics identifiers are what make a campaign measurable. They do not give anyone access to the content of your messages, and the identity attached to them is not verified by us.',
       ],
     },

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Reveal } from '../components/Reveal'
 import { legalDocs, type LegalDoc } from '../content/legal'
 import { site } from '../content/site'
@@ -79,15 +80,14 @@ export function Legal({ doc }: { doc: LegalDoc }) {
                 <h2 className="text-lg font-semibold tracking-tight text-ink-950">Questions</h2>
                 <p className="mt-3 text-sm leading-relaxed text-ink-600">
                   If anything on this page is unclear, or you think something has gone wrong, tell us and we
-                  will pick it up. Use the{' '}
-                  <a
-                    href="/contact#enquiry"
+                  will pick it up. Message us on WhatsApp, call us, or write to the address published on the{' '}
+                  <Link
+                    to="/contact"
                     className="font-semibold text-brand-700 underline underline-offset-2 hover:text-brand-800"
                   >
-                    enquiry form
-                  </a>{' '}
-                  or message us on WhatsApp. Contact details are published on the contact page once they are
-                  confirmed.
+                    contact page
+                  </Link>
+                  .
                 </p>
               </section>
             </div>

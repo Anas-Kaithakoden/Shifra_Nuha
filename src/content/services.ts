@@ -1190,7 +1190,7 @@ const serviceSources: ServiceSource[] = [
 /**
  * The nine services, with the derived fields every component uses. This array is
  * the single source for the homepage cards, the navbar, the `/services` hub, the
- * route table, the sitemap, the enquiry form options and the landing pages.
+ * route table, the sitemap and the landing pages.
  */
 export const services: Service[] = serviceSources.map((source) => ({
   ...source,
@@ -1210,30 +1210,6 @@ export const findService = (slug: string): Service | undefined => serviceBySlug[
 export const serviceByPath: Record<string, Service> = Object.fromEntries(
   services.map((service) => [service.path, service]),
 )
-
-/**
- * The enquiry form's "service required" options, in the order the brief lists
- * them. Derived from the services themselves so a new service cannot be added
- * to the site without appearing in the form.
- */
-export const serviceOptions: string[] = [...services.map((service) => service.name), 'Other']
-
-/** Business types, used by the enquiry form. */
-export const businessTypeOptions: string[] = [
-  'Retail / Trading',
-  'Restaurant / Food',
-  'Clinic / Healthcare',
-  'Tuition / Coaching centre',
-  'Manufacturing / Small industry',
-  'Construction / Contracting',
-  'Real estate',
-  'Professional services',
-  'Agency / Marketing',
-  'E-commerce / Online business',
-  'Technology / Software',
-  'NGO / Trust',
-  'Other',
-]
 
 /**
  * The nine core services, under the name the components and the brief use.

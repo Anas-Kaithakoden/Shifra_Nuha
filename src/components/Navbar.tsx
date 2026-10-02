@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { nav } from '../content/site'
 import { ui } from '../content/ui'
-import { WhatsAppButton } from './CtaButtons'
+import { CallButton, WhatsAppButton } from './CtaButtons'
 import { Logo } from './Logo'
 import { IconClose, IconMenu } from './icons'
 
@@ -117,7 +117,7 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile navigation: the same four links and the enquiry form, nothing more. */}
+      {/* Mobile navigation: the same four links and the Call button, nothing more. */}
       <div
         id="mobile-nav"
         hidden={!open}
@@ -142,14 +142,14 @@ export function Navbar() {
             ))}
           </ul>
 
-          {/* The tertiary path, for someone who would rather not start a chat. */}
+          {/* The secondary CTA, as a real dialler link rather than a route. */}
           <div className="mt-2 border-t border-paper-200 pt-2 pb-4">
-            <Link
-              to="/contact#enquiry"
-              className="flex min-h-12 items-center rounded-[8px] px-3 text-sm font-semibold text-ink-800 transition-colors hover:text-brand-700"
-            >
-              {ui['cta.enquiry']}
-            </Link>
+            <CallButton
+              place="navbar-mobile"
+              size="md"
+              variant="ghost"
+              className="w-full !justify-start !px-3"
+            />
           </div>
         </nav>
       </div>

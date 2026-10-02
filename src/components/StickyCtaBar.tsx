@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import { serviceByPath } from '../content/services'
 import { CtaPair } from './CtaButtons'
 
 /**
@@ -23,6 +24,11 @@ import { CtaPair } from './CtaButtons'
  * Solid white, no blur: a translucent bar over a scrolling page costs contrast
  * on the button label, which is the one thing on this site that must stay
  * readable at a glance.
+ *
+ * The WhatsApp button follows the page it is pinned to. On a service page it
+ * carries that service's message, so a visitor who has read down the LLP page
+ * and tapped the bar arrives in the chat already saying so; everywhere else it
+ * falls back to the site-wide default.
  */
 export function StickyCtaBar() {
   const { pathname } = useLocation()
@@ -48,6 +54,7 @@ export function StickyCtaBar() {
     >
       <CtaPair
         place="sticky-bar"
+        message={serviceByPath[pathname]?.whatsapp}
         size="md"
         whatsappVariant="whatsapp"
         callVariant="secondary"

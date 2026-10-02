@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { CallButton, WhatsAppButton } from '../components/CtaButtons'
-import { ContactForm } from '../components/ContactForm'
 import { Faq } from '../components/Faq'
 import { Reveal } from '../components/Reveal'
 import { serviceIcons } from '../components/iconRegistry'
@@ -35,6 +34,8 @@ import { PageIntro, PageShell } from './PageShell'
  *
  * The WhatsApp button is prefilled with a message about that specific service,
  * so the conversation starts with the visitor's actual interest already stated.
+ * There is no contact form: this page ends with the same two buttons it opened
+ * with, because a form between them would only add a step.
  */
 export function ServicePage({ service }: { service: CoreService }) {
   const Icon = serviceIcons[service.icon] ?? serviceIcons.document
@@ -275,17 +276,29 @@ export function ServicePage({ service }: { service: CoreService }) {
               </section>
             ) : null}
 
-            {/* Secondary CTA: the form, prefilled with this service */}
+            {/* Closing CTA: the same two buttons, prefilled for this service */}
             <section className="mt-12 border-t border-paper-200 pt-10">
               <h2 className="text-xl font-semibold tracking-tight text-ink-950">
-                {ui['section.form']}
+                Questions about {service.name.toLowerCase()}?
               </h2>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-600">
-                WhatsApp and calling are faster and we read both. Use the form if you would rather not start
-                a conversation — the service is already filled in.
+                WhatsApp is the fastest way to reach us, and the message is already written for you. Calling
+                works too, and we read both.
               </p>
-              <div className="mt-6">
-                <ContactForm defaultService={service.name} />
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <WhatsAppButton
+                  place="service-footer"
+                  message={message}
+                  size="lg"
+                  variant="whatsapp"
+                  className="w-full sm:w-auto"
+                />
+                <CallButton
+                  place="service-footer"
+                  size="lg"
+                  variant="secondary"
+                  className="w-full sm:w-auto"
+                />
               </div>
             </section>
           </div>

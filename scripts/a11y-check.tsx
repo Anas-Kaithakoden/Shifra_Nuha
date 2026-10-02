@@ -49,6 +49,21 @@ function hasTapTarget(cls: string) {
   return false
 }
 
+/**
+ * Whether a link sits inside an open `<p>`, i.e. inline in a sentence.
+ *
+ * Inline links are exempt from the tap-target rule: padding one out to 24px
+ * would break the line it sits in. The test is a nesting count rather than a
+ * look-back at the preceding characters, because paragraph length varies and a
+ * fixed window misjudges any link near the end of a long paragraph.
+ */
+function insideParagraph(html: string, index: number): boolean {
+  const before = html.slice(0, index)
+  const opens = (before.match(/<p[\s>]/g) ?? []).length
+  const closes = (before.match(/<\/p>/g) ?? []).length
+  return opens > closes
+}
+
 let failures = 0
 const fail = (route: string, msg: string) => {
   failures++
@@ -103,10 +118,7 @@ for (const route of routes) {
     // both dimensions. Inline links inside a sentence are exempt.
     for (const m of html.matchAll(/<a\b[^>]*class="([^"]*)"[^>]*>/g)) {
       if (hasTapTarget(m[1])) continue
-      // Check it is not nested inside a <p>: look at the 200 chars before it.
-      const start = m.index ?? 0
-      const before = html.slice(Math.max(0, start - 220), start)
-      if (/<p[\s\S]*$/.test(before)) continue
+      if (insideParagraph(html, m.index ?? 0)) continue
       fail(route, `link may be under 24px tall: ${m[0].slice(0, 100)}`)
     }
 

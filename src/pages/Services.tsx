@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { CtaPair } from '../components/CtaButtons'
 import { Reveal } from '../components/Reveal'
 import { ServiceCard } from '../components/ServiceCard'
@@ -6,6 +5,7 @@ import { IconArrowRight } from '../components/icons'
 import { coreServices } from '../content/services'
 import { servicesPage, site } from '../content/site'
 import { ui } from '../content/ui'
+import { callLink, mailtoLink, onPhoneClick } from '../lib/contactLinks'
 import { organisationSchema, useDocumentMeta, useJsonLd } from '../lib/seo'
 import { PageIntro, PageShell } from './PageShell'
 
@@ -52,6 +52,9 @@ export default function ServicesPage() {
     [],
   )
 
+  const phone = callLink()
+  const email = mailtoLink()
+
   return (
     <PageShell>
       <PageIntro
@@ -96,13 +99,25 @@ export default function ServicesPage() {
             </div>
             <p className="mt-5 text-sm text-ink-500">
               Or{' '}
-              <Link
-                to="/contact#enquiry"
+              <a
+                href={phone.href}
+                onClick={onPhoneClick('services-hub')}
                 className="inline-flex min-h-11 items-center gap-1.5 font-semibold text-ink-800 hover:text-brand-700"
               >
-                {ui['cta.enquiry']}
+                {ui['cta.call']}
                 <IconArrowRight width={16} height={16} />
-              </Link>
+              </a>
+              , or write to us at{' '}
+              {email.ready ? (
+                <a
+                  href={email.href}
+                  className="font-semibold break-all text-ink-800 hover:text-brand-700"
+                >
+                  {email.label}
+                </a>
+              ) : (
+                <span className="text-ink-500">{ui['placeholder.contact']}</span>
+              )}
               .
             </p>
           </div>

@@ -3,7 +3,7 @@ import { coreServices } from '../content/services'
 import { footer, site, social } from '../content/site'
 import { ui } from '../content/ui'
 import { callLink, mailtoLink, whatsappLink } from '../lib/contactLinks'
-import { WhatsAppButton } from './CtaButtons'
+import { CallButton, WhatsAppButton } from './CtaButtons'
 import { Logo } from './Logo'
 import { IconCheck, IconMail, IconPhone } from './icons'
 
@@ -140,14 +140,14 @@ export function Footer() {
 
             <div className="mt-5 space-y-2">
               <WhatsAppButton place="footer" size="md" className="w-full" />
-              {/* The third and quietest path, for someone who would rather not
-                  start a chat. */}
-              <Link
-                to="/contact#enquiry"
-                className="flex min-h-11 items-center justify-center text-sm font-semibold text-ink-800 transition-colors hover:text-brand-700"
-              >
-                {ui['cta.enquiry']}
-              </Link>
+              {/* The secondary CTA. The email address above is the quiet third
+                  route, so there is no button for it. */}
+              <CallButton
+                place="footer"
+                size="md"
+                variant="secondary"
+                className="w-full"
+              />
             </div>
 
             {activeSocials.length > 0 ? (

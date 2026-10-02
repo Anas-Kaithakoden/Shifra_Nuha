@@ -3,9 +3,10 @@ import { resolve } from 'node:path'
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom/server'
 import App from '../src/App'
-import { CONFIG } from '../src/config/site.config'
+import { CONFIG, whatsappDigits } from '../src/config/site.config'
 import { coreServices, featuredServices, serviceBySlug } from '../src/content/services'
-import { contact, social } from '../src/content/site'
+import { contact, contactPage, digitalSection, social } from '../src/content/site'
+import { callLink, mailtoLink, whatsappLink } from '../src/lib/contactLinks'
 import { INDEXABLE_ROUTES, ROUTES } from '../src/routes'
 import { ui } from '../src/content/ui'
 
@@ -455,7 +456,133 @@ if (INDEXABLE_ROUTES.length >= ROUTES.length) fail('routes', 'legal pages should
 pass('routes', `${ROUTES.length} routes, ${INDEXABLE_ROUTES.length} indexable`)
 
 // ===========================================================================
-// 7. Interface strings
+// 7. WhatsApp-first: every route in scope carries the right prefilled message
+// ===========================================================================
+
+/**
+ * The contact strategy is WhatsApp-first and the message is the whole point of
+ * the link: a visitor who taps a service button should arrive in the chat with
+ * their interest already stated.
+ *
+ * Two things can go wrong and neither is visible on the page. A component can
+ * pass no message, so the button silently falls back to the site-wide default;
+ * or it can pass the default explicitly where a specific one was intended. Both
+ * produce a working link that starts the wrong conversation, which is why this
+ * asserts on the rendered HTML of each page rather than on the data alone.
+ */
+const rendered = new Map(pages.map((page) => [page.path, page.html]))
+
+if (whatsappDigits()) {
+  const digits = whatsappDigits() as string
+  const whatsapp = whatsappLink()
+  const phone = callLink()
+  const email = mailtoLink()
+
+  /**
+   * A `wa.me` link with no `?text=` opens a completely blank chat, which is the
+   * worst possible first message. Every link on the site must carry one, and the
+   * helper makes that structural rather than a rule to remember at each call
+   * site — this asserts the guarantee actually holds.
+   */
+  for (const [path, html] of rendered) {
+    const bare = [...html.matchAll(/href="(https:\/\/wa\.me\/\d+)"(?!\?)/g)]
+    if (bare.length) fail('whatsapp', `${path} has ${bare.length} WhatsApp link(s) with no message`)
+  }
+
+  /*
+   * The navbar and the footer are global chrome, so they use the site-wide
+   * default on every page. The buttons *on* a service page — hero, aside,
+   * closing CTA and the sticky bar — must all use that service's own message,
+   * so the chat opens with the reason the visitor was reading that page.
+   */
+  for (const service of coreServices) {
+    const html = rendered.get(service.path) ?? ''
+    const want = encodeURIComponent(service.whatsapp)
+    const links = [...html.matchAll(/href="(https:\/\/wa\.me\/[^"]*)"/g)].map((m) => m[1])
+
+    if (links.length === 0) {
+      fail('whatsapp', `${service.slug} has no WhatsApp link at all`)
+      continue
+    }
+    const specific = links.filter((href) => href.includes(want)).length
+    if (specific < 4) {
+      fail(
+        'whatsapp',
+        `/${service.slug}: ${specific} of its own buttons use "${service.whatsapp}" (expected 4)`,
+      )
+    }
+  }
+
+  // The homepage carries a specific message for each secondary service too.
+  const home = rendered.get('/') ?? ''
+  for (const item of digitalSection.items) {
+    const want = encodeURIComponent(item.whatsappMessage)
+    if (!home.includes(`wa.me/${digits}?text=${want}`)) {
+      fail('whatsapp', `the homepage has no button for "${item.title}" using its own message`)
+    }
+  }
+
+  // Every service message is distinct, so no two services open the same chat.
+  const messages = new Set(coreServices.map((service) => service.whatsapp))
+  if (messages.size !== coreServices.length) {
+    fail('whatsapp', 'two services share the same prefilled WhatsApp message')
+  }
+
+  /*
+   * The contact page must offer all three routes, and each card must link to the
+   * route it describes. Matching on the card's own action text rather than on
+   * the link existing somewhere on the page — the intro and the details list
+   * also carry all three, so a looser check would pass on those alone.
+   */
+  const contactHtml = rendered.get('/contact') ?? ''
+  const anchors = [...contactHtml.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)].map((m) => ({
+    attrs: m[1],
+    text: m[2].replace(/<[^>]+>/g, '').trim(),
+  }))
+
+  for (const route of contactPage.routes) {
+    const expected = { whatsapp, phone, email }[route.icon as 'whatsapp' | 'phone' | 'email']
+
+    // An unconfigured route is legitimately not rendered as a card; the details
+    // block below shows the placeholder instead.
+    if (!expected.ready) continue
+
+    const card = anchors.find((a) => a.text === route.action)
+    if (!card) {
+      fail('whatsapp', `the /contact card "${route.action}" was not found`)
+      continue
+    }
+    if (!card.attrs.includes(`href="${expected.href}"`)) {
+      fail(
+        'whatsapp',
+        `the /contact card "${route.action}" points somewhere other than ${route.icon}`,
+      )
+    }
+  }
+
+  pass('whatsapp', `per-service messages on ${coreServices.length} pages + homepage`)
+} else {
+  pass('whatsapp', 'no number configured, prefilled messages not asserted')
+}
+
+// ===========================================================================
+// 8. No contact form anywhere
+// ===========================================================================
+
+/**
+ * There is deliberately no contact form. A form would be a field set to read
+ * before a message could be sent, which is the step this strategy exists to
+ * remove, and it would put visitor details somewhere that has to be secured.
+ */
+for (const [path, html] of rendered) {
+  if (/<form[\s>]/i.test(html)) fail('no-form', `${path} still renders a <form>`)
+  if (/<input[\s>]/i.test(html)) fail('no-form', `${path} still renders an <input>`)
+  if (/<textarea[\s>]/i.test(html)) fail('no-form', `${path} still renders a <textarea>`)
+}
+pass('no-form', 'no form, input or textarea on any page')
+
+// ===========================================================================
+// 9. Interface strings
 // ===========================================================================
 
 for (const [key, value] of Object.entries(ui)) {

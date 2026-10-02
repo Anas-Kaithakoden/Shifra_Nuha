@@ -6,11 +6,15 @@ import { hasGoogleAnalytics, hasMetaPixel } from '../config/site.config'
  * ---------------------------------------------------------------------------
  * One funnel, one vocabulary, three destinations.
  *
- * Every meaningful action on this site is one of five things: someone arrived on
- * a page, someone opened WhatsApp, someone called, someone opened the enquiry
- * form, or someone sent an enquiry. Naming those five explicitly — rather than
- * letting each component invent its own event name — is what makes the ad
- * reports readable and the funnel measurable end to end.
+ * Every meaningful action on this site is one of three things: someone arrived
+ * on a page, someone opened WhatsApp, or someone called. Naming those three
+ * explicitly — rather than letting each component invent its own event name —
+ * is what makes the ad reports readable and the funnel measurable end to end.
+ *
+ * There is deliberately no form submission event, because there is no form. The
+ * contact strategy is WhatsApp-first: the ad sends people to a chat, and the
+ * only two conversions worth counting are the tap that opens the chat and the
+ * tap that opens the dialler.
  *
  * The same event is pushed to Meta Pixel, GA4 and `dataLayer` when those are
  * configured. While an ID is blank no script is loaded at all (`Analytics.tsx`)
@@ -22,16 +26,12 @@ export type TrackEvent =
   | { name: 'PageView'; path: string; title?: string }
   | { name: 'WhatsAppClick'; place: string; label?: string }
   | { name: 'PhoneClick'; place: string; label?: string }
-  | { name: 'EnquiryFormOpen'; place: string }
-  | { name: 'EnquirySubmit'; service?: string }
 
 /** What each event means to Meta, as a standard conversion event. */
 const metaEvents: Record<TrackEvent['name'], string> = {
   PageView: 'PageView',
   WhatsAppClick: 'Contact',
   PhoneClick: 'Contact',
-  EnquiryFormOpen: 'ViewContent',
-  EnquirySubmit: 'Lead',
 }
 
 type DataLayerWindow = Window & {

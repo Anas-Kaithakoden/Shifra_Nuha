@@ -16,8 +16,8 @@
  * `shifranuha.com` or `https://www.shifranuha.com`.
  *
  * Behaviour while a value is empty:
- *  - PHONE_NUMBER / WHATSAPP_NUMBER — the matching button links to the enquiry
- *    form, prefilled with a relevant message, so the funnel still works.
+ *  - PHONE_NUMBER / WHATSAPP_NUMBER — the matching button links to the contact
+ *    page, prefilled with a relevant message, so the funnel still works.
  *  - EMAIL — a labelled placeholder is shown instead of a link.
  *  - ADDRESS — the address line is omitted rather than shown half-written.
  *  - WEBSITE_DOMAIN — canonical/og:url tags and sitemap.xml are skipped.

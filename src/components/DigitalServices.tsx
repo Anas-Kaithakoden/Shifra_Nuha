@@ -3,7 +3,7 @@ import { Reveal } from './Reveal'
 import { Section } from './Section'
 import { digitalIcons } from './iconRegistry'
 import { IconCheck } from './icons'
-import { digitalSection, enquiry } from '../content/site'
+import { digitalSection } from '../content/site'
 
 /**
  * ---------------------------------------------------------------------------
@@ -23,6 +23,10 @@ import { digitalSection, enquiry } from '../content/site'
  * There is no page behind either of these, deliberately: they are bought as an
  * addition to an existing client rather than searched for on their own, and a
  * thin landing page would be worse than a paragraph that says what they are.
+ *
+ * Each carries its own prefilled WhatsApp message rather than the site-wide
+ * default, so the chat opens with the reason that particular card was tapped
+ * already stated.
  */
 export function DigitalServices() {
   return (
@@ -63,7 +67,7 @@ export function DigitalServices() {
                 <div className="mt-auto pt-7">
                   <WhatsAppButton
                     place="digital-service"
-                    message={enquiry.whatsappMessage}
+                    message={item.whatsappMessage}
                     size="md"
                     variant="secondary"
                     className="w-full sm:w-auto"

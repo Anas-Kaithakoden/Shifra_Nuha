@@ -12,7 +12,7 @@ The traffic is a Meta advert — Facebook and Instagram — for people in Kerala
 have just decided to start a business. The funnel is:
 
 ```text
-Facebook / Instagram ad  ->  landing page  ->  WhatsApp  ->  enquiry
+Facebook / Instagram ad  ->  landing page  ->  WhatsApp  ->  conversation
 ```
 
 The brief leads with **LLP & Company registration starting at ₹2,999 + applicable
@@ -26,10 +26,51 @@ registration landing pages, so the figure cannot differ between them — that
 module does not exist yet, and the smoke test will fail if a price is typed
 straight into a page.
 
-WhatsApp and Call are the primary calls to action, on every page, above the fold
-and repeated at the foot of the page. The contact form exists but is third: it
-is the option for someone who would rather not start a conversation yet, and it
-is described that way rather than dressed up as the main path.
+### Contact strategy: WhatsApp-first, no form
+
+There is **no contact form anywhere on this site**, and that is the design rather
+than an omission. The advert sends people straight to WhatsApp, so a form is a
+step that only loses people. The site's job is credibility — what the business
+does, what it costs to think about, who they are — and then getting the visitor
+into a conversation as fast as possible.
+
+| Route | Role | Link |
+|---|---|---|
+| **WhatsApp Us** | Primary CTA, every page | `https://wa.me/<digits>?text=<prefilled>` |
+| **Call Us** | Secondary CTA, every page | `tel:` |
+| `info@shifranuhatech.com` | Quiet third route, for documents and for people who prefer writing | `mailto:` |
+
+Nothing is transmitted through this site. Tapping WhatsApp opens WhatsApp,
+tapping Call opens the dialler, tapping the email address opens the visitor's
+own mail app. The conversation happens in software the visitor already chose, so
+there is no server, no form handler, no spam problem and nowhere for visitor
+details to be stored or leaked.
+
+The email address is deliberately **not** a button. It is offered as a plain
+link in the contact page intro, the route cards and the footer, so it never
+competes with WhatsApp for attention.
+
+**Prefilled messages.** Every WhatsApp button carries a message. A service
+landing page, its closing CTA and its sticky bar all use that service's own
+message, so the chat opens with the reason the visitor was reading that page
+already stated:
+
+```text
+https://wa.me/919447979616?text=Hi%2C%20I%20am%20interested%20in%20LLP%20registration.
+```
+
+The navbar, the footer and the site-wide CTAs use the default message from
+`enquiry.whatsappMessage`, because at that point the visitor has not chosen a
+service. All nine services and both secondary services have their own message.
+
+`whatsappLink()` in `src/lib/contactLinks.ts` **defaults** its message rather
+than defaulting to nothing: a `wa.me` link with no `?text=` opens a completely
+blank chat, which is the worst possible first message, so there is no way to
+produce one by forgetting an argument. The smoke test asserts that no link
+anywhere lacks a message, and that each service page really does use its own.
+
+`wa.me` handles the platform difference itself — it opens the app on a phone and
+web.whatsapp.com on a desktop — so a single link covers both.
 
 Each of the nine services has its own landing page, because someone searching
 for "LLP registration" is not the same person as someone searching for "GST
@@ -121,8 +162,8 @@ phone number that does not work.
 | Variable | Currently set to | Effect while empty |
 |---|---|---|
 | `VITE_COMPANY_NAME` | `Shifra Nuha Technologies` | Falls back to the same name |
-| `VITE_PHONE_NUMBER` | `+91 9447979616` | "Call now" links to the enquiry form instead of `tel:` |
-| `VITE_WHATSAPP_NUMBER` | `919447979616` | "Chat on WhatsApp" links to the enquiry form, prefilled |
+| `VITE_PHONE_NUMBER` | `+91 9447979616` | "Call Us" links to the contact page instead of `tel:` |
+| `VITE_WHATSAPP_NUMBER` | `919447979616` | "WhatsApp Us" links to the contact page, prefilled |
 | `VITE_EMAIL` | `info@shifranuhatech.com` | A placeholder is shown instead of a `mailto:` link |
 | `VITE_ADDRESS` | Ryan Complex, Chungathara, Malappuram, Kerala 679334 | The address line is omitted from the contact page |
 | `VITE_WEBSITE_DOMAIN` | `https://shifranuhatech.com` | No canonical tags, no `og:url`, no `sitemap.xml`, and every page is `noindex, follow` |
@@ -166,7 +207,7 @@ Deliberately not "24/7". The phone line and WhatsApp number are open at any
 hour, but the honest claim is *when a reply comes*, not *when a message can be
 sent* — and on a page whose primary button is WhatsApp, "24/7" reads as "someone
 is on WhatsApp at 3am". Stating the honest version sets that expectation before
-the enquiry is sent rather than after.
+the conversation starts rather than after.
 
 It is still slightly incomplete: it says *working* hours without saying which.
 Adding the real window ("replies 9am–7pm, Mon–Sat") would close that gap, and is
@@ -192,9 +233,10 @@ social profile URLs are the one exception and are edited in `social` in
 `site.ts`.
 
 `src/content/services.ts` is the file to edit when adding or changing a
-service. The homepage cards, the `/services` hub, the route table, the sitemap,
-the enquiry form dropdown and the nine landing pages are all generated from it,
-so a service cannot exist without existing everywhere else.
+service. The homepage cards, the `/services` hub, the route table, the sitemap
+and the nine landing pages are all generated from it, so a service cannot exist
+without existing everywhere else. Each one carries its own `whatsappMessage`,
+which is what its WhatsApp buttons send.
 
 ### The copy model
 
@@ -203,8 +245,8 @@ Two kinds of text, handled two different ways on purpose:
 - **Long-form copy** - the explanation of a statutory or tax process - lives in
   `content/site.ts` and `content/services.ts`, as plain strings beside the
   component that renders them. Changing a wording is a one-line edit.
-- **Interface strings** - button labels, nav, form labels, error messages - live
-  in `src/content/ui.ts` and are read by key as `ui['cta.enquiry']`. They are on
+- **Interface strings** - button labels, nav, section headings - live in
+  `src/content/ui.ts` and are read by key as `ui['cta.whatsapp']`. They are on
   every page, so keeping them in one table means a wording change is a single
   edit rather than a sweep through the components.
 
@@ -238,6 +280,19 @@ The same script also checks every route for the three things that produce a
 horizontal scrollbar on a 320px screen: a hard-coded pixel width at or above the
 content box, `whitespace-nowrap`, and an unbreakable run of visible text.
 
+It also asserts the two contact-strategy invariants, because both fail silently
+and only show up as a message that opens the wrong conversation:
+
+- **No WhatsApp link anywhere lacks a prefilled message.** A bare `wa.me/<digits>`
+  opens a blank chat.
+- **Each service page's own buttons all use that service's message**, and no two
+  services share one. The navbar and footer use the site-wide default by design,
+  so the assertion is on the page-level buttons rather than on every link.
+
+And it asserts the reverse of the form: **no page renders a `<form>`, `<input>` or
+`<textarea>`**. That is the only place the "no contact form" decision is written
+down where it cannot quietly stop being true.
+
 It also validates the real contact values now that they are configured: every
 social profile must be an `https` URL and not a leftover example host, and a
 phone and WhatsApp number that do not match each other fails the build — that is
@@ -263,7 +318,6 @@ src/
     Analytics.tsx         Loads the pixel / GA scripts, if configured
     Button.tsx            Button / ButtonLink / ButtonAnchor
     Company.tsx           The "who we are" block — no invented statistics
-    ContactForm.tsx       The tertiary CTA
     CoreServices.tsx      The nine-service grid on the homepage
     CtaBand.tsx           Closing call-to-action
     CtaButtons.tsx        WhatsAppButton / CallButton / CtaPair
@@ -278,7 +332,7 @@ src/
     Reveal.tsx            Scroll fade (respects reduced motion)
     Section.tsx           Section shell + heading block
     ServiceCard.tsx
-    StickyCtaBar.tsx      Mobile WhatsApp + Call bar
+    StickyCtaBar.tsx      Mobile WhatsApp + Call bar; follows the current service
     WhyUs.tsx             Four reasons
     iconRegistry.tsx      Icon key -> SVG component
     icons.tsx             The SVG icon set
@@ -291,7 +345,6 @@ src/
     ui.ts                 Interface strings
   lib/
     contactLinks.ts       wa.me / tel: / mailto: builders + click tracking
-    enquiry.ts            Form submission (see below)
     seo.ts                Metadata, canonical, Open Graph, JSON-LD
     tracking.ts           Analytics event helper
   pages/
@@ -319,25 +372,20 @@ test passed while a link 404'd. Adding a page to `ROUTES` covers all four.
 
 ---
 
-## Form submissions
-
-`submitEnquiry()` in `src/lib/enquiry.ts` composes the enquiry into a readable
-message and opens it in WhatsApp. **There is no backend.** It returns
-`{ ok, message }` and the form shows the result, so replacing the function body
-with a `fetch` to your own API, a form service or a CRM webhook needs no other
-change to the form, the validation or the success state.
-
-Name, phone and service are required. Everything else is optional and says so.
-
----
-
 ## Analytics
 
-`src/lib/tracking.ts` wraps the Meta Pixel and Google Analytics globals. Events
-fire for page views, WhatsApp clicks, call clicks and form submissions, each
-tagged with a low-cardinality `place` (`hero`, `navbar`, `footer`,
-`service-page`, `sticky-bar`) so a campaign can be traced to the button it came
-from. Nothing is loaded and no request is made until an ID is configured.
+`src/lib/tracking.ts` wraps the Meta Pixel and Google Analytics globals. Three
+events fire — `PageView`, `WhatsAppClick` and `PhoneClick` — each tagged with a
+low-cardinality `place` (`hero`, `navbar`, `footer`, `service-hero`,
+`sticky-bar`) so a campaign can be traced to the button it came from. Nothing is
+loaded and no request is made until an ID is configured.
+
+There is no form-submission event, because there is no form. Both `WhatsAppClick`
+and `PhoneClick` map to Meta's standard `Contact` conversion. **This is the whole
+measurable funnel on the site**: everything the business can learn about interest
+is the count of people who tapped to start a conversation. There is no
+downstream "did they convert" signal unless WhatsApp Business or a CRM is wired
+up on their side, which is outside the site.
 
 ---
 
@@ -505,10 +553,10 @@ Verify after the first deploy, in this order:
 - [ ] Confirm the trademark and logo are held by the LLP rather than a partner.
       The IP clause in the Terms says they belong to the trading name; if a
       partner owns the registration, that clause names the wrong owner.
-- [ ] Replace `submitEnquiry()` with a real endpoint, or confirm that opening
-      WhatsApp is the intended behaviour. If it stays as it is, the Privacy
-      Policy's claim that enquiry details are collected and kept describes a
-      process that has no database behind it.
+- [ ] **Set a real working-hours window in `contact.hours` in `src/content/site.ts`.**
+      It currently reads "Enquiries any time — we reply during working hours",
+      which does not say which hours. On a WhatsApp-first page that is the one
+      expectation-setting line that matters.
 - [ ] **Have a native English speaker review the long-form copy in
       `site.ts` and `services.ts`.** It was machine-drafted as a placeholder, and
       the brief rules out unverified text for complex legal and accounting
