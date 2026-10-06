@@ -24,6 +24,9 @@ import ServicesPage from './pages/Services'
  * Page-view tracking lives here rather than in each page because this is the
  * one place that knows a navigation actually happened. The document title is
  * read after the route has rendered, so the event carries the right title.
+ * `track` turns this into GA4's built-in `page_view` (with `page_location` and
+ * `page_title`) and Meta's `PageView`, because GA4's standard reports are
+ * built from `page_view` alone.
  */
 function RouteEffects() {
   const { pathname, hash } = useLocation()

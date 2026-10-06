@@ -16,8 +16,9 @@ import { CONFIG } from '../config/site.config'
  * is one `useEffect` and no duplication between the two platforms.
  *
  * `send_page_view: false` on GA4 is deliberate: a single-page app navigates
- * without reloading, so page views are sent from the router in `App.tsx` rather
- * than twice.
+ * without reloading, so the router in `App.tsx` sends the standard `page_view`
+ * event itself on each navigation, rather than GA4 sending one only on the
+ * initial load. Sending it twice would double every page report.
  */
 
 type AnalyticsWindow = Window & {

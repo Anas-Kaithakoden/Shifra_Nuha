@@ -380,6 +380,15 @@ low-cardinality `place` (`hero`, `navbar`, `footer`, `service-hero`,
 `sticky-bar`) so a campaign can be traced to the button it came from. Nothing is
 loaded and no request is made until an ID is configured.
 
+The same three events are sent to GA4 under its own names: `PageView` becomes
+the built-in **`page_view`** event (carrying `page_location` and `page_title`),
+and the clicks become `whatsapp_click` / `phone_click`. `page_view` matters
+because every standard GA4 report — Pages and screens, Landing pages, the
+Engagement overview — is built from that event alone; a custom event never
+reaches them. `Analytics.tsx` sets `send_page_view: false` so the router in
+`App.tsx` is the only thing sending it, which keeps SPA navigations from being
+counted twice.
+
 There is no form-submission event, because there is no form. Both `WhatsAppClick`
 and `PhoneClick` map to Meta's standard `Contact` conversion. **This is the whole
 measurable funnel on the site**: everything the business can learn about interest

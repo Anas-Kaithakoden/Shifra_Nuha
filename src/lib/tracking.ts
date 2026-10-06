@@ -34,6 +34,43 @@ const metaEvents: Record<TrackEvent['name'], string> = {
   PhoneClick: 'Contact',
 }
 
+/**
+ * What each event is called in GA4.
+ *
+ * `PageView` maps to Google's own built-in `page_view`, not to a custom event
+ * of the same meaning: every standard GA4 report — Pages and screens, Landing
+ * pages, the Engagement overview — is built from `page_view` and its
+ * parameters, so a custom event never reaches them however often it fires.
+ * The click events follow GA4's snake_case convention. Meta keeps receiving
+ * the camelCase names above, unchanged.
+ */
+const gaEvents: Record<TrackEvent['name'], string> = {
+  PageView: 'page_view',
+  WhatsAppClick: 'whatsapp_click',
+  PhoneClick: 'phone_click',
+}
+
+/**
+ * The parameters GA4 expects for each event.
+ *
+ * `page_view` is keyed on `page_location` + `page_title`, the pair the Pages
+ * and screens and Landing pages reports group by. `path` alone would be a
+ * custom parameter those reports cannot read, and `window.location.href` is
+ * the full URL they need. The click events keep their own `place` and `label`,
+ * so a report can be broken down by the button that was pressed.
+ */
+function gaParams(event: TrackEvent): Record<string, unknown> {
+  if (event.name === 'PageView') {
+    return {
+      page_location: window.location.href,
+      page_title: event.title ?? document.title,
+    }
+  }
+
+  const { name, ...params } = event
+  return params
+}
+
 type DataLayerWindow = Window & {
   dataLayer?: Array<Record<string, unknown>>
   fbq?: (...args: unknown[]) => void
@@ -55,12 +92,13 @@ export function track(event: TrackEvent): void {
   }
 
   if (hasGoogleAnalytics && typeof win.gtag === 'function') {
-    win.gtag('event', event.name, { ...event, name: undefined })
+    win.gtag('event', gaEvents[event.name], gaParams(event))
   }
 
   // dataLayer is always pushed, so a tag manager can pick events up later
-  // without any of this being rewritten.
+  // without any of this being rewritten. It uses the GA4 name so a tag
+  // written against `page_view` matches what GA4 itself receives.
   if (Array.isArray(win.dataLayer)) {
-    win.dataLayer.push({ event: event.name, ...event })
+    win.dataLayer.push({ event: gaEvents[event.name], ...event })
   }
 }
