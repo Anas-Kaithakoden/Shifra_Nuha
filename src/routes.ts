@@ -36,7 +36,7 @@ const STATIC_ROUTES: Route[] = [
   { path: '/disclaimer', indexable: false, priority: 0.2 },
 ]
 
-/** The nine service landing pages, generated from the services themselves. */
+/** The service landing pages, generated from the services themselves. */
 const serviceRoutes: Route[] = coreServices.map((service) => ({
   path: service.path,
   indexable: true,

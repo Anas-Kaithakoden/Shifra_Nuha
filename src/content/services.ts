@@ -1185,10 +1185,121 @@ const serviceSources: ServiceSource[] = [
     ],
     related: ['company-registration', 'llp-registration', 'gst-services'],
   },
+
+  // ==========================================================================
+  {
+    slug: 'msme-udyam-registration',
+    name: 'MSME / Udyam Registration',
+    navLabel: 'MSME / Udyam',
+    summary:
+      'Udyam registration support for micro, small and medium enterprises to get recognition under the MSME framework and access applicable benefits.',
+    metaTitle: 'MSME Udyam Registration Kerala | Shifra Nuha Technologies',
+    metaDescription:
+      'Udyam registration services in Kerala for micro, small and medium enterprises. Eligibility check, application filing and support. Message us for a quotation.',
+    icon: 'document',
+    featured: true,
+    whatsappMessage: 'Hi, I am interested in MSME/Udyam registration.',
+    explanation: [
+      {
+        heading: 'What is Udyam Registration',
+        paragraphs: [
+          'Udyam Registration is the official registration for Micro, Small and Medium Enterprises under the MSMED Act, carried out through the Government of India’s Udyam portal. It gives businesses a unique Udyam Registration Number and a certificate of recognition as an MSME.',
+          'Classification as micro, small or medium is based on investment in plant and machinery/equipment and turnover as notified from time to time. Registration is done online and is largely self-declared, but getting it right matters for eligibility for benefits.',
+        ],
+      },
+      {
+        heading: 'Why register as MSME',
+        paragraphs: [
+          'MSME registration can help with eligibility for certain government schemes, subsidies, credit-linked support, participation in public procurement preferences where applicable, and easier access to some bank schemes. The exact benefits depend on the scheme and eligibility at the time of application.',
+          'We do not guarantee benefits — we focus on correct classification and proper registration so your application is accurate.',
+        ],
+      },
+    ],
+    whoNeeds: [
+      'A business that qualifies as micro, small or medium enterprise and wants formal recognition.',
+      'A business looking to avail of MSME-related schemes, tenders or bank facilities where Udyam registration is requested.',
+      'An existing enterprise that needs to update details on the Udyam portal.',
+      'A startup or proprietorship/partnership/company/LLP that wants to register under the MSME framework.',
+    ],
+    includes: [
+      'Eligibility check based on investment and turnover',
+      'Assistance with Aadhaar/PAN linked details and business information',
+      'Udyam registration application filing on the official portal',
+      'Guidance on classification (micro/small/medium)',
+      'Download of Udyam certificate and basic post-registration guidance',
+      'Support with corrections/amendments if details need updating',
+    ],
+    process: [
+      {
+        title: 'Check eligibility',
+        body: 'Share business details and we assess classification based on current thresholds.',
+      },
+      {
+        title: 'Collect details',
+        body: 'We need basic business, proprietor/partner/director details and activity information.',
+      },
+      {
+        title: 'File application',
+        body: 'Application is filed on the Udyam portal with correct details.',
+      },
+      {
+        title: 'Receive certificate',
+        body: 'Once processed, the Udyam Registration Certificate is issued and shared with you.',
+      },
+      {
+        title: 'Post-registration guidance',
+        body: 'Advice on next steps if you need to update details or link with other registrations.',
+      },
+    ],
+    documents: [
+      'Aadhaar card of proprietor/partner(s)/director(s) as applicable',
+      'PAN card of the business/entity or proprietor',
+      'Business address proof (if required)',
+      'Bank account details',
+      'Major activity details (manufacturing/services)',
+      'Investment and turnover details (as applicable)',
+    ],
+    caveats: [
+      'Classification depends on investment and turnover thresholds notified by the Government of India; these change from time to time.',
+      'Udyam registration is self-declared, but incorrect details can cause issues with eligibility for schemes.',
+      'Benefits are scheme-specific and not automatic; we do not guarantee approval for any particular scheme.',
+      'Some entities may already be registered or have different requirements — we confirm before filing.',
+    ],
+    pricingNote:
+      'Get a personalised quotation. Udyam registration fee depends on the work involved; government fees for registration are generally nil, but professional charges apply.',
+    faqs: [
+      {
+        question: 'What is Udyam Registration?',
+        answer:
+          'Udyam Registration is the government registration for micro, small and medium enterprises under the MSMED Act, providing recognition and a Udyam Registration Number.',
+      },
+      {
+        question: 'Who can apply for Udyam Registration?',
+        answer:
+          'Proprietorships, partnerships, LLPs, companies and other eligible business entities that qualify as micro, small or medium based on investment and turnover can apply.',
+      },
+      {
+        question: 'Is Udyam Registration mandatory?',
+        answer:
+          'No, it is not mandatory for all businesses. However, it may be required to avail of certain government schemes, bank benefits or public procurement preferences.',
+      },
+      {
+        question: 'How long does it take?',
+        answer:
+          'Udyam registration is usually processed quickly on the portal once details are submitted correctly, often within the same day in straightforward cases.',
+      },
+      {
+        question: 'Do I need GST for Udyam Registration?',
+        answer:
+          'For businesses required to have GST, PAN and GSTIN details may be linked as per portal requirements. We will guide you based on your specific case.',
+      },
+    ],
+    related: ['company-registration', 'gst-services', 'project-report'],
+  },
 ]
 
 /**
- * The nine services, with the derived fields every component uses. This array is
+ * The core services, with the derived fields every component uses. This array is
  * the single source for the homepage cards, the navbar, the `/services` hub, the
  * route table, the sitemap and the landing pages.
  */
@@ -1212,7 +1323,7 @@ export const serviceByPath: Record<string, Service> = Object.fromEntries(
 )
 
 /**
- * The nine core services, under the name the components and the brief use.
+ * The core services, under the name the components and the brief use.
  * `services` is the data; `coreServices` is the same array, named for what it
  * represents on the site. Both exist so the intent reads at the call site and
  * so the file stays the single source either way.
