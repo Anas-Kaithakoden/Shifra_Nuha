@@ -75,12 +75,18 @@ export const digitalIcons = {
   website: IconGlobe,
   automation: IconCpu,
   crm: IconChat,
+  chat: IconChat,
   branding: IconPalette,
   marketing: IconMegaphone,
   content: IconBook,
   email: IconMail,
   display: IconMonitor,
   whatsapp: IconWhatsApp,
+  globe: IconGlobe,
+  cpu: IconCpu,
+  document: IconDocument,
+  receipt: IconReceipt,
+  automation_alt: IconCpu,
 } satisfies Record<string, IconComponent>
 
 /** Supporting points on the homepage and the about page. */

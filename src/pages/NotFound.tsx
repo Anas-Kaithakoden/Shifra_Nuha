@@ -1,63 +1,38 @@
-import { BrandingServices } from '../components/BrandingServices'
-import { Company } from '../components/Company'
-import { CoreServices } from '../components/CoreServices'
-import { CtaBand } from '../components/CtaBand'
-import { DigitalServices } from '../components/DigitalServices'
-import { FaqSection } from '../components/FaqSection'
-import { Hero } from '../components/Hero'
-import { Process } from '../components/Process'
-import { WhyUs } from '../components/WhyUs'
-import { site } from '../content/site'
-import { organisationSchema, useDocumentMeta, useJsonLd } from '../lib/seo'
+import { Link } from 'react-router-dom'
+import { WhatsAppButton } from '../components/CtaButtons'
+import { Reveal } from '../components/Reveal'
+import { notFound, site } from '../content/site'
+import { useDocumentMeta } from '../lib/seo'
+import { PageIntro, PageShell } from './PageShell'
 
-/**
- * ---------------------------------------------------------------------------
- * HOME
- * ---------------------------------------------------------------------------
- * The order below is the argument, in sequence:
- *
- *   Hero → Professional services → Digital services → How We Work
- *        → Why work with us → About → FAQ → Closing CTA
- *
- * Read as a visitor does: what this is, exactly what they can get done, what
- * else there is, how the work actually runs, why they would use us rather than
- * the next firm on the list, who we are, the questions they are still unsure
- * about, and then the same two buttons.
- *
- * TIERING IS THE STRUCTURE. The professional services come first, on the
- * document surface, because they are what the business does and what a visitor
- * came for. The two digital services come after, on white, deliberately quieter
- * — both are optional, and neither is needed to get a business registered.
- * Presenting them as peers would misrepresent what the company is.
- *
- * THE SURFACES ALTERNATE: white, off-white, white, off-white, off-white, white,
- * off-white, white. Three tones and a hairline between each. That is the whole
- * of the section rhythm — no gradient, no glow, no decorative shape.
- *
- * There is no price anywhere on this page, and none in the structured data
- * either. The work is quoted per engagement once the case is known, so the only
- * thing the page states about cost is the process for getting one.
- */
-export default function Home() {
+export default function NotFound() {
   useDocumentMeta({
-    title: site.seoTitle,
-    description: site.seoDescription,
-    path: '/',
+    title: `Page not found | ${site.name}`,
+    description: notFound.body,
+    path: '/404',
   })
 
-  useJsonLd(organisationSchema(), [])
-
   return (
-    <>
-      <Hero />
-      <CoreServices />
-      <DigitalServices />
-      <BrandingServices />
-      <Process />
-      <WhyUs />
-      <Company />
-      <FaqSection />
-      <CtaBand />
-    </>
+    <PageShell>
+      <PageIntro eyebrow={notFound.eyebrow} title={notFound.heading} intro={notFound.body}>
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <WhatsAppButton place="not-found" size="lg" variant="whatsapp" />
+          <Link
+            to={notFound.ctaTo}
+            className="inline-flex items-center justify-center rounded-md border border-paper-300 px-6 py-3 text-sm font-semibold text-ink-900 transition-colors hover:bg-paper-100"
+          >
+            {notFound.ctaLabel}
+          </Link>
+        </div>
+      </PageIntro>
+      <Reveal>
+        <div className="mx-auto w-full max-w-6xl px-5 py-10 sm:px-8">
+          <p className="text-sm text-ink-600">
+            Try going back to <Link to="/" className="font-medium text-brand-700 underline">home</Link> or{' '}
+            <Link to="/services" className="font-medium text-brand-700 underline">business solutions</Link>.
+          </p>
+        </div>
+      </Reveal>
+    </PageShell>
   )
 }
