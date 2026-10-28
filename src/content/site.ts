@@ -366,6 +366,102 @@ export const digitalSection = {
 } as const
 
 // ============================================================================
+// HOME — TIER 2B: BRANDING & CREATIVE SERVICES
+// ============================================================================
+
+export const brandingSection = {
+  eyebrow: 'Branding & Creative Services',
+  title: 'Brand identity and visual communication',
+  intro:
+    'Build a consistent, professional brand that looks great across print and digital. From logo to full brand guidelines and marketing creatives.',
+  items: [
+    {
+      icon: 'branding',
+      title: 'Logo Design',
+      whatsappMessage: 'Hi, I am interested in logo design.',
+      body: 'Custom logos designed to reflect your business personality and work well at any size.',
+      points: [
+        'Multiple concepts & revisions',
+        'Vector files (AI, SVG, EPS) and web formats',
+        'Scalable for print and digital',
+      ],
+    },
+    {
+      icon: 'branding',
+      title: 'Brand Identity & Brand Guidelines',
+      whatsappMessage: 'Hi, I am interested in brand identity and brand guidelines.',
+      body: 'Complete brand identity with colors, typography, spacing and usage rules to keep things consistent.',
+      points: [
+        'Logo variations & color palette',
+        'Typography system',
+        'Brand guidelines document',
+      ],
+    },
+    {
+      icon: 'document',
+      title: 'Business Card & Letterhead Design',
+      whatsappMessage: 'Hi, I am interested in business card and letterhead design.',
+      body: 'Professional stationery designs ready for print with correct bleed and specs.',
+      points: [
+        'Print-ready files',
+        'Clean, professional layouts',
+        'Matching brand style',
+      ],
+    },
+    {
+      icon: 'document',
+      title: 'Company Profiles & Brochures',
+      whatsappMessage: 'Hi, I am interested in company profiles and brochures.',
+      body: 'Corporate profiles, product brochures and capability documents that tell your story well.',
+      points: [
+        'Tailored to your audience',
+        'Professional layout & content support',
+        'Print and digital ready',
+      ],
+    },
+    {
+      icon: 'display',
+      title: 'Social Media Posts & Banner Design',
+      whatsappMessage: 'Hi, I am interested in social media posts and banner design.',
+      body: 'Eye-catching posts, stories, covers and banners designed for each platform.',
+      points: [
+        'Platform-optimized sizes',
+        'On-brand creatives',
+        'Batch designs available',
+      ],
+    },
+    {
+      icon: 'document',
+      title: 'Product Catalogues & Promotional Creatives',
+      whatsappMessage: 'Hi, I am interested in product catalogues and promotional creatives.',
+      body: 'Clean catalogues and promo creatives for launches, offers and sales campaigns.',
+      points: [
+        'Product-focused layouts',
+        'Easy to update',
+        'Print and digital formats',
+      ],
+    },
+    {
+      icon: 'monitor',
+      title: 'Presentation & Pitch Deck Design',
+      whatsappMessage: 'Hi, I am interested in presentation and pitch deck design.',
+      body: 'Investor-ready pitch decks and business presentations with clear visuals and compelling flow.',
+      points: [
+        'Story-driven structure',
+        'Data visualization',
+        'PowerPoint/Canva ready files',
+      ],
+    },
+  ] as {
+    icon: DigitalIconKey
+    title: string
+    whatsappMessage: string
+    body: string
+    points: string[]
+  }[],
+} as const
+
+// ============================================================================
 // HOME — HOW WE WORK
 // ============================================================================
 

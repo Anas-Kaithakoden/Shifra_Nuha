@@ -1,3 +1,4 @@
+import { BrandingServices } from '../components/BrandingServices'
 import { Company } from '../components/Company'
 import { CoreServices } from '../components/CoreServices'
 import { CtaBand } from '../components/CtaBand'
@@ -51,6 +52,7 @@ export default function Home() {
       <Hero />
       <CoreServices />
       <DigitalServices />
+      <BrandingServices />
       <Process />
       <WhyUs />
       <Company />
