@@ -263,31 +263,97 @@ export const coreSection = {
  * design is meant to avoid.
  */
 export const digitalSection = {
-  eyebrow: 'Secondary services',
-  title: 'Digital services, when you are ready for them',
+  eyebrow: 'Digital Solutions',
+  title: 'Websites, software and automation',
   intro:
-    'Both of these are optional and neither is needed to get started. They are here because a business that is properly registered and still invisible online is leaving enquiries on the table.',
+    'Optional add-ons when you need more than registrations. Our main focus is ERP, billing and inventory systems, and CRM — built to fit how your business actually runs.',
   items: [
     {
       icon: 'website',
-      title: 'Business Websites',
-      whatsappMessage: 'Hi, I am interested in a website for my business.',
-      body: 'A straightforward, fast website for the business — the pages customers actually look for, structured so it can be found in search and maintained by your own staff.',
+      title: 'Website Design & Development',
+      whatsappMessage: 'Hi, I am interested in website design and development.',
+      body: 'Fast, mobile-friendly websites built to turn visitors into enquiries. Clean structure, clear calls-to-action, and easy to maintain.',
       points: [
-        'Service pages written around what customers search for',
-        'Mobile-first, with fast load on a phone connection',
-        'A content structure your team can update without a developer',
+        'Business websites & landing pages',
+        'Mobile-first and SEO-friendly',
+        'Contact forms and WhatsApp integration',
       ],
     },
     {
       icon: 'automation',
-      title: 'Business Automation & Digital Workflow',
-      whatsappMessage: 'Hi, I am interested in business automation.',
-      body: 'The repetitive part of running a business removed from a person’s day: enquiries captured, followed up on time, quotes and reminders issued, and the records written back where they belong.',
+      title: 'ERP & Business Management Software',
+      whatsappMessage: 'Hi, I am interested in ERP and business management software.',
+      body: 'Custom ERP solutions to centralise your operations — sales, purchase, accounts, HR and more in one system.',
       points: [
-        'Enquiry capture and follow-up, so nothing sits in a phone',
-        'Quotes, invoices, reminders and routine reports on a schedule',
-        'Hand-offs between WhatsApp, email and your accounting records',
+        'Modular as per business needs',
+        'Role-based access and reporting',
+        'Scalable for growing businesses',
+      ],
+    },
+    {
+      icon: 'receipt',
+      title: 'Billing & Inventory Systems',
+      whatsappMessage: 'Hi, I am interested in billing and inventory systems.',
+      body: 'Point-of-sale style billing, stock tracking, GST-ready invoices, and low-stock alerts to keep things under control.',
+      points: [
+        'GST-compliant billing',
+        'Real-time inventory tracking',
+        'Barcode/serial support where needed',
+      ],
+    },
+    {
+      icon: 'chat',
+      title: 'CRM & Lead Management',
+      whatsappMessage: 'Hi, I am interested in CRM and lead management.',
+      body: 'Capture leads from WhatsApp, website and calls, track follow-ups, and close more deals with a simple CRM built for your workflow.',
+      points: [
+        'Lead pipeline & reminders',
+        'WhatsApp/Email integration',
+        'Sales reports and activity tracking',
+      ],
+    },
+    {
+      icon: 'whatsapp',
+      title: 'WhatsApp Automation & Chatbots',
+      whatsappMessage: 'Hi, I am interested in WhatsApp automation and chatbots.',
+      body: 'Automate enquiries, order taking, appointments and follow-ups on WhatsApp — without losing the personal touch.',
+      points: [
+        'Auto-replies & enquiry forms',
+        'Order/booking workflows',
+        'Broadcasts with opt-in controls',
+      ],
+    },
+    {
+      icon: 'cpu',
+      title: 'AI Solutions & Workflow Automation',
+      whatsappMessage: 'Hi, I am interested in AI solutions and workflow automation.',
+      body: 'Connect your tools and automate repetitive tasks. From document processing to smart reminders, save time and reduce errors.',
+      points: [
+        'API/integrations between apps',
+        'Smart workflows & approvals',
+        'Pragmatic AI where it actually helps',
+      ],
+    },
+    {
+      icon: 'globe',
+      title: 'Cloud Hosting & Technical Support',
+      whatsappMessage: 'Hi, I am interested in cloud hosting and technical support.',
+      body: 'Reliable hosting, domain setup, SSL, backups and ongoing support so your systems stay online and secure.',
+      points: [
+        'Domain, hosting & SSL setup',
+        'Regular backups & monitoring',
+        'Ongoing maintenance & fixes',
+      ],
+    },
+    {
+      icon: 'document',
+      title: 'Custom Business Applications',
+      whatsappMessage: 'Hi, I am interested in custom business applications.',
+      body: 'Tailor-made apps for your exact process — when off-the-shelf doesn’t fit. Web or internal tools built to solve your problem.',
+      points: [
+        'Built around your workflow',
+        'Secure and easy to use',
+        'Designed for long-term use',
       ],
     },
   ] as {
