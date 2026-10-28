@@ -20,7 +20,6 @@ export function BrandingServices() {
       title={brandingSection.title}
       intro={brandingSection.intro}
       surface="page"
-      divided
     >
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
         {brandingSection.items.map((item, index) => {

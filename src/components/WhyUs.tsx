@@ -33,8 +33,8 @@ export function WhyUs() {
       divided
     >
       <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 sm:gap-y-12">
-        {whyUs.points.map((point, index) => {
-          const Icon = reasonIcons[point.icon] ?? reasonIcons.document
+        {(whyUs as any).points?.map((point: any, index: number) => {
+          const Icon = (reasonIcons as any)[point.icon] ?? (reasonIcons as any).document
 
           return (
             <Reveal as="li" key={point.title} delay={index * 60}>

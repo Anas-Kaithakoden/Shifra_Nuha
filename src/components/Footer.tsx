@@ -87,6 +87,30 @@ export function Footer() {
                 </li>
               ))}
             </ul>
+            <div className="mt-6">
+              <h3 className="text-xs font-semibold tracking-[0.14em] text-ink-500 uppercase">
+                Digital Solutions
+              </h3>
+              <ul className="mt-3 grid gap-0.5">
+                <li>
+                  <Link to="/digital-solutions" className="inline-flex min-h-10 items-center text-sm text-ink-700 transition-colors hover:text-brand-700">
+                    All Digital Solutions
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div className="mt-6">
+              <h3 className="text-xs font-semibold tracking-[0.14em] text-ink-500 uppercase">
+                Branding & Creative
+              </h3>
+              <ul className="mt-3 grid gap-0.5">
+                <li>
+                  <Link to="/branding-creative" className="inline-flex min-h-10 items-center text-sm text-ink-700 transition-colors hover:text-brand-700">
+                    All Branding & Creative Services
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </nav>
 
           <div>

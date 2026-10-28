@@ -36,7 +36,6 @@ export function DigitalServices() {
       title={digitalSection.title}
       intro={digitalSection.intro}
       surface="plain"
-      divided
     >
       <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
         {digitalSection.items.map((item, index) => {

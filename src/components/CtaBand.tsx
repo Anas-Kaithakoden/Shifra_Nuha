@@ -1,4 +1,3 @@
-import { cta } from '../content/site'
 import { CtaPair } from './CtaButtons'
 import { Reveal } from './Reveal'
 
@@ -23,17 +22,15 @@ export function CtaBand() {
         <Reveal>
           <div className="max-w-2xl">
             <h2 className="text-2xl leading-[1.2] font-semibold tracking-tight text-balance text-ink-950 sm:text-3xl">
-              {cta.title}
+              Let&apos;s Discuss Your Business Requirements.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-pretty text-ink-600 sm:text-lg">
-              {cta.body}
+              Tell us what you need help with, and our team can guide you through the next steps.
             </p>
 
             <div className="mt-7">
               <CtaPair place="cta-band" whatsappVariant="whatsapp" callVariant="secondary" size="lg" />
             </div>
-
-            <p className="mt-5 max-w-xl text-sm leading-relaxed text-ink-500">{cta.note}</p>
           </div>
         </Reveal>
       </div>

@@ -71,7 +71,7 @@ export default function About() {
                 </p>
               </div>
               <ul className="space-y-3 lg:pt-2">
-                {aboutPage.boundaries.points.map((point) => (
+                {aboutPage.boundaries.points.map((point: string) => (
                   <li
                     key={point}
                     className="rounded-xl border border-paper-200 bg-white p-5 text-sm leading-relaxed text-ink-700"
@@ -103,7 +103,7 @@ export default function About() {
               there is nothing left to overflow.
             */}
             <dl className="mt-8 divide-y divide-paper-200 overflow-hidden rounded-xl border border-paper-200 bg-white">
-              {aboutPage.partners.rows.map((row) => (
+              {aboutPage.partners.rows.map((row: { role: string; responsibility: string }) => (
                 <div key={row.role} className="p-5 sm:flex sm:gap-8 sm:p-6">
                   <dt className="text-sm font-semibold tracking-tight text-ink-950 sm:w-56 sm:shrink-0">
                     {row.role}
@@ -126,7 +126,7 @@ export default function About() {
             </p>
 
             <ol className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-              {aboutPage.journey.steps.map((step, index) => (
+              {aboutPage.journey.steps.map((step: { title: string; body: string }, index: number) => (
                 <Reveal key={step.title} as="li" delay={index * 60} className="h-full">
                   <div className="flex h-full flex-col rounded-xl border border-paper-200 bg-white p-5">
                     <span className="font-mono text-xs font-semibold text-brand-600">

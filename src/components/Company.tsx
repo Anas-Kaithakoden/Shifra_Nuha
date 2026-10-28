@@ -26,25 +26,25 @@ import { company } from '../content/site'
  * do by accident, because the only source is this list.
  */
 export function Company() {
-  const testimonials = company.testimonials
+  const testimonials: any[] = (company as any).testimonials || []
 
   return (
     <Section
       id="about"
-      eyebrow={company.eyebrow}
-      title={company.title}
+      eyebrow={(company as any).eyebrow}
+      title={(company as any).title}
       surface="plain"
       divided
     >
       <div className="grid gap-10 lg:grid-cols-[1.45fr_1fr] lg:gap-14">
         <div>
           <p className="max-w-2xl text-base leading-relaxed text-pretty text-ink-600 sm:text-lg">
-            {company.body}
+            {(company as any).body}
           </p>
 
           {testimonials.length > 0 ? (
             <ul className="mt-10 space-y-5">
-              {testimonials.map((testimonial) => (
+              {testimonials.map((testimonial: any) => (
                 <li
                   key={testimonial.name}
                   className="rounded-xl border border-paper-200 bg-paper-50 p-6"
@@ -69,7 +69,7 @@ export function Company() {
               What you can hold us to
             </h3>
             <ul className="mt-4 space-y-3">
-              {company.points.map((point) => (
+              {(company as any).points?.map((point: string) => (
                 <li key={point} className="flex gap-3 text-sm leading-relaxed text-ink-700">
                   <IconCheck width={16} height={16} className="mt-0.5 shrink-0 text-brand-600" />
                   <span className="text-pretty">{point}</span>
@@ -83,7 +83,7 @@ export function Company() {
                 size="md"
                 variant="secondary"
                 className="w-full"
-                label={company.button}
+                label={(company as any).button}
               />
             </div>
           </div>

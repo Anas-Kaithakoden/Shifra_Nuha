@@ -71,7 +71,7 @@ export function Navbar() {
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-2 px-4 sm:gap-3 sm:px-8 lg:h-[72px] lg:px-8">
         <Logo />
 
-        <nav aria-label={ui['nav.primary']} className="hidden items-center gap-1 md:flex">
+        <nav aria-label={ui['nav.primary']} className="hidden items-center gap-1 lg:flex">
           {nav.map((item) => (
             <NavLink key={item.to} to={item.to} end={item.to === '/'} className={linkClass}>
               {item.label}
@@ -110,7 +110,7 @@ export function Navbar() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? ui['nav.closeMenu'] : ui['nav.openMenu']}
-            className="-mr-2 inline-flex size-11 items-center justify-center rounded-[8px] text-ink-800 transition-colors hover:bg-ink-100 md:hidden"
+            className="-mr-2 inline-flex size-11 items-center justify-center rounded-[8px] text-ink-800 transition-colors hover:bg-ink-100 lg:hidden"
           >
             {open ? <IconClose /> : <IconMenu />}
           </button>
@@ -121,7 +121,7 @@ export function Navbar() {
       <div
         id="mobile-nav"
         hidden={!open}
-        className="border-t border-paper-200 bg-white text-left md:hidden"
+        className="border-t border-paper-200 bg-white text-left lg:hidden"
       >
         <nav aria-label="Mobile" className="mx-auto w-full max-w-6xl px-4 py-3 sm:px-8">
           <ul className="flex flex-col">

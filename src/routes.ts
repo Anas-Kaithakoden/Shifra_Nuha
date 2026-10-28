@@ -27,6 +27,8 @@ export type Route = {
 const STATIC_ROUTES: Route[] = [
   { path: '/', indexable: true, priority: 1.0 },
   { path: '/services', indexable: true, priority: 0.9 },
+  { path: '/digital-solutions', indexable: true, priority: 0.8 },
+  { path: '/branding-creative', indexable: true, priority: 0.8 },
   { path: '/about', indexable: true, priority: 0.6 },
   { path: '/contact', indexable: true, priority: 0.8 },
   // Legal pages are reachable from every footer, but they are not landing pages

@@ -100,7 +100,7 @@ export default function Contact() {
         ------------------------------------------------------------------ */}
         <Reveal>
           <div className="grid gap-5 md:grid-cols-3">
-            {contactPage.routes
+            {((contactPage.routes as unknown) as any[])
               /*
                * Only the routes that actually have an address behind them. An
                * unconfigured route would otherwise render as a link back to this
@@ -108,9 +108,9 @@ export default function Contact() {
                * details block below carries the labelled placeholder for the
                * empty case.
                */
-              .filter((route) => routeLinks[route.icon].ready)
-              .map((route) => {
-                const link = routeLinks[route.icon]
+              .filter((route: any) => (routeLinks as any)[route.icon]?.ready)
+              .map((route: any) => {
+                const link = (routeLinks as any)[route.icon]
                 const Icon =
                   route.icon === 'whatsapp'
                     ? IconWhatsApp
@@ -171,7 +171,7 @@ export default function Contact() {
                 {ui['section.next']}
               </h2>
               <ol className="mt-8 grid gap-px overflow-hidden rounded-xl bg-paper-200 ring-1 ring-ink-300 sm:grid-cols-3">
-                {contactPage.nextSteps.map((step, index) => (
+                {((contactPage.nextSteps as unknown) as any[]).map((step: any, index: number) => (
                   <Reveal
                     key={step.number}
                     as="li"

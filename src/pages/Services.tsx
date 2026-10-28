@@ -1,128 +1,63 @@
-import { CtaPair } from '../components/CtaButtons'
-import { Reveal } from '../components/Reveal'
-import { ServiceCard } from '../components/ServiceCard'
-import { IconArrowRight } from '../components/icons'
-import { coreServices } from '../content/services'
-import { servicesPage, site } from '../content/site'
-import { ui } from '../content/ui'
-import { callLink, mailtoLink, onPhoneClick } from '../lib/contactLinks'
+import { BrandingServices } from '../components/BrandingServices'
+import { Company } from '../components/Company'
+import { CoreServices } from '../components/CoreServices'
+import { CtaBand } from '../components/CtaBand'
+import { DigitalServices } from '../components/DigitalServices'
+import { FaqSection } from '../components/FaqSection'
+import { Hero } from '../components/Hero'
+import { Process } from '../components/Process'
+import { WhyUs } from '../components/WhyUs'
+import { site } from '../content/site'
 import { organisationSchema, useDocumentMeta, useJsonLd } from '../lib/seo'
-import { PageIntro, PageShell } from './PageShell'
 
 /**
  * ---------------------------------------------------------------------------
- * /services — the hub
+ * HOME
  * ---------------------------------------------------------------------------
- * A list, not a series of sales pages. Every card links to the service's own
- * landing page, because that is where the ad lands and where the SEO entry
- * point is — a visitor who wants to know whether GST applies to them should
- * read the GST page, not a summary of it here.
+ * The order below is the argument, in sequence:
  *
- * The pricing policy sits above the grid rather than being buried at the
- * bottom. The most common question about these services is what it costs, and
- * the honest answer is "it depends, and here is what it depends on". Saying that
- * before the grid — rather than after it, where it reads as an apology — is more
- * persuasive than a figure we would have to defend in every message afterwards.
+ *   Hero → Professional services → Digital services → How We Work
+ *        → Why work with us → About → FAQ → Closing CTA
+ *
+ * Read as a visitor does: what this is, exactly what they can get done, what
+ * else there is, how the work actually runs, why they would use us rather than
+ * the next firm on the list, who we are, the questions they are still unsure
+ * about, and then the same two buttons.
+ *
+ * TIERING IS THE STRUCTURE. The professional services come first, on the
+ * document surface, because they are what the business does and what a visitor
+ * came for. The two digital services come after, on white, deliberately quieter
+ * — both are optional, and neither is needed to get a business registered.
+ * Presenting them as peers would misrepresent what the company is.
+ *
+ * THE SURFACES ALTERNATE: white, off-white, white, off-white, off-white, white,
+ * off-white, white. Three tones and a hairline between each. That is the whole
+ * of the section rhythm — no gradient, no glow, no decorative shape.
+ *
+ * There is no price anywhere on this page, and none in the structured data
+ * either. The work is quoted per engagement once the case is known, so the only
+ * thing the page states about cost is the process for getting one.
  */
-export default function ServicesPage() {
-
+export default function Home() {
   useDocumentMeta({
-    title: `Business Registration, GST, Tax & Accounting Services in Kerala | ${site.name}`,
-    description:
-      'Company and LLP registration, GST, income tax, accounting and bookkeeping, auditing, project reports and trademark and legal registration support for businesses across Kerala.',
-    path: '/services',
+    title: site.seoTitle,
+    description: site.seoDescription,
+    path: '/',
   })
 
-  useJsonLd(
-    {
-      ...organisationSchema(),
-      hasOfferCatalog: {
-        '@type': 'OfferCatalog',
-        name: servicesPage.title,
-        itemListElement: coreServices.map((service) => ({
-          '@type': 'Offer',
-          itemOffered: {
-            '@type': 'Service',
-            name: service.name,
-            description: service.summary,
-          },
-        })),
-      },
-    },
-    [],
-  )
-
-  const phone = callLink()
-  const email = mailtoLink()
+  useJsonLd(organisationSchema(), [])
 
   return (
-    <PageShell>
-      <PageIntro
-        eyebrow={servicesPage.eyebrow}
-        title={servicesPage.title}
-        intro={servicesPage.intro}
-      >
-        <div className="mt-9">
-          <CtaPair place="services-hub-hero" whatsappVariant="whatsapp" callVariant="secondary" />
-        </div>
-      </PageIntro>
-
-      <div className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8 sm:py-20">
-        {/* The cost policy, stated up front. */}
-        <Reveal>
-          <div className="rounded-xl border border-paper-200 bg-white p-6 sm:p-7">
-            <h2 className="text-base font-semibold tracking-tight text-ink-950">
-              {servicesPage.pricingPolicy.title}
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-ink-600">
-              {servicesPage.pricingPolicy.body}
-            </p>
-          </div>
-        </Reveal>
-
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {coreServices.map((service, index) => (
-            <Reveal key={service.slug} delay={index * 60} className="h-full">
-              <ServiceCard service={service} />
-            </Reveal>
-          ))}
-        </div>
-
-        {/* A second, quieter CTA, for anyone who scrolled the whole list. */}
-        <Reveal>
-          <div className="mt-12 rounded-xl border border-paper-200 bg-white p-7 sm:p-9">
-            <h2 className="text-xl font-semibold tracking-tight text-balance text-ink-950 sm:text-2xl">
-              {ui['cta.notSure']}
-            </h2>
-            <div className="mt-6">
-              <CtaPair place="services-hub" whatsappVariant="whatsapp" callVariant="secondary" />
-            </div>
-            <p className="mt-5 text-sm text-ink-500">
-              Or{' '}
-              <a
-                href={phone.href}
-                onClick={onPhoneClick('services-hub')}
-                className="inline-flex min-h-11 items-center gap-1.5 font-semibold text-ink-800 hover:text-brand-700"
-              >
-                {ui['cta.call']}
-                <IconArrowRight width={16} height={16} />
-              </a>
-              , or write to us at{' '}
-              {email.ready ? (
-                <a
-                  href={email.href}
-                  className="font-semibold break-all text-ink-800 hover:text-brand-700"
-                >
-                  {email.label}
-                </a>
-              ) : (
-                <span className="text-ink-500">{ui['placeholder.contact']}</span>
-              )}
-              .
-            </p>
-          </div>
-        </Reveal>
-      </div>
-    </PageShell>
+    <>
+      <Hero />
+      <CoreServices />
+      <DigitalServices />
+      <BrandingServices />
+      <Process />
+      <WhyUs />
+      <Company />
+      <FaqSection />
+      <CtaBand />
+    </>
   )
 }

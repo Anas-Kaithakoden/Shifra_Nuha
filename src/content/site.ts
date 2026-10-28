@@ -1,6 +1,5 @@
 import { hasEmail, hasPhone, hasWhatsapp, siteConfig, siteOrigin } from '../config/site.config'
-import type { DigitalIconKey, ReasonIconKey } from '../components/iconRegistry'
-import type { FaqItem } from './services'
+import type { DigitalIconKey } from '../components/iconRegistry'
 
 /**
  * ---------------------------------------------------------------------------
@@ -176,9 +175,11 @@ export type NavItem = { to: string; label: string }
  * more than one click away.
  */
 export const nav: NavItem[] = [
-  { to: '/services', label: 'Services' },
-  { to: '/about', label: 'About Us' },
-  { to: '/#how-it-works', label: 'How We Work' },
+  { to: '/', label: 'Home' },
+  { to: '/services', label: 'Business Solutions' },
+  { to: '/digital-solutions', label: 'Digital Solutions' },
+  { to: '/branding-creative', label: 'Branding & Creative' },
+  { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' },
 ]
 
@@ -201,10 +202,10 @@ export const nav: NavItem[] = [
  * a number we would have to defend in a message at eleven at night.
  */
 export const hero = {
-  eyebrow: 'Professional business services',
-  heading: 'Business registration, accounting and legal compliance in Kerala',
+  eyebrow: 'Business services for growth',
+  heading: 'The Right Support to Start and Build Your Business.',
   supporting:
-    'We help new and existing businesses get registered, stay compliant and keep the paperwork in order. One point of contact from the first conversation to the finished documents.',
+    'From business registration and tax compliance to digital solutions and professional branding, we help you navigate essential business needs with one point of contact.',
   /**
    * Statements about how we work rather than claims about our history, which is
    * why they are safe to make before anything has been measured.
@@ -231,10 +232,10 @@ export const hero = {
  * the difference between a catalogue and a service map.
  */
 export const coreSection = {
-  eyebrow: 'Our services',
-  title: 'Professional services for new and running businesses',
+  eyebrow: 'Business Solutions',
+  title: 'Everything You Need to Get Your Business Started.',
   intro:
-    'Eight services, and between them most of what a small business needs done to its registrations, its books and its tax. Open any one to see what it covers, what it needs from you, and where the limits are.',
+    'Get support with registration, taxation, accounting and other essential professional requirements.',
   /**
    * The single line under the grid. Partnership firm registration is a real
    * service with its own page, but it is a niche structure choice rather than
@@ -264,9 +265,9 @@ export const coreSection = {
  */
 export const digitalSection = {
   eyebrow: 'Digital Solutions',
-  title: 'Websites, software and automation',
+  title: 'Make Your Business Work Smarter.',
   intro:
-    'Optional add-ons when you need more than registrations. Our main focus is ERP, billing and inventory systems, and CRM — built to fit how your business actually runs.',
+    'Websites, custom applications and workflow automation to help businesses organize their work.',
   items: [
     {
       icon: 'website',
@@ -371,9 +372,9 @@ export const digitalSection = {
 
 export const brandingSection = {
   eyebrow: 'Branding & Creative Services',
-  title: 'Brand identity and visual communication',
+  title: 'Give Your Business a Professional Identity.',
   intro:
-    'Build a consistent, professional brand that looks great across print and digital. From logo to full brand guidelines and marketing creatives.',
+    'From your first logo to a consistent brand identity, create the visual materials your business needs.',
   items: [
     {
       icon: 'branding',
@@ -481,305 +482,184 @@ export const process = {
   steps: [
     {
       number: '01',
-      title: 'Initial Consultation',
-      body: 'We talk through what you are setting up or what has gone wrong, and what you actually need done. You get a straight answer on whether we are the right firm for it, and what it will involve, before anything is committed.',
+      title: 'Discuss your requirements.',
+      body: 'We talk through what you need help with and help identify the right service for your business.',
     },
     {
       number: '02',
-      title: 'Documentation & Filing',
-      body: 'We tell you exactly what documents are needed and why, collect them digitally, prepare the forms and agreements, and file with the relevant authority. You can see what is going out before it goes out.',
+      title: 'Review the scope, documents, deliverables, fees, and dependencies.',
+      body: 'We agree on the scope, list the documents required, explain deliverables and fees (government fees and professional fees are separate where applicable), and outline any dependencies before we start.',
     },
     {
       number: '03',
-      title: 'Ongoing Compliance & Support',
-      body: 'Returns, filings, renewals and deadlines are tracked on a calendar for you, with reminders before each one. The same person who did the registration stays on the work.',
+      title: 'Proceed with the agreed work.',
+      body: 'Work begins after the scope and terms are confirmed. We keep you updated throughout the agreed process.',
     },
   ],
+  note: 'Timelines depend on the authority and on how quickly documents are provided. We do not promise fixed processing dates.',
   /**
    * Stated plainly, because the most common thing a registration company
    * oversells is a date. Promising one we do not control is how a firm loses a
    * customer in week two.
    */
-  note: 'We do not quote a guaranteed completion time. Processing time depends on the documentation, the authority involved and its workload — we will tell you what is realistic for your case instead.',
 } as const
 
-// ============================================================================
-// HOME — WHY CHOOSE US
-// ============================================================================
+export const faqsSection = {
+  eyebrow: 'FAQs',
+  title: 'Frequently Asked Questions',
+  intro: '',
+} as const
 
-/**
- * Four points, all of them statements about how the work is organised. No
- * "Kerala's best", no client counts, no awards: none of them has been verified,
- * and a first-time business owner is exactly the person who checks.
- */
+export const faqs = [] as const
+
 export const whyUs = {
   eyebrow: 'Why work with us',
-  title: 'What you are actually getting',
-  intro: 'Four things that decide whether a filing goes smoothly or turns into a runaround.',
+  title: 'Pragmatic support, no unnecessary steps',
+  intro: 'We focus on keeping things clear, coordinated and accountable.',
   points: [
     {
-      icon: 'chat',
+      icon: 'document',
       title: 'One point of contact',
-      body: 'The person who takes your first message also sees the filing through. You are not explaining your business again to every new vendor.',
+      body: 'You deal with a single person who keeps track of your requirements and coordinates the rest.',
     },
     {
-      icon: 'document',
-      title: 'Scope agreed in writing',
-      body: 'What we will do, what it costs and which parts involve an external professional are agreed before any work begins.',
+      icon: 'partner',
+      title: 'Right people for the work',
+      body: 'Regulated work goes to qualified professionals; we tell you in advance when that is the case.',
     },
     {
       icon: 'shield',
-      title: 'Qualified professionals on regulated work',
-      body: 'Accounting, tax, audit, incorporation and IP work is carried out or supervised by the appropriate chartered accountant, company secretary or practitioner.',
+      title: 'Scope agreed before we start',
+      body: 'We list documents, deliverables, fees and dependencies before work begins.',
     },
     {
-      icon: 'steps',
-      title: 'Deadlines tracked, not remembered',
-      body: 'Returns, renewals and annual filings go on a calendar with a reminder ahead of each one, so compliance does not depend on someone remembering.',
+      icon: 'clock',
+      title: 'Straight answers',
+      body: 'If something is not our work, we say so plainly and point you in the right direction.',
     },
   ],
 } as const
 
-// ============================================================================
-// HOME — COMPANY CONTEXT
-// ============================================================================
-
-/**
- * The "who we are" block. Deliberately free of statistics: the number of
- * businesses assisted, customer testimonials, review counts and professional
- * credentials all belong here when they are real, and none of them is real yet.
- * Rather than pad the section with placeholders a visitor would read as
- * failures, it makes the argument the business can actually make — that there
- * is a real person on the other end of the WhatsApp message.
- *
- * When a testimonial is collected, it belongs in `testimonials` below and in
- * the render inside `components/Company.tsx`. Inventing one instead is the
- * fastest way to lose a first-time business owner's trust.
- */
 export const company = {
-  eyebrow: 'About us',
-  title: 'A small firm that tells you what it will and will not do',
-  body: 'Shifra Nuha Technologies helps businesses across Kerala get properly registered, stay compliant, and keep the professional work in one place rather than split across a dozen vendors. Registration is where a relationship usually starts. It is not the whole of it.',
+  eyebrow: 'About',
+  title: `About ${siteConfig.COMPANY_NAME}`,
+  body: 'We help businesses across Kerala with registration, tax, accounting and compliance, and coordinate qualified partners where required. One point of contact throughout.',
   points: [
-    'You deal with the same person from the first message to the finished documents.',
-    'We tell you what the documents are before you start gathering them, not after.',
-    'If what you need is not something we handle, we will tell you that instead of selling it.',
-    'We will tell you in advance which part of the work is being done by an external professional.',
+    'One point of contact throughout',
+    'Documents named before you gather them',
+    'Straight answer when it is not our work',
+    'Advance notice of external professionals involved',
   ],
-  /**
-   * Deliberately empty. Populate with real, attributable, verifiable quotes only
-   * — name, business, and the words they actually said.
-   */
-  testimonials: [] as { quote: string; name: string; business: string }[],
-  button: 'Talk to us on WhatsApp',
+  testimonials: [],
+  button: 'Talk on WhatsApp',
 } as const
-
-// ============================================================================
-// HOME — FAQ
-// ============================================================================
-
-export const faqsSection = {
-  eyebrow: 'FAQ',
-  title: 'Questions we are asked most',
-  intro: 'Answered honestly. Where the honest answer is "it depends", that is what it says.',
-} as const
-
-/**
- * The homepage FAQ. The first two are the questions a visitor always opens an
- * FAQ to check — what it costs, and how long it takes — and both get the answer
- * that is actually true rather than the one that closes a sale.
- */
-export const faqs: FaqItem[] = [
-  {
-    question: 'How much do your services cost?',
-    answer:
-      'It depends on your situation, so we do not publish a figure that would only be right for one kind of case. The cost depends on the work involved, the number of people involved, the state, the transaction volume, and the government fees that apply at the time. Tell us what you need and we will prepare a written quotation for it, with government fees shown separately from our professional fee.',
-  },
-  {
-    question: 'How long does registration take?',
-    answer:
-      'We do not quote a guaranteed timeline, because we do not control it. Processing time depends on how complete and correct the documentation is, on the authority handling the filing, and on its workload at the time. What we will do is tell you what is realistic for your specific case and keep you updated rather than going quiet.',
-  },
-  {
-    question: 'What documents are required?',
-    answer:
-      'The exact list depends on the applicant and the business structure. For a company we normally need, for each director, PAN and Aadhaar (or passport), date of birth, a passport-size photograph, a signature, proof of current address, an email address and a mobile number — plus proof of the registered office address, a short description of the business activity, and two or three preferred names in order of preference. We send you the exact list for your registration before you start gathering anything.',
-  },
-  {
-    question: 'Do I need to visit an office?',
-    answer:
-      'In most cases, no. We collect your documents digitally over WhatsApp or email, prepare the application and handle the filing, and you receive the registration documents the same way. If something in your case does need to be signed or verified in person, we will tell you exactly what and why before you pay anything.',
-  },
-  {
-    question: 'Who actually does the work?',
-    answer:
-      'Some business services are regulated and must be performed or supervised by qualified professionals. Where that applies, the appropriate professional carries out the work — a chartered accountant for accounting, taxation, GST and audit-related work; a company secretary for incorporation and corporate compliance; a lawyer for agreements and contracts; and a trademark or IP professional for IP work. We coordinate the engagement and tell you in advance which part involves an external partner.',
-  },
-  {
-    question: 'Can you help after registration?',
-    answer:
-      'Yes, and that is usually where the bulk of the work is. GST registration and return filing, accounting, bookkeeping, income tax support, auditing, project reports and trademark work are all services we handle, and the digital work — website and business automation — is available too. The same contact continues, so you are not explaining your business again to each new vendor.',
-  },
-]
-
-// ============================================================================
-// HOME — CLOSING CTA
-// ============================================================================
-
-export const cta = {
-  title: 'Tell us what you need done',
-  body: 'A short message is enough to start. We will tell you what applies, what it involves, and what it costs, before you commit to anything.',
-  /**
-   * The line under the buttons. It exists to remove the last objection to
-   * sending a message: that this is the point at which we start selling.
-   */
-  note: 'There is no obligation to go ahead, and we will not put a figure on it until we have understood what the work actually involves.',
-} as const
-
-// ============================================================================
-// /services
-// ============================================================================
-
-export const servicesPage = {
-  eyebrow: 'Services',
-  title: 'Business registration and professional services',
-  intro:
-    'Registration is where we start. The services below cover starting a business and keeping it properly run — open any one to see what it covers, what documents it needs, and what we will ask you for before we start.',
-  /** Rendered above the grid, so the cost policy is visible up front. */
-  pricingPolicy: {
-    title: 'How we quote',
-    body: 'There is no published price list, and we would rather explain why than look as though we have one. Professional fees depend on the scope of the work, the number of people involved, the state, the transaction volume and how much reconciliation is included. Government fees — filing fees, stamp duty and statutory charges — are always itemised separately from our own fee, never folded into a single figure. We prepare a written quotation once we understand the case, and that is the figure you are held to.',
-  },
-} as const
-
-// ============================================================================
-// /about
-// ============================================================================
 
 export const aboutPage = {
-  eyebrow: 'About us',
-  heading: 'A business partner, not just a service provider.',
-  intro:
-    'Shifra Nuha Technologies helps new and existing businesses across Kerala get properly registered, stay compliant, and keep the professional work in one place. Registration is where we start. It is not the whole relationship.',
+  eyebrow: 'About',
+  heading: siteConfig.COMPANY_NAME,
+  intro: 'Business services with clarity, coordination and accountability.',
   positioning: {
-    title: 'How we describe ourselves',
-    primary: 'We help businesses start properly, and stay that way.',
-    secondary: 'Registration, tax, accounting and professional support — through one point of contact.',
-    body: 'We are deliberately not positioned as only a web development agency, an accounting firm or a marketing agency. A business rarely needs one of those things. It usually needs the right combination, in the right order, coordinated properly — and that is a different job from selling any single one of them.',
+    title: 'Pragmatic support for businesses',
+    primary: 'Registration, tax and compliance, handled properly.',
+    secondary: 'With digital solutions and branding when you need them.',
+    body: 'We focus on getting the essentials right the first time, keeping you informed, and coordinating qualified partners where the work requires them.',
   },
   boundaries: {
-    title: 'How we work with professional partners',
-    body: 'Some business services are regulated and must be performed or supervised by qualified professionals. Where that applies, we coordinate the work and the appropriate professional carries it out — a chartered accountant for accounting, taxation, GST and audit-related work; a company secretary for incorporation and corporate compliance; a lawyer for agreements and contracts; and a trademark or IP professional for IP work.',
+    title: 'How we work',
+    body: 'We keep the process clear about what we do, what partners do, and what you need to provide.',
     points: [
-      'You deal with one point of contact for the whole project.',
-      'Regulated work is performed or supervised by the appropriate qualified professional.',
-      'We tell you in advance which part of the work involves an external partner.',
+      'Scope and responsibilities agreed upfront',
+      'Documents listed before collection',
+      'External professionals brought in only when required',
+      'Updates throughout the agreed process',
     ],
   },
   partners: {
     title: 'Who does what',
-    intro: 'We work with a small network of trusted specialists rather than a large in-house team, so you get the right expertise without a large fixed cost. You will always be told which work is being handled by an external partner.',
+    intro: 'A simple split to avoid confusion.',
     rows: [
-      { role: 'Chartered Accountant', responsibility: 'Accounting, taxation, GST, audit-related work and financial statements' },
-      { role: 'Company Secretary', responsibility: 'Incorporation and corporate compliance' },
-      { role: 'Lawyer', responsibility: 'Agreements, contracts and other legal matters' },
-      { role: 'Trademark / IP professional', responsibility: 'Trademark search, filing and representation' },
-      { role: 'Design and creative', responsibility: 'Branding, logo and creative work' },
-      { role: 'Marketing', responsibility: 'Advertising, lead generation and SEO' },
-      { role: 'Technical team', responsibility: 'Websites, software, automation and integrations' },
+      { role: 'Shifra Nuha Technologies', responsibility: 'Coordination, advice, filings where authorised, and your single point of contact.' },
+      { role: 'Chartered Accountant', responsibility: 'Statutory accounts, tax matters and certifications as applicable.' },
+      { role: 'Company Secretary', responsibility: 'Corporate filings and secretarial matters as applicable.' },
     ],
   },
   journey: {
-    title: 'How an engagement usually grows',
-    intro: 'Most businesses do not need everything at once. The work usually moves in this order, and each stage feeds the next. We do not push the later stages onto anyone.',
+    title: 'How an engagement runs',
+    intro: 'A straightforward path from first message to completion of agreed work.',
     steps: [
-      { title: 'Register', body: 'Company, LLP or partnership, plus GST' },
-      { title: 'Comply', body: 'Accounting, bookkeeping, income tax, audit' },
-      { title: 'Build', body: 'Branding, logo, website, email, WhatsApp Business' },
-      { title: 'Grow', body: 'Facebook and Instagram ads, Google Ads, lead generation' },
-      { title: 'Automate', body: 'CRM, WhatsApp automation, and workflow automation' },
+      { title: 'Discuss', body: 'Talk through your requirements.' },
+      { title: 'Scope', body: 'Agree scope, documents, deliverables and fees.' },
+      { title: 'Prepare', body: 'Collect documents and prepare filings.' },
+      { title: 'File', body: 'Submit to the relevant authority with coordination.' },
+      { title: 'Follow up', body: 'Track and keep you updated until agreed deliverables are done.' },
     ],
   },
   closing: {
-    title: 'Start with a conversation, not a commitment.',
-    body: 'Tell us what you are dealing with. If it is not something we handle, we will say so rather than take the work and pass it on.',
+    title: 'Ready to get started?',
+    body: 'Message us on WhatsApp with a short description of what you need.',
   },
 } as const
 
-// ============================================================================
-// /contact
-// ============================================================================
-
-/**
- * ---------------------------------------------------------------------------
- * /contact
- * ---------------------------------------------------------------------------
- * WHATSAPP-FIRST, NO FORM. The page answers one question — how do I get hold of
- * this business — and it answers it three times over: WhatsApp first, phone
- * second, email third for whoever prefers it. There is no form, so there is no
- * set of fields to read before the first message, and nothing for a visitor to
- * get wrong.
- *
- * The three route cards are descriptive rather than three more big buttons: the
- * call to action is the pair of buttons in the intro, and the cards explain what
- * each route is actually for so a visitor can pick the one that suits them.
- */
 export const contactPage = {
   eyebrow: 'Contact',
-  heading: 'Have questions about your business?',
-  intro:
-    'We are happy to help with business registration and our other services. WhatsApp is the fastest way to reach us — it is a short message rather than a form, and we read every one.',
+  heading: 'Get in touch',
+  intro: 'WhatsApp is fastest. Call or email if you prefer.',
   routes: [
     {
       icon: 'whatsapp',
       title: 'WhatsApp',
-      lead: 'Fastest — usually the quickest reply',
-      body: 'Opens a chat with a short message already written, so you can add a few lines about your business and send it. Best if you are on your phone and want an answer in the same conversation.',
-      action: 'Message us on WhatsApp',
+      lead: 'Fastest response',
+      body: 'Start a conversation with details of what you need. We will reply during working hours.',
+      action: 'Message on WhatsApp',
     },
     {
       icon: 'phone',
       title: 'Call',
-      lead: 'Best if you want to talk it through',
-      body: 'Reaches us directly and works well if you already know what you need and would rather settle it on a call than in writing.',
-      action: 'Call us now',
+      lead: 'Talk it through',
+      body: 'Speak directly if you want to clarify something quickly.',
+      action: 'Call now',
     },
     {
       icon: 'email',
       title: 'Email',
-      lead: 'For anything you want in writing',
-      body: 'A business address you can use for documents, detailed questions, or anything that is easier to explain than to type into a chat. We read email too.',
-      action: 'Write to us',
+      lead: 'Share documents',
+      body: 'Send documents or a detailed query by email.',
+      action: 'Send an email',
     },
   ],
-  directTitle: 'Contact details',
+  directTitle: 'Direct details',
   nextSteps: [
-    {
-      number: '01',
-      title: 'You message us',
-      body: 'Send a few lines on WhatsApp, call, or write by email. A short description of your business is enough to start.',
-    },
-    {
-      number: '02',
-      title: 'We review and respond',
-      body: 'We understand the requirement, check what is actually needed, and reply with a suggested way forward.',
-    },
-    {
-      number: '03',
-      title: 'We agree the scope',
-      body: 'Scope, cost and who will be involved are agreed before any work begins.',
-    },
+    { number: '01', title: 'Message us', body: 'Tell us what you need and where you are based.' },
+    { number: '02', title: 'Get a clear scope', body: 'We will list documents, fees and next steps.' },
+    { number: '03', title: 'Proceed', body: 'Start once scope and terms are agreed.' },
   ],
 } as const
 
-// ============================================================================
-// FOOTER / UTILITY
-// ============================================================================
+export const servicesPage = {
+  eyebrow: 'Business Solutions',
+  heading: 'Our Services',
+  intro: 'Business registration, tax, accounting and compliance support across Kerala.',
+} as const
+
+export const notFound = {
+  eyebrow: '404',
+  heading: 'Page not found',
+  body: 'The page you are looking for does not exist or has been moved.',
+  ctaLabel: 'Back to home',
+  ctaTo: '/',
+} as const
+
+export const cta = {
+  title: 'Ready to get started?',
+  body: 'Message us on WhatsApp with your requirements.',
+  whatsappLabel: 'Message on WhatsApp',
+  callLabel: 'Call us',
+} as const
 
 export const footer = {
   blurb:
-    'Business registration, accounting, tax and compliance support for new and existing businesses across Kerala.',
-  servicesTitle: 'Services',
+    'Business registration, accounting, tax and compliance support for new and existing businesses across Kerala. Complementary digital solutions and professional branding services.',
+  servicesTitle: 'Business Solutions',
   contactTitle: 'Contact',
   legalTitle: 'Legal',
   legal: [
@@ -788,12 +668,3 @@ export const footer = {
     { label: 'Disclaimer', to: '/disclaimer' },
   ],
 } as const
-
-export const notFound = {
-  heading: 'Page not found',
-  body: 'The page you are looking for does not exist or has moved. Try one of the services, or get in touch and we will point you to the right place.',
-  button: 'Go to the homepage',
-} as const
-
-// Re-exported so the icon registries stay the single source of icon keys.
-export type { DigitalIconKey, ReasonIconKey }

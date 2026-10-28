@@ -23,18 +23,19 @@ import { Section } from './Section'
  * is a wall, not an FAQ.
  */
 export function FaqSection() {
-  useJsonLd(faqSchema(faqs), [faqs.length])
+  const items: any[] = ((faqs as unknown) as any[]) || []
+  useJsonLd(faqSchema(items), [items.length])
 
   return (
     <Section
       id="faq"
-      eyebrow={faqsSection.eyebrow}
-      title={faqsSection.title}
-      intro={faqsSection.intro}
+      eyebrow={(faqsSection as any).eyebrow}
+      title={(faqsSection as any).title}
+      intro={(faqsSection as any).intro}
       surface="page"
       divided
     >
-      <Faq items={faqs} />
+      <Faq items={items} />
     </Section>
   )
 }

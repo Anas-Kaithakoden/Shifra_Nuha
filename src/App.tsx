@@ -9,7 +9,9 @@ import { serviceBySlug } from './content/services'
 import { ui } from './content/ui'
 import { track } from './lib/tracking'
 import About from './pages/About'
+import BrandingCreative from './pages/BrandingCreative'
 import Contact from './pages/Contact'
+import DigitalSolutions from './pages/DigitalSolutions'
 import Home from './pages/Home'
 import { Legal } from './pages/Legal'
 import NotFound from './pages/NotFound'
@@ -71,6 +73,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/services" element={<ServicesPage />} />
+          <Route path="/digital-solutions" element={<DigitalSolutions />} />
+          <Route path="/branding-creative" element={<BrandingCreative />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           {Object.values(serviceBySlug).map((service) => (

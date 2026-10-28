@@ -1,61 +1,63 @@
-import { Link } from 'react-router-dom'
-import { ButtonLink } from '../components/Button'
-import { coreServices } from '../content/services'
-import { notFound, site } from '../content/site'
-import { ui } from '../content/ui'
-import { useDocumentMeta } from '../lib/seo'
-import { IconArrowRight } from '../components/icons'
+import { BrandingServices } from '../components/BrandingServices'
+import { Company } from '../components/Company'
+import { CoreServices } from '../components/CoreServices'
+import { CtaBand } from '../components/CtaBand'
+import { DigitalServices } from '../components/DigitalServices'
+import { FaqSection } from '../components/FaqSection'
+import { Hero } from '../components/Hero'
+import { Process } from '../components/Process'
+import { WhyUs } from '../components/WhyUs'
+import { site } from '../content/site'
+import { organisationSchema, useDocumentMeta, useJsonLd } from '../lib/seo'
 
 /**
- * The 404. Kept out of the index, and — more usefully — used as a way back into
- * the nine service pages, because a mistyped or stale URL is very often someone
- * looking for the thing they came here for.
+ * ---------------------------------------------------------------------------
+ * HOME
+ * ---------------------------------------------------------------------------
+ * The order below is the argument, in sequence:
+ *
+ *   Hero → Professional services → Digital services → How We Work
+ *        → Why work with us → About → FAQ → Closing CTA
+ *
+ * Read as a visitor does: what this is, exactly what they can get done, what
+ * else there is, how the work actually runs, why they would use us rather than
+ * the next firm on the list, who we are, the questions they are still unsure
+ * about, and then the same two buttons.
+ *
+ * TIERING IS THE STRUCTURE. The professional services come first, on the
+ * document surface, because they are what the business does and what a visitor
+ * came for. The two digital services come after, on white, deliberately quieter
+ * — both are optional, and neither is needed to get a business registered.
+ * Presenting them as peers would misrepresent what the company is.
+ *
+ * THE SURFACES ALTERNATE: white, off-white, white, off-white, off-white, white,
+ * off-white, white. Three tones and a hairline between each. That is the whole
+ * of the section rhythm — no gradient, no glow, no decorative shape.
+ *
+ * There is no price anywhere on this page, and none in the structured data
+ * either. The work is quoted per engagement once the case is known, so the only
+ * thing the page states about cost is the process for getting one.
  */
-export default function NotFound() {
-
+export default function Home() {
   useDocumentMeta({
-    title: `Page not found — ${site.name}`,
-    description: 'The page you are looking for does not exist or has moved.',
-    path: '/404',
-    noindex: true,
+    title: site.seoTitle,
+    description: site.seoDescription,
+    path: '/',
   })
 
-  return (
-    <section className="bg-paper-100">
-      <div className="mx-auto min-h-[60vh] w-full max-w-6xl px-5 py-20 sm:px-8 sm:py-24">
-        <p className="font-mono text-sm font-semibold text-brand-600">404</p>
-        <h1 className="mt-4 text-3xl font-semibold tracking-tight text-balance text-ink-950 sm:text-4xl">
-          {notFound.heading}
-        </h1>
-        <p className="mt-4 max-w-xl text-base leading-relaxed text-pretty text-ink-600">
-          {notFound.body}
-        </p>
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <ButtonLink to="/">{notFound.button}</ButtonLink>
-          <ButtonLink to="/services" variant="secondary">
-            {ui['cta.viewServices']}
-          </ButtonLink>
-        </div>
+  useJsonLd(organisationSchema(), [])
 
-        <nav aria-label={ui['nav.servicesList']} className="mt-12 border-t border-paper-200 pt-8">
-          <h2 className="text-xs font-semibold tracking-[0.18em] text-ink-500 uppercase">
-            {ui['nav.servicesList']}
-          </h2>
-          <ul className="mt-4 grid gap-0.5 sm:grid-cols-2 lg:grid-cols-3">
-            {coreServices.map((service) => (
-              <li key={service.slug}>
-                <Link
-                  to={service.path}
-                  className="inline-flex min-h-11 items-center gap-1.5 text-sm text-ink-700 transition-colors hover:text-brand-700"
-                >
-                  {service.name}
-                  <IconArrowRight width={14} height={14} className="text-ink-400" />
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
-    </section>
+  return (
+    <>
+      <Hero />
+      <CoreServices />
+      <DigitalServices />
+      <BrandingServices />
+      <Process />
+      <WhyUs />
+      <Company />
+      <FaqSection />
+      <CtaBand />
+    </>
   )
 }
