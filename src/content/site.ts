@@ -52,13 +52,13 @@ export const site = {
    * must never disagree, and the copy in `index.html` is the pre-JavaScript
    * version of the same value.
    */
-  seoTitle: `Business Registration, Accounting & Compliance in Kerala | ${siteConfig.COMPANY_NAME}`,
+  seoTitle: `Business Registration & Digital Solutions in Kerala | ${siteConfig.COMPANY_NAME}`,
   /**
    * The same for the meta description. No price and no promise of a timeline:
    * a search snippet that quotes either is a commitment the site cannot keep.
    */
   seoDescription:
-    'LLP and company registration, GST, income tax, accounting, auditing, project reports and trademark support for businesses across Kerala. Talk to us on WhatsApp.',
+    'Business registration, tax and compliance, websites and branding for businesses across Kerala. One partner from idea to launch. Talk to us on WhatsApp.',
   description:
     'Business registration, accounting, tax and compliance support for new and existing businesses across Kerala — LLP and company registration, GST, income tax, bookkeeping, auditing, project reports and trademark.',
   /**
@@ -175,7 +175,6 @@ export type NavItem = { to: string; label: string }
  * more than one click away.
  */
 export const nav: NavItem[] = [
-  { to: '/', label: 'Home' },
   { to: '/services', label: 'Business Solutions' },
   { to: '/digital-solutions', label: 'Digital Solutions' },
   { to: '/branding-creative', label: 'Branding & Creative' },
@@ -202,20 +201,303 @@ export const nav: NavItem[] = [
  * a number we would have to defend in a message at eleven at night.
  */
 export const hero = {
-  eyebrow: 'Business services for growth',
-  heading: 'The Right Support to Start and Build Your Business.',
+  eyebrow: 'Business Solutions & Digital Services',
+  /** Rendered as three display lines so the headline can reveal line by line. */
+  headingTop: 'Every great business',
+  headingBottom: 'starts',
+  headingAccent: 'somewhere.',
   supporting:
-    'From business registration and tax compliance to digital solutions and professional branding, we help you navigate essential business needs with one point of contact.',
+    'From business registration and compliance to branding and digital solutions, we help you build what comes next.',
+  primaryCta: "Let's Talk",
+  secondaryCta: 'Explore What We Do',
+  /**
+   * The four cards in the hero stack. Each one is a piece of the same business,
+   * not a dashboard widget: the same client file moving from paperwork to a
+   * working digital presence.
+   */
+  cards: [
+    {
+      index: '01',
+      title: 'Business Registration',
+      status: 'Completed',
+      note: 'Entity and documents',
+    },
+    {
+      index: '02',
+      title: 'GST Registration',
+      status: 'Completed',
+      note: 'Tax registration',
+    },
+    {
+      index: '03',
+      title: 'Website Development',
+      status: 'In Progress',
+      note: 'Design and build',
+    },
+    {
+      index: '04',
+      title: 'Brand Identity',
+      status: 'Ready to Build',
+      note: 'Identity and collateral',
+    },
+  ],
   /**
    * Statements about how we work rather than claims about our history, which is
    * why they are safe to make before anything has been measured.
    */
-  points: [
-    'One point of contact throughout',
-    'Scope and cost agreed before we start',
-    'Qualified professionals carry out regulated work',
-  ],
+  points: ['One point of contact', 'Scope agreed before we start', 'Regulated work handled properly'],
 } as const
+
+// ============================================================================
+// HOME — IDEA TO LAUNCH JOURNEY
+// ============================================================================
+
+export type JourneyService = { label: string; to?: string }
+
+export type JourneyStage = {
+  id: string
+  number: string
+  label: string
+  headline: string
+  description: string
+  services: JourneyService[]
+  ctaLabel: string
+  whatsappMessage: string
+}
+
+export const journeySection = {
+  eyebrow: 'The journey',
+  title: 'From idea to launch, without losing the thread.',
+  intro:
+    'A business is not one decision. It is a sequence of them — each one built on the last. Follow the four stages we handle with you.',
+} as const
+
+export const journeyStages: JourneyStage[] = [
+  {
+    id: 'register',
+    number: '01',
+    label: 'Register',
+    headline: 'Start with the right foundation.',
+    description:
+      'Turn your business idea into a legally established business with the right registration and documentation.',
+    services: [
+      { label: 'LLP Registration', to: '/llp-registration' },
+      { label: 'Private Limited Company Registration', to: '/company-registration' },
+      { label: 'Proprietorship Registration' },
+    ],
+    ctaLabel: 'Talk to us about registration',
+    whatsappMessage:
+      "Hi, I'm planning to start a business and would like to know more about your registration services.",
+  },
+  {
+    id: 'comply',
+    number: '02',
+    label: 'Comply',
+    headline: 'Stay compliant. Stay focused.',
+    description:
+      'Keep your business obligations organized with reliable accounting, taxation and compliance support.',
+    services: [
+      { label: 'GST Registration', to: '/gst-services' },
+      { label: 'GST Filing', to: '/gst-services' },
+      { label: 'Income Tax Filing', to: '/income-tax' },
+      { label: 'Accounting and Bookkeeping', to: '/accounting-bookkeeping' },
+      { label: 'Auditing and Business Documentation', to: '/auditing' },
+    ],
+    ctaLabel: 'Talk to us about compliance',
+    whatsappMessage:
+      "Hi, I'd like to discuss GST, income tax filing and ongoing compliance support for my business.",
+  },
+  {
+    id: 'go-digital',
+    number: '03',
+    label: 'Go Digital',
+    headline: 'Bring your business online.',
+    description:
+      'Build a professional digital presence and streamline your operations with technology.',
+    services: [
+      { label: 'Website Design and Development', to: '/digital-solutions' },
+      { label: 'ERP and Business Management Software', to: '/digital-solutions' },
+      { label: 'Billing and Inventory Systems', to: '/digital-solutions' },
+      { label: 'CRM and Lead Management', to: '/digital-solutions' },
+      { label: 'WhatsApp Automation and Chatbots', to: '/digital-solutions' },
+      { label: 'AI Solutions and Workflow Automation', to: '/digital-solutions' },
+    ],
+    ctaLabel: 'Talk to us about digital solutions',
+    whatsappMessage:
+      "Hi, I'm interested in a professional website and digital solutions for my business. I'd like to discuss the requirements and pricing.",
+  },
+  {
+    id: 'brand',
+    number: '04',
+    label: 'Brand',
+    headline: 'Make your business recognizable.',
+    description:
+      'Build a consistent identity that communicates professionalism and earns trust.',
+    services: [
+      { label: 'Logo Design', to: '/branding-creative' },
+      { label: 'Brand Identity and Guidelines', to: '/branding-creative' },
+      { label: 'Business Card and Letterhead Design', to: '/branding-creative' },
+      { label: 'Company Profiles and Brochures', to: '/branding-creative' },
+      { label: 'Product Catalogues and Promotional Creatives', to: '/branding-creative' },
+    ],
+    ctaLabel: 'Talk to us about branding',
+    whatsappMessage:
+      "Hi, I'm interested in branding for my business. I'd like to discuss logo, identity and design requirements.",
+  },
+]
+
+// ============================================================================
+// HOME — SERVICE SELECTOR
+// ============================================================================
+
+export type SelectorOption = {
+  id: string
+  number: string
+  label: string
+  short: string
+  description: string
+  services: JourneyService[]
+  ctaLabel: string
+  whatsappMessage: string
+}
+
+export const selectorSection = {
+  eyebrow: 'Find your starting point',
+  title: 'What are you looking to build?',
+  intro:
+    'Choose where you are now. We will show you what usually comes next — and you can change your mind when you message us.',
+} as const
+
+export const selectorOptions: SelectorOption[] = [
+  {
+    id: 'starting',
+    number: '01',
+    label: 'Starting a Business',
+    short: 'The first steps',
+    description:
+      'Choose a structure, register the entity and set up the tax registrations you need before you start trading.',
+    services: [
+      { label: 'LLP Registration', to: '/llp-registration' },
+      { label: 'Private Limited Registration', to: '/company-registration' },
+      { label: 'GST Registration', to: '/gst-services' },
+      { label: 'Accounting Support', to: '/accounting-bookkeeping' },
+    ],
+    ctaLabel: 'Start the conversation',
+    whatsappMessage:
+      "Hi, I'm planning to start a business and would like to know more about your registration services.",
+  },
+  {
+    id: 'running',
+    number: '02',
+    label: 'Already Running a Business',
+    short: 'Keep it in order',
+    description:
+      'Keep filings, books and documentation in order so you can spend your attention on the business itself.',
+    services: [
+      { label: 'GST Filing', to: '/gst-services' },
+      { label: 'Income Tax Filing', to: '/income-tax' },
+      { label: 'Accounting and Bookkeeping', to: '/accounting-bookkeeping' },
+      { label: 'Auditing', to: '/auditing' },
+    ],
+    ctaLabel: 'Review my compliance',
+    whatsappMessage:
+      "Hi, I'm running an existing business and would like to discuss accounting, tax filing and compliance support.",
+  },
+  {
+    id: 'website',
+    number: '03',
+    label: 'Need a Website',
+    short: 'Build the presence',
+    description:
+      'A clear, fast website that explains what you do and makes it easy for the right customer to contact you.',
+    services: [
+      { label: 'Website Design and Development', to: '/digital-solutions' },
+      { label: 'Billing and Inventory Systems', to: '/digital-solutions' },
+      { label: 'CRM and Lead Management', to: '/digital-solutions' },
+      { label: 'WhatsApp Automation', to: '/digital-solutions' },
+    ],
+    ctaLabel: 'Discuss my website',
+    whatsappMessage:
+      "Hi, I'm interested in developing a professional website for my business. I'd like to discuss the requirements and pricing.",
+  },
+  {
+    id: 'branding',
+    number: '04',
+    label: 'Need Branding',
+    short: 'Become recognizable',
+    description:
+      'Build a consistent visual identity that looks the same on a card, a brochure, a shopfront and a screen.',
+    services: [
+      { label: 'Logo Design', to: '/branding-creative' },
+      { label: 'Brand Identity and Guidelines', to: '/branding-creative' },
+      { label: 'Business Card and Letterhead', to: '/branding-creative' },
+      { label: 'Company Profiles and Brochures', to: '/branding-creative' },
+    ],
+    ctaLabel: 'Discuss my brand',
+    whatsappMessage:
+      "Hi, I'm interested in building a professional brand identity for my business. I'd like to discuss logo, stationery and brand guidelines.",
+  },
+]
+
+// ============================================================================
+// HOME — BUSINESS STRUCTURE COMPARISON
+// ============================================================================
+
+export type StructureOption = {
+  id: string
+  label: string
+  summary: string
+  legal: string
+  ownership: string
+  liability: string
+  suitable: string
+  to: string
+}
+
+export const structureSection = {
+  eyebrow: 'Business structures',
+  title: 'Choosing the right business structure?',
+  intro:
+    'The right structure follows from how you will own the business, how much liability you are prepared to carry, and what you plan to do next.',
+  note:
+    'This is general information, not legal or tax advice. Requirements and suitability depend on your circumstances — talk to us before deciding.',
+  ctaLabel: 'Talk about the right structure',
+  whatsappMessage:
+    'Hi, I would like guidance on choosing between a proprietorship, LLP and private limited company.',
+} as const
+
+export const structureOptions: StructureOption[] = [
+  {
+    id: 'proprietorship',
+    label: 'Proprietorship',
+    summary: 'The simplest starting point, with no separation between you and the business.',
+    legal: 'Not a separate legal entity. The owner and the business are treated as the same person.',
+    ownership: 'One owner.',
+    liability: 'Unlimited. Personal assets are not separated from business obligations.',
+    suitable: 'Small, local businesses testing an idea, with limited risk and no outside investors.',
+    to: '/services',
+  },
+  {
+    id: 'llp',
+    label: 'LLP',
+    summary: 'A separate entity for two or more owners who want a lighter compliance load.',
+    legal: 'A separate legal entity formed under the Limited Liability Partnership Act, 2008.',
+    ownership: 'Two or more partners, with designated partners responsible for management.',
+    liability: 'Generally limited to each partner’s agreed contribution, subject to the LLP agreement and the law.',
+    suitable: 'Professional firms and small businesses with multiple owners who want limited liability.',
+    to: '/llp-registration',
+  },
+  {
+    id: 'private-limited',
+    label: 'Private Limited Company',
+    summary: 'A formal company structure suited to shared ownership and outside investment.',
+    legal: 'A separate legal entity incorporated with the Registrar of Companies under the Companies Act, 2013.',
+    ownership: 'Shareholders own the company; directors manage it.',
+    liability: 'Generally limited to the shares held, subject to the Companies Act and the company’s constitution.',
+    suitable: 'Businesses with co-founders, investment plans, or customers and vendors who expect a registered company.',
+    to: '/company-registration',
+  },
+]
 
 // ============================================================================
 // HOME — TIER 1: PROFESSIONAL SERVICES
@@ -239,7 +521,7 @@ export const coreSection = {
   /**
    * The single line under the grid. Partnership firm registration is a real
    * service with its own page, but it is a niche structure choice rather than
-   * one of the eight things most businesses need, so it is linked rather than
+   * one of the nine things most businesses need, so it is linked rather than
    * given a card of its own.
    */
   footnoteLead: 'Also available:',
@@ -254,14 +536,13 @@ export const coreSection = {
 // ============================================================================
 
 /**
- * Two things, and they are genuinely secondary. The professional work is what
- * the business is built on; this is the digital layer a business chooses once it
- * exists.
+ * The digital layer, and it is genuinely secondary. The professional work is
+ * what the business is built on; this is what a business adds once it exists.
  *
  * It sits on the quiet surface, after the primary work has been established,
- * as two plain entries rather than a card grid — a grid of two would be a
- * mistake, and a grid of eight would be the generic startup landing page the
- * design is meant to avoid.
+ * as an evenly divided grid of short entries rather than oversized feature
+ * tiles. Each entry carries only what it needs: what the service is, three
+ * concrete inclusions, and a prefilled WhatsApp message.
  */
 export const digitalSection = {
   eyebrow: 'Digital Solutions',
@@ -475,28 +756,33 @@ export const brandingSection = {
  * week.
  */
 export const process = {
-  eyebrow: 'How we work',
-  title: 'Three steps, the same for almost everyone',
+  eyebrow: 'Our process',
+  title: 'Clear process. No surprises.',
   intro:
-    'What changes from one client to the next is the content of each step, because it depends on your business and on the authority involved. The shape of it does not.',
+    'Four steps, the same shape for almost every engagement. What changes is the work inside each one.',
   steps: [
     {
       number: '01',
-      title: 'Discuss your requirements.',
-      body: 'We talk through what you need help with and help identify the right service for your business.',
+      title: 'Message Us',
+      body: 'Tell us what you need and where your business is based.',
     },
     {
       number: '02',
-      title: 'Review the scope, documents, deliverables, fees, and dependencies.',
-      body: 'We agree on the scope, list the documents required, explain deliverables and fees (government fees and professional fees are separate where applicable), and outline any dependencies before we start.',
+      title: 'Scope and Cost',
+      body: 'We understand your requirements and agree on the scope and pricing before starting.',
     },
     {
       number: '03',
-      title: 'Proceed with the agreed work.',
-      body: 'Work begins after the scope and terms are confirmed. We keep you updated throughout the agreed process.',
+      title: 'We Handle It',
+      body: 'Our team works on your requirements and keeps you updated along the way.',
+    },
+    {
+      number: '04',
+      title: 'Delivered',
+      body: 'Receive the completed service or solution, with the next steps made clear.',
     },
   ],
-  note: 'Timelines depend on the authority and on how quickly documents are provided. We do not promise fixed processing dates.',
+  note: 'Timelines and approvals depend on the authority involved and on how quickly documents are provided. We agree the scope before work begins and do not promise fixed processing dates.',
   /**
    * Stated plainly, because the most common thing a registration company
    * oversells is a date. Promising one we do not control is how a firm loses a
@@ -505,12 +791,48 @@ export const process = {
 } as const
 
 export const faqsSection = {
-  eyebrow: 'FAQs',
-  title: 'Frequently Asked Questions',
+  eyebrow: 'Questions',
+  title: 'A few things people ask before they message.',
   intro: '',
 } as const
 
-export const faqs = [] as const
+export const faqs = [
+  {
+    question: 'Can I complete business registration entirely online?',
+    answer:
+      'In most cases, yes. Applications are filed electronically and documents can be shared digitally. Some structures or circumstances may need a physical signature or notarisation, and we will confirm exactly what applies to your case before you begin.',
+  },
+  {
+    question: 'Do I need to visit your office?',
+    answer:
+      'No. Most of the work is handled over WhatsApp, email and calls. If a step genuinely needs a physical signature or visit, we will tell you in advance rather than after you have started.',
+  },
+  {
+    question: 'What documents are required for LLP registration?',
+    answer:
+      'Typically PAN and Aadhaar of the partners, photographs and signatures, proof of address, proof of the proposed registered office, and details of the proposed business. Exact requirements depend on your case, so we send a written checklist before you collect anything.',
+  },
+  {
+    question: 'How much does business registration cost?',
+    answer:
+      'It depends on the structure you choose, the state, the number of directors or partners, and the government fees involved. We give you a written quotation before work begins, with government fees shown separately from our professional fee.',
+  },
+  {
+    question: 'Do you provide website development?',
+    answer:
+      'Yes. We design and build business websites, landing pages, billing and inventory systems, CRM tools and custom web applications. We can also coordinate domain, hosting and ongoing technical support.',
+  },
+  {
+    question: 'Can you build custom business management software?',
+    answer:
+      'Yes. We start with the way your business actually works, then build around that process — whether it is billing, inventory, leads, approvals or a combination. You see the scope before development starts.',
+  },
+  {
+    question: 'Do you provide ongoing accounting and compliance support?',
+    answer:
+      'Yes. We provide ongoing accounting, bookkeeping, GST and income tax filing support, and can agree a recurring scope for the compliance work your business needs.',
+  },
+] as const
 
 export const whyUs = {
   eyebrow: 'Why work with us',
@@ -654,6 +976,16 @@ export const cta = {
   body: 'Message us on WhatsApp with your requirements.',
   whatsappLabel: 'Message on WhatsApp',
   callLabel: 'Call us',
+} as const
+
+export const closing = {
+  eyebrow: 'The next step',
+  title: 'Your next step starts here.',
+  body: "Whether you're starting a business, strengthening an existing one or building something digital, let's make it happen.",
+  ctaLabel: 'Start a Conversation',
+  whatsappMessage:
+    "Hi, I'd like to talk about what my business needs next. Could you help me understand the right starting point?",
+  stages: ['Idea', 'Register', 'Comply', 'Launch'],
 } as const
 
 export const footer = {

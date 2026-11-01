@@ -8,6 +8,24 @@ export default defineConfig({
   server: {
     port: 5173,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        /**
+         * GSAP is the largest single dependency, and it is needed as soon as
+         * the homepage journey mounts. Splitting it into its own chunk keeps
+         * the application chunk comfortably under Vite's warning threshold and
+         * lets the browser fetch both files in parallel. It is not lazy: this
+         * is purely a chunking boundary, not a deferred experience.
+         */
+        manualChunks(id) {
+          if (id.includes('/node_modules/gsap/') || id.includes('/node_modules/@gsap/')) {
+            return 'gsap'
+          }
+        },
+      },
+    },
+  },
 })
 
 /**

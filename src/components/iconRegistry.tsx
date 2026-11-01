@@ -65,9 +65,10 @@ export const serviceIcons: Record<ServiceIconKey, IconComponent> = {
 }
 
 /**
- * Secondary digital services. Deliberately a short list: the tier-two offering
- * is two things, not eight, and a registry padded with keys nobody renders is
- * an invitation to put the padding back.
+ * Secondary digital and creative services. One registry serves the homepage
+ * grids and the two catalogue pages, so each key maps to a drawing rather than
+ * to a particular section. A registry padded with keys nobody renders is an
+ * invitation to put the padding back.
  */
 export type DigitalIconKey = keyof typeof digitalIcons
 

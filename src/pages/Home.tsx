@@ -1,38 +1,34 @@
 import { BrandingServices } from '../components/BrandingServices'
-import { Company } from '../components/Company'
 import { CoreServices } from '../components/CoreServices'
 import { CtaBand } from '../components/CtaBand'
 import { DigitalServices } from '../components/DigitalServices'
 import { FaqSection } from '../components/FaqSection'
 import { Hero } from '../components/Hero'
+import { JourneyStory } from '../components/journey/JourneyStory'
 import { Process } from '../components/Process'
-import { WhyUs } from '../components/WhyUs'
+import { ServiceSelector } from '../components/ServiceSelector'
+import { StructureComparison } from '../components/StructureComparison'
 import { site } from '../content/site'
 import { organisationSchema, useDocumentMeta, useJsonLd } from '../lib/seo'
 
 /**
  * ---------------------------------------------------------------------------
- * HOME
+ * HOME — IDEA TO LAUNCH
  * ---------------------------------------------------------------------------
- * The order below is the argument, in sequence:
+ * The page is one argument, told in order:
  *
- *   Hero → Professional services → Digital services → How We Work
- *        → Why work with us → About → FAQ → Closing CTA
+ *   Hero                 what this is, and how to start
+ *   Journey              the four stages of getting a business live
+ *   Selector             where the visitor is now, and what comes next
+ *   Structures           the one decision that changes everything after it
+ *   Services             the work itself, in full
+ *   Process              what actually happens after the first message
+ *   FAQ                  the questions still standing
+ *   Closing CTA          the same action, now earned
  *
- * Read as a visitor does: what this is, exactly what they can get done, what
- * else there is, how the work actually runs, why they would use us rather than
- * the next firm on the list, who we are, the questions they are still unsure
- * about, and then the same two buttons.
- *
- * TIERING IS THE STRUCTURE. The professional services come first, on the
- * document surface, because they are what the business does and what a visitor
- * came for. The two digital services come after, on white, deliberately quieter
- * — both are optional, and neither is needed to get a business registered.
- * Presenting them as peers would misrepresent what the company is.
- *
- * THE SURFACES ALTERNATE: white, off-white, white, off-white, off-white, white,
- * off-white, white. Three tones and a hairline between each. That is the whole
- * of the section rhythm — no gradient, no glow, no decorative shape.
+ * The journey is the centre of the page and the only dark chapter. Everything
+ * around it is warm paper, navy type and a single teal accent, so the section
+ * carries the weight rather than a stack of differently coloured bands.
  *
  * There is no price anywhere on this page, and none in the structured data
  * either. The work is quoted per engagement once the case is known, so the only
@@ -50,12 +46,13 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <JourneyStory />
+      <ServiceSelector />
+      <StructureComparison />
       <CoreServices />
       <DigitalServices />
       <BrandingServices />
       <Process />
-      <WhyUs />
-      <Company />
       <FaqSection />
       <CtaBand />
     </>

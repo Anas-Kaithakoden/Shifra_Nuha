@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import { Analytics } from './components/Analytics'
+import { FloatingWhatsApp } from './components/FloatingWhatsApp'
 import { Footer } from './components/Footer'
 import { Navbar } from './components/Navbar'
 import { StickyCtaBar } from './components/StickyCtaBar'
@@ -95,6 +96,7 @@ export default function App() {
 
       <Footer />
       <StickyCtaBar />
+      <FloatingWhatsApp />
       <Analytics />
     </div>
   )

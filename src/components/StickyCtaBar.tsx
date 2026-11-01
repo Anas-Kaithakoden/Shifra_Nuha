@@ -35,10 +35,15 @@ export function StickyCtaBar() {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 320)
+    const onScroll = () =>
+      setVisible(window.scrollY > Math.min(window.innerHeight * 0.8, 720))
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    window.addEventListener('resize', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
   }, [])
 
   // A new page is a new decision; do not carry the bar across the navigation.
@@ -48,7 +53,7 @@ export function StickyCtaBar() {
 
   return (
     <div
-      className={`fixed inset-x-0 bottom-0 z-40 border-t border-paper-200 bg-white px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-opacity duration-150 md:hidden ${
+      className={`fixed inset-x-0 bottom-0 z-40 border-t border-paper-200 bg-paper-50 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_24px_-18px_rgba(7,29,43,0.45)] transition-opacity duration-200 md:hidden ${
         visible ? 'visible opacity-100' : 'invisible opacity-0'
       }`}
     >

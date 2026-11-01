@@ -58,25 +58,42 @@ export function Section({
         divided ? 'border-t border-paper-200' : ''
       } ${className}`}
     >
-      <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
+      <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
         <Reveal>
-          <div className={centered ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl'}>
-            {eyebrow ? (
-              <p className={`mb-3 text-xs font-semibold tracking-[0.16em] uppercase ${tone.eyebrow}`}>
-                {eyebrow}
-              </p>
-            ) : null}
-            {/*
-              A section heading is a fixed size. The brief asks for a clear
-              hierarchy and no excessively huge typography, and the only way to
-              get that consistently is to stop letting the title's own length
-              change the type size.
-            */}
-            <h2 className="text-2xl leading-[1.2] font-semibold tracking-tight text-balance text-ink-950 sm:text-3xl">
-              {title}
-            </h2>
+          <div
+            className={
+              centered
+                ? 'mx-auto max-w-2xl text-center'
+                : `grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end lg:gap-16 ${
+                    intro ? '' : 'lg:grid-cols-1'
+                  }`
+            }
+          >
+            <div className={centered ? '' : 'max-w-2xl'}>
+              {eyebrow ? (
+                <div className={`mb-4 flex items-center gap-3 ${centered ? 'justify-center' : ''}`}>
+                  <span aria-hidden="true" className="h-px w-8 bg-brand-600" />
+                  <p className={`text-[11px] font-semibold tracking-[0.2em] uppercase ${tone.eyebrow}`}>
+                    {eyebrow}
+                  </p>
+                </div>
+              ) : null}
+              {/*
+                A section heading is a fixed size. The brief asks for a clear
+                hierarchy and no excessively huge typography, and the only way to
+                get that consistently is to stop letting the title's own length
+                change the type size.
+              */}
+              <h2 className="font-display text-[clamp(2.1rem,4vw,3.4rem)] leading-[1.02] font-normal tracking-[-0.025em] text-balance text-ink-950">
+                {title}
+              </h2>
+            </div>
             {intro ? (
-              <p className={`mt-4 text-base leading-relaxed text-pretty sm:text-lg ${tone.body}`}>
+              <p
+                className={`max-w-lg text-base leading-relaxed text-pretty sm:text-lg ${tone.body} ${
+                  centered ? 'mx-auto mt-4' : 'lg:justify-self-end'
+                }`}
+              >
                 {intro}
               </p>
             ) : null}

@@ -91,10 +91,10 @@ for (const { path, html } of pages) {
 }
 
 // ===========================================================================
-// 3. The nine core services
+// 3. The ten core services
 // ===========================================================================
 
-if (coreServices.length !== 9) fail('services', `expected 9 core services, found ${coreServices.length}`)
+if (coreServices.length !== 10) fail('services', `expected 10 core services, found ${coreServices.length}`)
 
 const seenPaths = new Set<string>()
 for (const service of coreServices) {
@@ -327,19 +327,20 @@ pass('claims', `no prices, timelines, guarantees, ratings or statistics in ${pag
 
 /**
  * The Tier 1 grid on the homepage is built from `featuredServices`, and the count
- * is pinned here rather than left implicit. Eight is a decision: it is what fits
- * two clean rows at four across, and it is the set a business actually needs.
- * Changing the grid is a content change that has to come through here.
+ * is pinned here rather than left implicit. Nine is a decision: it is the set a
+ * business actually needs, with partnership registration offered in text below
+ * the grid instead of taking a card of its own. Changing the grid is a content
+ * change that has to come through here.
  */
-if (featuredServices.length !== 8) {
-  fail('services', `expected 8 featured services, found ${featuredServices.length}`)
+if (featuredServices.length !== 9) {
+  fail('services', `expected 9 featured services, found ${featuredServices.length}`)
 } else if (featuredServices.some((service) => !service.featured)) {
   fail('services', 'a service is in the featured grid but not flagged as featured')
 } else {
   const unlisted = coreServices.filter((service) => !featuredServices.includes(service))
   pass(
     'services',
-    `8 featured services in the Tier 1 grid; ${unlisted.map((s) => s.slug).join(', ') || 'none'} offered in text`,
+    `9 featured services in the Tier 1 grid; ${unlisted.map((s) => s.slug).join(', ') || 'none'} offered in text`,
   )
 }
 

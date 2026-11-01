@@ -25,6 +25,8 @@ type AnalyticsWindow = Window & {
   dataLayer?: unknown[]
   gtag?: (...args: unknown[]) => void
   fbq?: (...args: unknown[]) => void
+  /** Guards Strict Mode's double effect run against a duplicate pixel init. */
+  snMetaInitialised?: boolean
 }
 
 function loadScript(src: string, id: string) {
@@ -43,7 +45,8 @@ export function Analytics() {
     const gaId = CONFIG.GOOGLE_ANALYTICS_ID
 
     // --- Meta Pixel --------------------------------------------------------
-    if (metaId) {
+    if (metaId && !win.snMetaInitialised) {
+      win.snMetaInitialised = true
       if (!win.fbq) {
         /* eslint-disable @typescript-eslint/no-explicit-any */
         ;(function fbp(w: any, d: Document, s: string) {

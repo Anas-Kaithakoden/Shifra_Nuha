@@ -45,7 +45,7 @@ const sizes: Record<Size, string> = {
  * horizontally, so this only governs lines *within* the label once it wraps.
  */
 const base =
-  'inline-flex items-center justify-center gap-2 rounded-[10px] text-left font-semibold tracking-tight transition-colors duration-150 select-none'
+  'inline-flex items-center justify-center gap-2 rounded-[2px] text-left font-semibold tracking-tight transition-colors duration-150 select-none'
 
 type CommonProps = {
   variant?: Variant

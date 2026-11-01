@@ -5,70 +5,69 @@
    * ---------------------------------------------------------------------------
    * TYPOGRAPHY
    * ---------------------------------------------------------------------------
-   * One family, Inter, for the whole interface. The site is English only, so a
-   * single family is enough and a second one would only dilute the hierarchy.
+   * Two families, each with one job. Fraunces carries the editorial voice —
+   * headlines, stage numbers, the occasional pull quote. Inter carries the
+   * interface and every paragraph, because it stays legible at 13px on a
+   * mid-range phone and never competes with the display face.
    */
   --font-sans:
     'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Fraunces', ui-serif, Georgia, Cambria, 'Times New Roman', serif;
 
   /*
    * ---------------------------------------------------------------------------
    * INK — text, borders, dark surfaces
    * ---------------------------------------------------------------------------
-   * A deep slate-navy scale. Deliberately not pure black: #0F172A reads as
-   * printed ink on an off-white page and keeps headings legible in long
-   * passages, where #000 reads as a screen. The two darkest steps are the
-   * brand's own deep tones — `ink-950` is the fill behind primary buttons and
-   * the colour of every heading, `ink-800` is the second surface.
+   * A deep navy scale rather than a neutral slate. #071D2B is the colour of the
+   * printed word on a warm page and of the dark chapters that carry the
+   * scrollytelling section.
    */
-  --color-ink-50: #f8fafc;
-  --color-ink-100: #f1f5f9;
-  --color-ink-200: #e2e8f0;
-  --color-ink-300: #cbd5e1;
-  --color-ink-400: #94a3b8;
-  --color-ink-500: #64748b;
-  --color-ink-600: #475569;
-  --color-ink-700: #334155;
-  --color-ink-800: #1e293b;
-  --color-ink-900: #172033;
-  --color-ink-950: #0f172a;
+  --color-ink-50: #f4f7f8;
+  --color-ink-100: #e8eef0;
+  --color-ink-200: #d2dee1;
+  --color-ink-300: #b0c2c8;
+  --color-ink-400: #7c93a0;
+  --color-ink-500: #54707f;
+  --color-ink-600: #406476;
+  --color-ink-700: #244a5e;
+  --color-ink-800: #143649;
+  --color-ink-900: #0d293a;
+  --color-ink-950: #071d2b;
 
   /*
    * ---------------------------------------------------------------------------
    * PAPER — page and section surfaces
    * ---------------------------------------------------------------------------
-   * Off-white to white, three steps, no more. `paper-50` is the document, white
-   * is a raised plane sitting on it, `paper-100` is the quiet step for the
-   * sections that recede, and `paper-200` is the hairline that separates one
-   * plane from the next. Nothing else is a surface colour, which is what keeps
-   * the page from turning into a stack of differently coloured bands.
+   * Warm off-white to white. `paper-50` is the document; white is a raised
+   * plane; `paper-100` is the quiet step; `paper-200` is the hairline. Nothing
+   * else is a surface colour, which is what keeps the page from turning into a
+   * stack of differently coloured bands.
    */
-  --color-paper-50: #f8fafc;
-  --color-paper-100: #f1f5f9;
-  --color-paper-200: #e2e8f0;
-  --color-paper-300: #cbd5e1;
+  --color-paper-50: #f7f5ef;
+  --color-paper-100: #f1eee5;
+  --color-paper-200: #e3ddd0;
+  --color-paper-300: #d0c8b7;
 
   /*
    * ---------------------------------------------------------------------------
    * BRAND — the single accent
    * ---------------------------------------------------------------------------
-   * A restrained corporate blue, kept well below the saturation of the old
-   * petrol accent so it never reads as a "tech" colour. It carries eyebrows,
-   * focus rings, the small mark beside a check, and the tint behind a service
-   * icon. WhatsApp's green is deliberately not part of this scale, so the one
-   * green on the page is always a WhatsApp action a visitor can recognise.
+   * Teal. Restrained enough to sit beside navy in a formal document, warm
+   * enough to feel human beside the off-white paper. It carries eyebrows,
+   * focus rings, active states and the small marks that connect the journey.
+   * WhatsApp's green remains a separate, recognisable signal.
    */
-  --color-brand-50: #eff4fb;
-  --color-brand-100: #dbe6f5;
-  --color-brand-200: #bcd0e9;
-  --color-brand-300: #8fadd6;
-  --color-brand-400: #5c83bb;
-  --color-brand-500: #3a639b;
-  --color-brand-600: #274b7c;
-  --color-brand-700: #1d3a63;
-  --color-brand-800: #162c4a;
-  --color-brand-900: #101f34;
-  --color-brand-950: #0a1524;
+  --color-brand-50: #eaf4f1;
+  --color-brand-100: #d3e9e4;
+  --color-brand-200: #a9d3cb;
+  --color-brand-300: #79bdb4;
+  --color-brand-400: #46a29a;
+  --color-brand-500: #1f8882;
+  --color-brand-600: #14716d;
+  --color-brand-700: #0b5f5c;
+  --color-brand-800: #0a4b49;
+  --color-brand-900: #0a3b3a;
+  --color-brand-950: #062927;
 }
 
 @layer base {
@@ -76,51 +75,10 @@
     -webkit-text-size-adjust: 100%;
   }
 
-  /*
-   * Body copy is justified on phones, left-aligned from `sm` up.
-   *
-   * REVERSAL NOTE: this was left-aligned at every width, on the reasoning that
-   * hyphenation dictionaries are inconsistent between browsers and languages,
-   * and that where one is missing, justification stretches the gaps between words
-   * instead. That reasoning was written while the site still carried Malayalam,
-   * where browsers have no usable hyphenation dictionary at all. The site is
-   * English-only now and `<html lang="en">` is static, so Chrome, Safari and
-   * Firefox all ship a good English dictionary and the objection largely goes.
-   *
-   * `hyphens-auto` is therefore not decoration, it is the thing that makes
-   * justification survive a ~350px column. Without permission to break words
-   * the browser can only break at spaces, so it stretches the gaps instead.
-   * It switches off at `sm` where the measure is wide enough not to need it.
-   *
-   * Last line of a paragraph is unaffected, as is any single line of text, so
-   * short strings still sit flush left.
-   *
-   * To opt a block out, set `text-left` on it. Three do, each deliberately:
-   *
-   *  - The contact form. Browsers align text inside inputs themselves and do
-   *    not inherit `text-align` from the document, so a justified label over a
-   *    left-aligned field would look broken rather than deliberate.
-   *  - The mobile navigation. Menu items are scanned by their left edge.
-   *  - The footer's legal disclaimer. Justified grey fine print at this size is
-   *    markedly harder to read than a ragged right edge.
-   */
   body {
-    @apply bg-paper-50 font-sans text-ink-700 antialiased text-justify hyphens-auto sm:text-left sm:hyphens-manual;
+    @apply bg-paper-50 font-sans text-ink-700 antialiased;
   }
 
-  /*
-   * Headings opt out of the justification above.
-   *
-   * `body` is justified, and a heading sets no alignment of its own, so it
-   * inherits `justify` and a two-line heading stretches the gap between its
-   * words to fill the measure — "Business" / a wide gap / "Registration". That
-   * reads as a layout bug rather than a choice, so headings are pinned left
-   * here. `sm:text-left` is not needed: the left setting is the default at
-   * every width, which is what the rest of the design assumes.
-   *
-   * Same reasoning applies to the FAQ questions, which are labels rather than
-   * prose; that one is opted out in `Faq.tsx` because it is a single span.
-   */
   h1,
   h2,
   h3,
@@ -128,6 +86,9 @@
   h5,
   h6 {
     @apply text-left text-ink-950;
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.015em;
   }
 
   :focus-visible {
@@ -135,7 +96,7 @@
   }
 
   ::selection {
-    @apply bg-brand-600 text-white;
+    @apply bg-brand-700 text-white;
   }
 }
 
@@ -144,10 +105,65 @@
      control looks identical across browsers. */
   .select-field {
     @apply appearance-none bg-white pr-11;
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23406476' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 0.9rem center;
     background-size: 1.05rem 1.05rem;
+  }
+
+  /*
+   * Editorial rules. A hairline that fades at one end is used to separate a
+   * stage label from its content, and nowhere else.
+   */
+  .rule-fade {
+    background: linear-gradient(90deg, currentColor 0%, currentColor 45%, transparent 100%);
+    opacity: 0.18;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Keyed panel transitions used by the service selector and comparison tabs.
+     The element is re-mounted with a new key, so the animation runs on change. */
+  .panel-enter {
+    animation: panel-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .line-enter {
+    animation: line-enter 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* Supplied to GSAP as the initial state instead of a CSS class, so the page
+     remains readable if JavaScript never runs. */
+  .will-reveal {
+    opacity: 1;
+  }
+}
+
+@keyframes panel-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes line-enter {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
   }
 }
 

@@ -1,50 +1,83 @@
-import { useId } from 'react'
+import { useId, useState } from 'react'
 import type { FaqItem } from '../content/services'
 import { IconChevron } from './icons'
 
 /**
  * ---------------------------------------------------------------------------
- * FAQ
+ * FAQ ACCORDION
  * ---------------------------------------------------------------------------
- * A plain `<details>`/`<summary>` accordion, one per question.
+ * A button-and-panel accordion rather than native `<details>`, because the
+ * brief asks for a smooth open and close and `<details>` has no animatable
+ * height in any browser.
  *
- * Native disclosure is used deliberately: it is keyboard accessible and
- * correctly announced by every screen reader with no ARIA to maintain, it works
- * with JavaScript switched off, and it is what search engines expect for FAQ
- * content. The markup below adds nothing but styling and the chevron.
+ * It is still keyboard-native: every question is a real button, the panel is
+ * labelled by it, `aria-expanded` follows the state, and the collapse uses a
+ * grid row transition so the answer stays in the document for search engines
+ * while taking no visual space. Closed panels are marked `aria-hidden` and made
+ * inert, so a keyboard user never tabs into hidden content.
  *
- * The answers are long — these are real questions about cost, timelines and
- * documents, and one-line answers would be the kind of overpromising the brief
- * rules out — so the closed state stays closed by default and a visitor reads
- * only what they came for.
+ * Only one answer is open at a time. That keeps a long FAQ scannable and means
+ * the reader never loses track of the question they are on.
  */
 export function Faq({ items, className = '' }: { items: FaqItem[]; className?: string }) {
-  const base = useId()
+  const baseId = useId()
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   if (items.length === 0) return null
 
   return (
-    <div className={`divide-y divide-paper-200 overflow-hidden rounded-xl border border-paper-200 bg-white ${className}`}>
+    <div className={`border-t border-paper-200 ${className}`}>
       {items.map((item, index) => {
-        const id = `${base}-${index}`
+        const open = openIndex === index
+        const buttonId = `${baseId}-question-${index}`
+        const panelId = `${baseId}-answer-${index}`
+
         return (
-          <details key={item.question} className="group">
-            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-base font-semibold tracking-tight text-ink-950 transition-colors hover:bg-paper-100 sm:px-6 [&::-webkit-details-marker]:hidden">
-              {/* `text-left` opts the question out of the justified body copy:
-                  it is a label, not prose, and a two-line question would
-                  otherwise stretch its inter-word gap. The answer below stays
-                  justified. */}
-              <span className="text-left text-pretty">{item.question}</span>
-              <IconChevron
-                width={18}
-                height={18}
-                className="shrink-0 text-ink-400 transition-transform duration-200 group-open:rotate-180"
-              />
-            </summary>
-            <div id={id} className="px-5 pb-5 text-sm leading-relaxed text-ink-600 sm:px-6 sm:pb-6">
-              <p className="text-pretty">{item.answer}</p>
+          <div key={item.question} className="border-b border-paper-200">
+            <h3 className="m-0">
+              <button
+                id={buttonId}
+                type="button"
+                aria-expanded={open}
+                aria-controls={panelId}
+                onClick={() => setOpenIndex(open ? null : index)}
+                className="group flex min-h-16 w-full items-center justify-between gap-5 py-4 text-left transition-colors hover:text-brand-700 sm:gap-8"
+              >
+                <span className="flex items-baseline gap-4 sm:gap-6">
+                  <span className="shrink-0 text-[10px] font-semibold tracking-[0.12em] text-ink-400 tabular-nums">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <span className="font-sans text-[15px] leading-snug font-semibold tracking-[-0.005em] text-ink-900 text-pretty group-hover:text-brand-700 sm:text-base">
+                    {item.question}
+                  </span>
+                </span>
+                <IconChevron
+                  width={17}
+                  height={17}
+                  className={`shrink-0 text-ink-400 transition-transform duration-300 ${
+                    open ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
+            </h3>
+
+            <div
+              id={panelId}
+              role="region"
+              aria-labelledby={buttonId}
+              aria-hidden={!open}
+              {...(!open ? { inert: '' } : {})}
+              className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+                open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+              }`}
+            >
+              <div className="overflow-hidden">
+                <p className="max-w-3xl pb-6 pl-8 text-sm leading-relaxed text-pretty text-ink-600 sm:pl-12">
+                  {item.answer}
+                </p>
+              </div>
             </div>
-          </details>
+          </div>
         )
       })}
     </div>

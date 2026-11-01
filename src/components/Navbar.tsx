@@ -10,16 +10,13 @@ import { IconClose, IconMenu } from './icons'
  * ---------------------------------------------------------------------------
  * NAVBAR
  * ---------------------------------------------------------------------------
- * Three things, and nothing else: the logo, four links, and one WhatsApp button.
+ * The logo, five links, and one WhatsApp button. No mega-menu, no search, no
+ * secondary row: every page on the site is at most two clicks from this bar.
  *
- * The brief is explicit that there is no mega-menu, and the site does not need
- * one. The nine service pages are all listed on `/services`, in the footer and
- * on each service page, so every page on the site is at most two clicks from
- * the header.
- *
- * The header is white with a hairline, always. It never becomes transparent
- * over the hero and it never picks up a blur: the hero is a light surface, and a
- * translucent bar over it only costs contrast.
+ * The header sits on the same warm paper as the page and is separated by a
+ * single hairline. It is deliberately opaque — the hero is a light surface, and
+ * a translucent bar over it only costs contrast on the one control that has to
+ * stay legible while the visitor is deciding.
  *
  * THE 320px PROBLEM
  *  A logo (≈108px), a labelled WhatsApp button (≈130px), a gap and a 44px menu
@@ -61,20 +58,34 @@ export function Navbar() {
     }
   }, [open])
 
-  const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `inline-flex min-h-11 items-center rounded-[8px] px-3 text-sm font-medium transition-colors ${
-      isActive ? 'text-ink-950' : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900'
-    }`
-
   return (
-    <header className="sticky top-0 z-50 border-b border-paper-200 bg-white">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-2 px-4 sm:gap-3 sm:px-8 lg:h-[72px] lg:px-8">
+    <header className="sticky top-0 z-50 border-b border-paper-200 bg-paper-50">
+      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-2 px-5 sm:gap-3 sm:px-8 lg:h-[72px]">
         <Logo />
 
-        <nav aria-label={ui['nav.primary']} className="hidden items-center gap-1 lg:flex">
+        <nav aria-label={ui['nav.primary']} className="hidden h-full items-stretch lg:flex">
           {nav.map((item) => (
-            <NavLink key={item.to} to={item.to} end={item.to === '/'} className={linkClass}>
-              {item.label}
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === '/'}
+              className={({ isActive }) =>
+                `relative inline-flex items-center px-3 text-[11px] font-semibold tracking-[0.13em] uppercase transition-colors ${
+                  isActive ? 'text-ink-950' : 'text-ink-500 hover:text-ink-950'
+                }`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  {item.label}
+                  <span
+                    aria-hidden="true"
+                    className={`absolute inset-x-3 bottom-0 h-[2px] transition-colors ${
+                      isActive ? 'bg-brand-600' : 'bg-transparent'
+                    }`}
+                  />
+                </>
+              )}
             </NavLink>
           ))}
         </nav>
@@ -110,20 +121,20 @@ export function Navbar() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? ui['nav.closeMenu'] : ui['nav.openMenu']}
-            className="-mr-2 inline-flex size-11 items-center justify-center rounded-[8px] text-ink-800 transition-colors hover:bg-ink-100 lg:hidden"
+            className="-mr-2 inline-flex size-11 items-center justify-center text-ink-800 transition-colors hover:bg-paper-200/70 lg:hidden"
           >
             {open ? <IconClose /> : <IconMenu />}
           </button>
         </div>
       </div>
 
-      {/* Mobile navigation: the same four links and the Call button, nothing more. */}
+      {/* Mobile navigation: the same links and the Call button, nothing more. */}
       <div
         id="mobile-nav"
         hidden={!open}
-        className="border-t border-paper-200 bg-white text-left lg:hidden"
+        className="border-t border-paper-200 bg-paper-50 text-left lg:hidden"
       >
-        <nav aria-label="Mobile" className="mx-auto w-full max-w-6xl px-4 py-3 sm:px-8">
+        <nav aria-label="Mobile" className="mx-auto w-full max-w-7xl px-5 py-3 sm:px-8">
           <ul className="flex flex-col">
             {nav.map((item) => (
               <li key={item.to}>
@@ -131,8 +142,10 @@ export function Navbar() {
                   to={item.to}
                   end={item.to === '/'}
                   className={({ isActive }) =>
-                    `flex min-h-12 items-center rounded-[8px] px-3 text-base font-medium transition-colors ${
-                      isActive ? 'bg-ink-100 text-ink-950' : 'text-ink-700 hover:bg-ink-100'
+                    `flex min-h-12 items-center border-l-2 px-4 text-[13px] font-semibold tracking-[0.06em] uppercase transition-colors ${
+                      isActive
+                        ? 'border-brand-600 bg-white text-ink-950'
+                        : 'border-transparent text-ink-700 hover:border-paper-300 hover:bg-white'
                     }`
                   }
                 >

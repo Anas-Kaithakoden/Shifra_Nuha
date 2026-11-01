@@ -4,7 +4,7 @@
  * ---------------------------------------------------------------------------
  * This is the file to edit when adding or changing a service. The homepage
  * cards, the navbar list, the `/services` hub, the route table, the sitemap and
- * the nine landing pages are all generated from it.
+ * the ten landing pages are all generated from it.
  *
  * Editorial rules that shaped the copy below, and that should be kept when it
  * is updated:
@@ -19,11 +19,11 @@
  *  - No professional claims that have not been verified. Regulated work is
  *    described as being carried out or supervised by the appropriate qualified
  *    professional.
- *  - No services outside the agreed list. The nine below are the whole
+ *  - No services outside the agreed list. The ten below are the whole
  *    registration and professional-services catalogue.
  *
  * `featured` decides what appears in the Tier 1 grid on the homepage. It is
- * true for the eight services most businesses need, and false for
+ * true for the nine services most businesses need, and false for
  * `partnership-registration`, which is a real service with its own page but a
  * structure choice rather than a universal one — so it is linked in a line
  * beneath the grid instead of taking a card.
@@ -66,7 +66,7 @@ type ServiceSource = {
    * Whether the service takes a card in the Tier 1 grid on the homepage. A real
    * service can be false when it is a structure choice rather than something
    * every business needs, in which case it is linked in a line of text beneath
-   * the grid instead of taking one of the eight places on it.
+   * the grid instead of taking one of the nine places on it.
    */
   featured: boolean
   /** Prefilled WhatsApp message, English. Used by every button on this page. */
@@ -1219,7 +1219,7 @@ const serviceSources: ServiceSource[] = [
       'A business that qualifies as micro, small or medium enterprise and wants formal recognition.',
       'A business looking to avail of MSME-related schemes, tenders or bank facilities where Udyam registration is requested.',
       'An existing enterprise that needs to update details on the Udyam portal.',
-      'A startup or proprietorship/partnership/company/LLP that wants to register under the MSME framework.',
+      'A startup, or an existing proprietorship, partnership, company or LLP that wants to register under the MSME framework.',
     ],
     includes: [
       'Eligibility check based on investment and turnover',
@@ -1236,7 +1236,7 @@ const serviceSources: ServiceSource[] = [
       },
       {
         title: 'Collect details',
-        body: 'We need basic business, proprietor/partner/director details and activity information.',
+        body: 'We need basic business details, proprietor, partner or director details, and activity information.',
       },
       {
         title: 'File application',
@@ -1252,7 +1252,7 @@ const serviceSources: ServiceSource[] = [
       },
     ],
     documents: [
-      'Aadhaar card of proprietor/partner(s)/director(s) as applicable',
+      'Aadhaar card of the proprietor, partner or director as applicable',
       'PAN card of the business/entity or proprietor',
       'Business address proof (if required)',
       'Bank account details',
@@ -1286,7 +1286,7 @@ const serviceSources: ServiceSource[] = [
       {
         question: 'How long does it take?',
         answer:
-          'Udyam registration is usually processed quickly on the portal once details are submitted correctly, often within the same day in straightforward cases.',
+          'Udyam registration is usually processed quickly on the portal once details are submitted correctly. Straightforward cases generally move faster, but the timing is set by the portal rather than by us.',
       },
       {
         question: 'Do I need GST for Udyam Registration?',
@@ -1333,7 +1333,7 @@ export type CoreService = Service
 export const coreServices: CoreService[] = services
 
 /**
- * The eight services that take a card in the Tier 1 grid on the homepage.
+ * The nine services that take a card in the Tier 1 grid on the homepage.
  * `partnership-registration` is deliberately not here: it is a real service with
  * its own page, but choosing between a partnership, an LLP and a company is a
  * structure decision rather than something every business needs, so it is

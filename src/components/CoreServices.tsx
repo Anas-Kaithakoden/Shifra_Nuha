@@ -12,23 +12,24 @@ import { ui } from '../content/ui'
  * ---------------------------------------------------------------------------
  * TIER 1 — THE PROFESSIONAL SERVICES
  * ---------------------------------------------------------------------------
- * The eight services that are the actual business, in the order a business
+ * The nine services that are the actual business, in the order a business
  * meets them: get the entity right, register for tax, keep the books, do the
  * tax, prove it to an auditor or a bank, protect the name. Each one has its own
  * page and its own WhatsApp button, so a visitor never has to choose between
  * "tell me more" and "start the conversation" — both are one tap away from here.
  *
- * WHY A GRID AND NOT A LIST. Eight services is the point at which a single
+ * WHY A GRID AND NOT A LIST. Nine services is the point at which a single
  * column becomes a scroll and a visitor gives up two thirds of the way down. At
- * four across on a laptop it is two rows, which is a shape a person can take in
- * at once. Nothing here is a rounded, glowing tile: it is a flat card, a hairline
- * border and a small brand-tinted icon square.
+ * three across on a laptop it is three even rows, which is a shape a person can
+ * take in at once; four across would leave one card stranded on its own row.
+ * Nothing here is a rounded, glowing tile: it is a flat card, a hairline border
+ * and a small brand-tinted icon square.
  *
  * `featuredServices` rather than the full catalogue. Partnership firm
  * registration is a real service with its own page, but choosing between a
  * partnership, an LLP and a company is a structure decision rather than one of
- * the eight things most businesses need — so it is offered in a line of text
- * underneath rather than given one of the eight places on the grid.
+ * the nine things most businesses need — so it is offered in a line of text
+ * underneath rather than given one of the nine places on the grid.
  */
 export function CoreServices() {
   return (
@@ -39,24 +40,27 @@ export function CoreServices() {
       intro={coreSection.intro}
       surface="page"
     >
-      <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <ul className="grid gap-px border border-paper-200 bg-paper-200 sm:grid-cols-2 lg:grid-cols-3">
         {featuredServices.map((service, index) => {
           const Icon = serviceIcons[service.icon] ?? serviceIcons.document
 
           return (
-            <Reveal as="li" key={service.slug} delay={index * 50} className="h-full">
-              <article className="group flex h-full flex-col rounded-xl border border-paper-200 bg-white p-5 transition-colors duration-150 hover:border-brand-300">
-                <span className="inline-flex size-10 items-center justify-center rounded-lg bg-brand-50 text-brand-700 ring-1 ring-brand-100 ring-inset">
-                  <Icon width={20} height={20} />
-                </span>
+            <Reveal as="li" key={service.slug} delay={index * 50} className="h-full bg-white">
+              <article className="group flex h-full flex-col bg-white p-5 transition-colors duration-200 hover:bg-paper-50 sm:p-6">
+                <div className="flex items-center justify-between gap-4">
+                  <span className="text-[10px] font-semibold tracking-[0.18em] text-ink-400 uppercase tabular-nums">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <Icon width={20} height={20} className="shrink-0 text-brand-700" />
+                </div>
 
-                <h3 className="mt-4 text-base leading-snug font-semibold tracking-tight text-balance text-ink-950">
+                <h3 className="mt-6 font-display text-[1.25rem] leading-[1.15] font-normal tracking-[-0.015em] text-balance text-ink-950">
                   {service.name}
                 </h3>
 
-                <p className="mt-2.5 text-sm leading-relaxed text-ink-600">{service.summary}</p>
+                <p className="mt-2.5 text-[13px] leading-relaxed text-ink-600">{service.summary}</p>
 
-                <div className="mt-auto flex flex-col gap-1 pt-6">
+                <div className="mt-auto flex flex-col gap-1 border-t border-paper-200 pt-4">
                   {/*
                     WhatsApp before "Learn more": a visitor who has read four words
                     of a service is more likely to want to talk about it than to
@@ -89,7 +93,7 @@ export function CoreServices() {
         })}
       </ul>
 
-      {/* The ninth service, in a sentence rather than a card. */}
+      {/* The tenth service, in a sentence rather than a card. */}
       <p className="mt-10 max-w-3xl border-t border-paper-200 pt-6 text-sm leading-relaxed text-ink-600">
         <span className="font-semibold text-ink-950">{coreSection.footnoteLead}</span>{' '}
         <Link
