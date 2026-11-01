@@ -486,7 +486,16 @@ function JourneyStatic() {
             </Reveal>
 
             <Reveal delay={80}>
-              <div className="h-[420px] sm:h-[460px]">
+              {/*
+                The document sets the height rather than being squeezed into a
+                fixed one. The tallest stages (the digital and registration
+                mockups) are taller than the frame at narrow widths, and
+                centring them in a fixed box made them spill upward over the
+                WhatsApp button above. A minimum keeps the short documents
+                from collapsing; tall ones grow the frame instead of leaving
+                the border.
+              */}
+              <div className="min-h-[420px] sm:min-h-[460px]">
                 <StageVisual stage={stage} />
               </div>
             </Reveal>
