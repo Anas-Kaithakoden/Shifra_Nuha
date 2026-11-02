@@ -12,8 +12,10 @@ import {
   FileText,
   Globe,
   Handshake,
+  HelpCircle,
   Landmark,
   ListOrdered,
+  Loader2,
   Mail,
   Megaphone,
   Menu,
@@ -24,7 +26,9 @@ import {
   Phone,
   Quote,
   Receipt,
+  RotateCcw,
   Scale,
+  Send,
   ShieldCheck,
   Square,
   Tag,
@@ -116,6 +120,12 @@ export const IconMegaphone = fromLucide(Megaphone)
 
 /** Generic speech bubble, for "someone replies" points. */
 export const IconChat = fromLucide(MessageSquare)
+
+/** Chat chrome: send, clear, FAQ and a static loading mark. */
+export const IconSend = fromLucide(Send)
+export const IconReset = fromLucide(RotateCcw)
+export const IconHelp = fromLucide(HelpCircle)
+export const IconSpinner = fromLucide(Loader2)
 
 /** Opening quote mark, for the testimonial block. */
 export const IconQuote = fromLucide(Quote)

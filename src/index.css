@@ -145,6 +145,12 @@
   .will-reveal {
     opacity: 1;
   }
+
+  /* The three-dot typing indicator in the chat panel. The global
+     `prefers-reduced-motion` rule below stops it for anyone who asks. */
+  .chat-typing-dot {
+    animation: chat-typing-dot 1.15s ease-in-out infinite;
+  }
 }
 
 @keyframes panel-enter {
@@ -164,6 +170,19 @@
   }
   to {
     transform: scaleX(1);
+  }
+}
+
+@keyframes chat-typing-dot {
+  0%,
+  70%,
+  100% {
+    opacity: 0.35;
+    transform: translate3d(0, 0, 0);
+  }
+  35% {
+    opacity: 1;
+    transform: translate3d(0, -2px, 0);
   }
 }
 

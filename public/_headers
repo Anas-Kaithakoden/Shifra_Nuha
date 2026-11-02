@@ -29,3 +29,9 @@
 # files rather than fingerprinted, so they get a shorter leash than /assets.
 /brand/*
   Cache-Control: public, max-age=86400
+
+# The chat endpoint handles a live message and must never be cached. Marking it
+# noindex also keeps a JSON endpoint out of search results if it is ever linked.
+/api/*
+  Cache-Control: no-store
+  X-Robots-Tag: noindex

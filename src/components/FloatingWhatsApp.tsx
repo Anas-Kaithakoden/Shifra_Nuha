@@ -44,7 +44,7 @@ export function FloatingWhatsApp() {
   return (
     <div
       aria-hidden={!visible}
-      className={`fixed right-6 bottom-6 z-40 hidden transition-all duration-200 md:block ${
+      className={`fixed right-6 bottom-24 z-40 hidden transition-all duration-200 md:block ${
         visible ? 'visible translate-y-0 opacity-100' : 'invisible translate-y-2 opacity-0'
       }`}
     >

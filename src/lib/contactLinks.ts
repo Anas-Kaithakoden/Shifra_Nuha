@@ -15,8 +15,9 @@ import { track } from './tracking'
  * event. Email is a real address for someone who prefers it, deliberately not a
  * button. There is no contact form anywhere on this site: the advertising sends
  * people straight to WhatsApp, and a form on the way there is a step that loses
- * people. Nothing is transmitted through this site, so there is no server, no
- * form handler and nowhere for visitor details to be stored.
+ * people. These contact routes transmit nothing through this site, so there is
+ * no form handler and nowhere for visitor details to be stored. (The optional
+ * AI chat is the one exception and is described in the README.)
  *
  * While a number is unconfirmed the buttons fall back to the contact page rather
  * than a dialler that would not connect. A dead button is a lost lead; a button
@@ -73,6 +74,15 @@ export function whatsappLink(message: string = enquiry.whatsappMessage): Contact
     href: `https://wa.me/${digits}?text=${encodeURIComponent(message)}`,
     label: formatDigits(digits),
   }
+}
+
+/**
+ * The raw WhatsApp URL, for callers that already have an editable message and
+ * only need the `href` - the chatbot handoff review screen, for example.
+ * It still returns the contact-page fallback while the number is unconfirmed.
+ */
+export function createWhatsAppUrl(message: string = enquiry.whatsappMessage): string {
+  return whatsappLink(message).href
 }
 
 export function callLink(): ContactLink {

@@ -40,11 +40,16 @@ into a conversation as fast as possible.
 | **Call Us** | Secondary CTA, every page | `tel:` |
 | `info@shifranuhatech.com` | Quiet third route, for documents and for people who prefer writing | `mailto:` |
 
-Nothing is transmitted through this site. Tapping WhatsApp opens WhatsApp,
-tapping Call opens the dialler, tapping the email address opens the visitor's
-own mail app. The conversation happens in software the visitor already chose, so
-there is no server, no form handler, no spam problem and nowhere for visitor
-details to be stored or leaked.
+Tapping WhatsApp opens WhatsApp, tapping Call opens the dialler, and tapping the
+email address opens the visitor's own mail app. The conversation happens in
+software the visitor already chose, so those routes have no form handler, no spam
+problem and nowhere for visitor details to be stored or leaked.
+
+The one exception is the **optional AI assistant**, which does send the messages
+you type to a server so that a reply can be generated. It is described in
+[AI assistant](#ai-assistant): the transcript stays in the visitor's browser
+session, and the site keeps no copy. The contact routes above remain the
+recommended way to send documents or personal details.
 
 The email address is deliberately **not** a button. It is offered as a plain
 link in the contact page intro, the route cards and the footer, so it never
@@ -75,6 +80,132 @@ web.whatsapp.com on a desktop — so a single link covers both.
 Each of the nine services has its own landing page, because someone searching
 for "LLP registration" is not the same person as someone searching for "GST
 registration" and should not land on the same page.
+
+---
+
+## AI assistant
+
+A floating launcher in the bottom-right opens an optional support assistant. The
+panel is **not mounted until the visitor opens it**: the launcher is part of the
+main bundle, and `ChatPanel` is loaded as its own lazy chunk on first click. That
+keeps the static pages free of a form, input or textarea in server-rendered
+markup, which the smoke test asserts.
+
+The assistant answers from a fixed knowledge base in `src/data/`:
+
+| File | Purpose |
+|---|---|
+| `knowledgeBase.ts` | Services, approved pricing, pricing rules, exact unlisted-pricing sentence |
+| `faqs.ts` | Approved FAQ questions and answers, used by both the UI and the prompt |
+| `chatbot.ts` | Welcome message, initial quick replies and follow-ups |
+| `whatsappTemplates.ts` | Enquiry templates and keyword detection for the handoff |
+
+There is **no RAG, vector store, embedding or PDF ingestion**. The system prompt
+is assembled from those modules when a request arrives. That is deliberate: a
+small, auditable set of facts is easier to keep correct than a retrieval pipeline,
+and the site's approved content is the only thing the model is allowed to use.
+
+### Request path
+
+```text
+browser  ->  POST /api/chat  ->  functions/api/chat.ts  ->  provider fallback  ->  reply
+```
+
+`functions/api/chat.ts` is a Cloudflare Pages Function. `public/_routes.json`
+includes only `/api/*`, so Functions are invoked for the chat API and ordinary
+static assets continue to bypass them.
+
+The browser sends the message plus a bounded slice of recent history; the server
+keeps no transcript. The visitor's copy lives in `sessionStorage`, survives a
+refresh in the same tab, and is cleared when the tab closes or the visitor uses
+the clear-conversation button. No database, KV namespace, Durable Object or log
+of message content is used.
+
+### Providers
+
+Priority is fixed in code: **OpenRouter, then Groq, then Gemini**. A provider is
+skipped when its key is blank, so one key, two keys or all three are all valid
+deployments. The model names are configuration, not code, because providers
+retire models on their own schedule.
+
+| Provider | Required variable | Default model | Optional |
+|---|---|---|---|
+| OpenRouter | `OPENROUTER_API_KEY` | `meta-llama/llama-3.3-70b-instruct` | `OPENROUTER_MODEL`, `OPENROUTER_SITE_URL`, `OPENROUTER_APP_NAME` |
+| Groq | `GROQ_API_KEY` | `llama-3.3-70b-versatile` | `GROQ_MODEL` |
+| Gemini | `GEMINI_API_KEY` | `gemini-2.5-flash` | `GEMINI_MODEL` |
+
+Each attempt has its own timeout and falls through to the next provider on
+failure. If every provider fails, the visitor gets a safe fallback reply and a
+WhatsApp route; provider names, model names, keys and raw upstream errors are
+never returned to the browser. Server logs record only the provider, whether the
+price guard fired, and elapsed time.
+
+Tuning variables, all optional:
+
+| Variable | Default | Bounds |
+|---|---|---|
+| `CHAT_RATE_LIMIT` | `12` requests per client per window | 1–100 |
+| `CHAT_RATE_WINDOW_SECONDS` | `600` | 10–3600 |
+| `CHAT_REQUEST_TIMEOUT_MS` | `12000` | 100–30000 |
+
+The rate limit is **best effort and per isolate**. Cloudflare can run several
+isolates, each with its own in-memory map, so it stops accidental loops and
+casual abuse rather than a distributed attacker. A hard global limit needs a
+Durable Object, KV or Cloudflare's rate-limiting rules; the interface in
+`functions/_lib/rateLimit.ts` is small enough to back with one of those later.
+
+### Pricing safety
+
+Only LLP Registration and Private Limited Company Registration have approved
+prices. Both figures are supplied and must not be rounded, recalculated or
+quietly "corrected":
+
+| Package | Advertised total | Component sum |
+|---|---|---|
+| LLP Registration, 2 partners | ₹9,900 | ₹9,899 |
+| Private Limited Company Registration, 2 directors | ₹13,200 | ₹13,199 |
+
+Two layers protect those numbers:
+
+1. A question about any other service's price is answered **before a provider is
+   called**, with exactly:
+   `Pricing depends on your requirements. Please contact our team for a quotation.`
+2. The model's reply is scanned for currency amounts. Any amount outside the
+   approved set — the two totals, the component lines, and the two component sums —
+   replaces the whole reply with that same exact sentence. This is enforcement,
+   not a prompt instruction.
+
+The price guard is a backstop for pricing, not a general fact-checker. The prompt
+also prohibits invented timelines, guarantees, statistics and services, but an AI
+reply can still be imperfect; the WhatsApp handoff is the route to a human
+answer.
+
+### WhatsApp handoff
+
+The team's existing number is read through `src/config/site.config.ts` and
+`src/lib/contactLinks.ts`; it is not hardcoded in the chat components. When the
+visitor chooses to continue on WhatsApp, the assistant builds an editable
+prefilled message from the conversation and detected service interest. Nothing
+is sent automatically: WhatsApp opens only after the visitor clicks the handoff
+button, and the message can be edited there before sending.
+
+### Local development
+
+Copy the server-side example file and add at least one provider key:
+
+```bash
+cp .dev.vars.example .dev.vars        # Windows: copy .dev.vars.example .dev.vars
+```
+
+`.dev.vars` is gitignored. The Vite dev server reads it once, serves the real
+`/api/chat` handler through middleware, and therefore exercises the same
+validation, fallback, rate limiting and price guard as production. Restart the
+dev server after editing the file. With no key present, the endpoint returns its
+"assistant is not available" reply rather than failing silently.
+
+`npm run test:chat` drives the real handler with a mocked provider: validation,
+deterministic pricing, all three fallbacks, timeouts, the price guard, rate
+limiting and configuration bounds. It needs no key and makes no network call.
 
 ---
 
@@ -130,26 +261,29 @@ the button label keeps its contrast over whatever is scrolling underneath it.
 
 ```bash
 npm install
-cp .env.example .env      # Windows: copy .env.example .env
-npm run dev               # http://localhost:5173
-npm run build             # typecheck + production build into dist/
-npm run preview           # serve the production build locally
-npm run test              # typecheck + render smoke test + accessibility checks
+cp .env.example .env                  # Windows: copy .env.example .env
+cp .dev.vars.example .dev.vars        # optional: enables the AI assistant
+npm run dev                           # http://localhost:5173
+npm run build                         # typecheck + production build into dist/
+npm run preview                       # serve the production build locally
+npm run test                          # typecheck + smoke + a11y + chat tests
 ```
 
-`.env` holds the real contact details and the domain. It is gitignored, so on
-Cloudflare Pages the same values have to be entered in the dashboard as well —
-see [Deploying](#deploying).
+`.env` holds the real contact details and the domain. `.dev.vars` holds the
+server-only chat keys. Both are gitignored, so on Cloudflare Pages the same values
+have to be entered in the dashboard as well — see [Deploying](#deploying). The
+assistant still appears without `.dev.vars`; it reports that it is not available.
 
 | Command | What it does |
 |---|---|
-| `npm run dev` | Dev server with hot reload |
+| `npm run dev` | Dev server with hot reload and `/api/chat` |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run build` | Typecheck, then build to `dist/` |
 | `npm run preview` | Serve `dist/` locally |
 | `npm run test:smoke` | Render every page and assert the content is sound |
 | `npm run test:a11y` | Render every page and check the markup for a11y faults |
-| `npm test` | All three, in order |
+| `npm run test:chat` | Exercise the real chat handler with a mocked provider |
+| `npm test` | All four, in order |
 
 ---
 
@@ -309,9 +443,14 @@ public/
   favicon.svg             Vector favicon, traced from the mark
   _headers                Cloudflare Pages response headers (cache + security)
   _redirects              SPA rewrite for Netlify / Cloudflare Pages
+  _routes.json            Invokes Functions for /api/* only
+functions/
+  api/chat.ts             POST /api/chat - validation, rate limit, fallback
+  _lib/                   Config, prompt, pricing, providers, validation, limiter
 scripts/
   smoke.tsx               Renders every route; content and claim checks
   a11y-check.tsx          Renders every route; markup checks
+  chat-test.ts            Drives the real chat handler with a mocked provider
   make-og-image.py        Regenerates public/brand/og-image-v2.png (optional)
 src/
   components/
@@ -334,6 +473,9 @@ src/
     ServiceCard.tsx
     StickyCtaBar.tsx      Mobile WhatsApp + Call bar; follows the current service
     WhyUs.tsx             Four reasons
+    chat/
+      ChatbotWidget.tsx   Floating launcher; lazy-mounts the panel on first open
+      ChatPanel.tsx       Dialog, transcript, quick replies, FAQ, handoff
     iconRegistry.tsx      Icon key -> SVG component
     icons.tsx             The SVG icon set
   config/
@@ -343,8 +485,19 @@ src/
     services.ts           The nine services
     site.ts               Site copy, contact values, social profile URLs
     ui.ts                 Interface strings
+  data/
+    knowledgeBase.ts      Services, approved pricing, pricing rules
+    faqs.ts               Approved FAQ answers
+    chatbot.ts            Welcome copy and quick replies
+    whatsappTemplates.ts  Enquiry templates and service keywords
   lib/
     contactLinks.ts       wa.me / tel: / mailto: builders + click tracking
+    chatbot/
+      api.ts              POST /api/chat client
+      enquiry.ts          Editable WhatsApp draft builder
+      serviceInterest.ts  Service detection from a message
+      session.ts          sessionStorage transcript
+      types.ts            Shared client types
     seo.ts                Metadata, canonical, Open Graph, JSON-LD
     tracking.ts           Analytics event helper
   pages/
@@ -361,7 +514,7 @@ src/
   main.tsx
   index.css               Tailwind theme + base styles
   routes.ts               Every route, in one list
-vite.config.ts            React plugin + the sitemap / robots.txt plugin
+vite.config.ts            React/Tailwind, SEO files, local /api/chat middleware
 ```
 
 ### `src/routes.ts` is the route list
@@ -473,6 +626,37 @@ link unfurl it was written for.
 
 ---
 
+## Limitations
+
+- **The rate limit is not global.** It is held in memory per Worker isolate, so
+  the configured number is a target rather than a hard distributed cap. Moving it
+  to a Durable Object or Cloudflare rate-limiting rule is the upgrade path.
+- **The assistant is a first-response tool, not an adviser.** The deterministic
+  pricing layer and price guard control currency figures, but the model can still
+  phrase a non-pricing detail imperfectly. It is instructed not to invent
+  timelines, guarantees or services; the WhatsApp handoff is where a human
+  confirms anything that matters.
+- **Replies are not streamed.** The request waits for a complete provider
+  response, with a timeout and fallback. A slow provider therefore shows the
+  typing indicator for longer rather than producing partial text.
+- **Availability depends on the providers.** If every configured provider is
+  down, rate-limited or misconfigured, the visitor receives a safe fallback and a
+  WhatsApp route. At least one provider key is required.
+- **Model names are configuration and will age.** Provider catalogues change;
+  update `OPENROUTER_MODEL`, `GROQ_MODEL` or `GEMINI_MODEL` in the dashboard
+  rather than editing code.
+- **The knowledge base is static.** A service, FAQ or approved price change ships
+  with the next deploy. There is no admin panel, no live content feed and no
+  conversation analytics.
+- **The transcript is per browser tab.** `sessionStorage` clears when the tab
+  closes, and it is not shared across devices. The site stores no conversation
+  server-side, so it cannot email a transcript or follow up automatically.
+- **The chat is text only and English only.** There is no file upload, document
+  review, voice input or Malayalam interface. Sensitive documents should go
+  through WhatsApp or email, not the assistant.
+
+---
+
 ## Deploying
 
 `npm run build` outputs a static site in `dist/`.
@@ -525,6 +709,31 @@ Pages only exposes variables prefixed `VITE_` to the bundle. A forgotten one
 produces a build that succeeds and a site that quietly misbehaves, so the build
 warns and names anything unset — read the log rather than assuming it worked.
 
+**The chat keys are separate runtime secrets.** They are read by the Pages
+Function, not by the build, and they must **not** have a `VITE_` prefix. Add at
+least one provider under *Settings → Environment variables* for **both**
+Production and Preview, using the names from
+[Providers](#providers):
+
+```text
+OPENROUTER_API_KEY       (optional, first choice)
+GROQ_API_KEY             (optional, second choice)
+GEMINI_API_KEY           (optional, third choice)
+```
+
+The model and tuning variables from the same section can be added alongside them.
+`OPENROUTER_SITE_URL` and `OPENROUTER_APP_NAME` are optional attribution headers,
+not secrets. Keys can also be set with Wrangler:
+
+```bash
+npx wrangler pages secret put OPENROUTER_API_KEY --project-name <pages-project>
+```
+
+`.dev.vars` is for local development only and is never deployed. `public/_routes.json`
+is copied into `dist/` and restricts Functions to `/api/*`; no bindings, KV
+namespaces or extra services are required. The function is stateless, so there is
+nothing to migrate or back up.
+
 Two files in `public/` are copied into `dist/` and picked up automatically, so
 neither needs to be configured anywhere:
 
@@ -554,6 +763,11 @@ Verify after the first deploy, in this order:
    did not reach the build.
 5. Paste the URL into the Facebook/LinkedIn Sharing Debugger and confirm the
    card renders with the text on it.
+6. Open the chat launcher, send a message that exercises an approved price
+   (for example "How much is LLP registration for two partners?") and confirm a
+   reply arrives. Then ask about an unlisted service and confirm the exact
+   quotation sentence. If the panel reports that the assistant is unavailable,
+   the runtime key is missing or misspelled.
 
 ### Before launch
 
@@ -563,6 +777,10 @@ Verify after the first deploy, in this order:
 - [x] Generate `public/brand/og-image-v2.png`.
 - [ ] Add the Cloudflare Pages environment variables — all eight under
       Production, the six non-domain ones under Preview.
+- [ ] Add at least one AI provider key to the Pages runtime environment, under
+      both Production and Preview. Confirm with a real chat message after deploy.
+- [ ] Review the privacy policy's new AI-assistant paragraph, and confirm the
+      provider's terms are acceptable for the business before launch.
 - [ ] Attach `shifranuhatech.com` as the custom domain, and settle apex vs `www`.
 - [x] Set `contact.hours` to the honest wording.
 - [x] Complete the three legal documents: registered entity, registered address,

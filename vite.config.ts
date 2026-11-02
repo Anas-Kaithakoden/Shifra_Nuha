@@ -1,14 +1,24 @@
 import { defineConfig, type Plugin, type ResolvedConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [react(), tailwindcss(), seoFiles()],
+export default defineConfig(({ isSsrBuild }) => ({
+  plugins: [react(), tailwindcss(), seoFiles(), devChatApi()],
   server: {
     port: 5173,
   },
   build: {
+    /**
+     * The browser build keeps Vite's conservative default, but the test
+     * harnesses are bundled for Node with `vite build --ssr`. They use
+     * top-level `await` to drive the real request handler, which the browser
+     * target does not allow. `esnext` is safe there because the output only
+     * ever runs in the installed Node version.
+     */
+    target: isSsrBuild ? 'esnext' : undefined,
     rollupOptions: {
       output: {
         /**
@@ -26,7 +36,7 @@ export default defineConfig({
       },
     },
   },
-})
+}))
 
 /**
  * ---------------------------------------------------------------------------
@@ -201,4 +211,122 @@ function siteOrigin(config: ResolvedConfig): string {
   if (!domain) return ''
   const withScheme = /^https?:\/\//i.test(domain) ? domain : `https://${domain}`
   return withScheme.replace(/\/+$/, '')
+}
+
+/**
+ * ---------------------------------------------------------------------------
+ * LOCAL CHAT API
+ * ---------------------------------------------------------------------------
+ * Cloudflare Pages Functions are not part of the Vite dev server, so without
+ * this plugin `npm run dev` would serve a chat button that posts to a 404 and
+ * the only way to test the assistant would be a deploy.
+ *
+ * The plugin reads `.dev.vars` (Cloudflare's local secrets file, gitignored) and
+ * invokes the real handler through `ssrLoadModule`. That means local
+ * development exercises the same validation, rate limiting, provider fallback
+ * and price guard as production - not a mock with different behaviour.
+ *
+ * Restart the dev server after editing `.dev.vars`; the file is read once when
+ * the config resolves.
+ */
+function devChatApi(): Plugin {
+  let env: Record<string, string> = {}
+
+  return {
+    name: 'shifranuha-dev-chat-api',
+    apply: 'serve',
+
+    configResolved() {
+      env = readDevVars()
+    },
+
+    configureServer(server) {
+      server.middlewares.use('/api/chat', async (req, res, next) => {
+        try {
+          const originalUrl =
+            (req as typeof req & { originalUrl?: string }).originalUrl ??
+            req.url ??
+            '/api/chat'
+
+          const chunks: Buffer[] = []
+          for await (const chunk of req) {
+            chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
+          }
+
+          const headers = new Headers()
+          for (const [key, value] of Object.entries(req.headers)) {
+            if (value === undefined) continue
+            headers.set(key, Array.isArray(value) ? value.join(', ') : value)
+          }
+
+          const method = req.method ?? 'GET'
+          const request = new Request(`http://localhost${originalUrl}`, {
+            method,
+            headers,
+            body: method === 'GET' || method === 'HEAD' ? undefined : Buffer.concat(chunks),
+          })
+
+          const module = (await server.ssrLoadModule('/functions/api/chat.ts')) as {
+            onRequest: (context: {
+              request: Request
+              env: Record<string, string>
+              params: Record<string, string>
+              waitUntil: (promise: Promise<unknown>) => void
+            }) => Promise<Response>
+          }
+
+          const response = await module.onRequest({
+            request,
+            env,
+            params: {},
+            waitUntil: () => undefined,
+          })
+
+          res.statusCode = response.status
+          response.headers.forEach((value, key) => res.setHeader(key, value))
+          res.end(Buffer.from(await response.arrayBuffer()))
+        } catch (error) {
+          next(error instanceof Error ? error : new Error(String(error)))
+        }
+      })
+    },
+  }
+}
+
+/**
+ * Reads the simple `KEY=value` format Cloudflare uses for `.dev.vars`.
+ * Quotes around a value are stripped; comments and blank lines are ignored.
+ */
+function readDevVars(): Record<string, string> {
+  const env: Record<string, string> = {}
+
+  try {
+    const text = readFileSync(resolve(process.cwd(), '.dev.vars'), 'utf8')
+
+    for (const line of text.split(/\r?\n/)) {
+      const trimmed = line.trim()
+      if (!trimmed || trimmed.startsWith('#')) continue
+
+      const withoutExport = trimmed.startsWith('export ') ? trimmed.slice(7).trim() : trimmed
+      const separator = withoutExport.indexOf('=')
+      if (separator <= 0) continue
+
+      const key = withoutExport.slice(0, separator).trim()
+      let value = withoutExport.slice(separator + 1).trim()
+
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1)
+      }
+
+      if (key) env[key] = value
+    }
+  } catch {
+    // No .dev.vars is a valid state: the chat endpoint reports that it is not
+    // configured, which is exactly what a fresh clone should see.
+  }
+
+  return env
 }

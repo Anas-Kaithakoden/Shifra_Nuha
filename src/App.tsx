@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import { Analytics } from './components/Analytics'
+import { ChatbotWidget } from './components/chat/ChatbotWidget'
 import { FloatingWhatsApp } from './components/FloatingWhatsApp'
 import { Footer } from './components/Footer'
 import { Navbar } from './components/Navbar'
@@ -97,6 +98,7 @@ export default function App() {
       <Footer />
       <StickyCtaBar />
       <FloatingWhatsApp />
+      <ChatbotWidget />
       <Analytics />
     </div>
   )

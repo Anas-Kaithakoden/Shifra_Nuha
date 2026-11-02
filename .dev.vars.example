@@ -1,0 +1,48 @@
+# ---------------------------------------------------------------------------
+# Shifra Nuha Technologies - server-side chat configuration
+# ---------------------------------------------------------------------------
+# Copy this file to `.dev.vars` for local development:
+#
+#   copy .dev.vars.example .dev.vars      (Windows)
+#   cp .dev.vars.example .dev.vars        (macOS / Linux)
+#
+# `.dev.vars` is gitignored and is never committed. On Cloudflare Pages the
+# same names are added under Settings -> Environment variables, for BOTH
+# Production and Preview.
+#
+# These values are server-only. They do NOT have a VITE_ prefix, so they are
+# never exposed to the browser bundle. Do not put any of these in `.env`: Vite
+# would not expose them, but keeping runtime secrets out of the build-time file
+# avoids the mistake later.
+#
+# AT LEAST ONE PROVIDER IS REQUIRED. The order is fixed in code:
+# OpenRouter, then Groq, then Gemini. A provider is skipped when its key is
+# blank, so one key is a valid setup.
+
+# --- OpenRouter (first choice) ---------------------------------------------
+# https://openrouter.ai/keys
+OPENROUTER_API_KEY=
+# Model name as OpenRouter lists it. Models are retired; change this without
+# touching the code.
+OPENROUTER_MODEL=meta-llama/llama-3.3-70b-instruct
+# Optional attribution headers. Safe to leave blank.
+OPENROUTER_SITE_URL=https://shifranuhatech.com
+OPENROUTER_APP_NAME=Shifra Nuha Technologies
+
+# --- Groq (second choice) ---------------------------------------------------
+# https://console.groq.com/keys
+GROQ_API_KEY=
+GROQ_MODEL=llama-3.3-70b-versatile
+
+# --- Google Gemini (third choice) ------------------------------------------
+# https://aistudio.google.com/app/apikey
+GEMINI_API_KEY=
+GEMINI_MODEL=gemini-2.5-flash
+
+# --- Optional tuning --------------------------------------------------------
+# Requests per client, per window. Best effort per isolate (see README).
+CHAT_RATE_LIMIT=12
+# Rate-limit window in seconds.
+CHAT_RATE_WINDOW_SECONDS=600
+# Timeout for one provider before falling through to the next, in milliseconds.
+CHAT_REQUEST_TIMEOUT_MS=12000
